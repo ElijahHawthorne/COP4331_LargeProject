@@ -3,10 +3,10 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   build:
@@ -36,8 +36,8 @@ jobs:
           SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
         run:
 	   sshpass -p "${SSH_KEY}" ssh -o StrictHostKeyChecking=no ${SSH_USERNAME}@${SSH_HOST} << 'EOF'
-            cd /var/www/your-app-directory
-            git pull origin master
+            cd /var/www/html
+            git pull origin main
             npm install
             npm run build
             pm2 restart server
