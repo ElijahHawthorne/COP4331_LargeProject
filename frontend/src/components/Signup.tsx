@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
     const app_name = "777finances.com";
+    const navigate = useNavigate(); // Get the navigate function
 
     function buildPath(route: string): string {
         if (process.env.NODE_ENV !== "development") {
@@ -21,7 +23,7 @@ function Signup() {
     async function doSignup(event: any): Promise<void> {
         event.preventDefault();
 
-        var obj = {
+        let obj = {
             login: signupName, // Matching API field name
             password: signupPassword,
             firstName: firstName,
@@ -43,7 +45,7 @@ function Signup() {
             if (res.success) {
                 setMessage("Signup successful! Redirecting to login...");
                 setTimeout(() => {
-                    window.location.href = "/login";
+                    navigate("/login"); // Use navigate function to redirect
                 }, 2000);
             } else {
                 setMessage(res.error || "Signup failed. Please try again.");
@@ -70,12 +72,17 @@ function Signup() {
         setEmail(e.target.value);
     }
 
+    function goToLogin() {
+        navigate("/"); // Use navigate function to go to login page
+    }
+
     return (
-        <div id="signupDiv">
-            <span id="inner-title">PLEASE SIGN UP</span>
+        <div id="signupDiv" className="mt-4 flex flex-col items-center justify-center bg-white p-6 rounded shadow-md w-full max-w-md">
+            <span id="inner-title" className="text-3xl font-bold mb-6">PLEASE SIGN UP</span>
             <br />
             <input
                 type="text"
+                className="mb-4 p-2 border border-gray-300 rounded w-full"
                 id="firstName"
                 placeholder="First Name"
                 onChange={handleSetFirstName}
@@ -83,6 +90,7 @@ function Signup() {
             <br />
             <input
                 type="text"
+                className="mb-4 p-2 border border-gray-300 rounded w-full"
                 id="lastName"
                 placeholder="Last Name"
                 onChange={handleSetLastName}
@@ -90,6 +98,7 @@ function Signup() {
             <br />
             <input
                 type="email"
+                className="mb-4 p-2 border border-gray-300 rounded w-full"
                 id="email"
                 placeholder="Email"
                 onChange={handleSetEmail}
@@ -97,6 +106,7 @@ function Signup() {
             <br />
             <input
                 type="text"
+                className="mb-4 p-2 border border-gray-300 rounded w-full"
                 id="signupName"
                 placeholder="Username"
                 onChange={handleSetSignupName}
@@ -104,6 +114,7 @@ function Signup() {
             <br />
             <input
                 type="password"
+                className="mb-4 p-2 border border-gray-300 rounded w-full"
                 id="signupPassword"
                 placeholder="Password"
                 onChange={handleSetPassword}
@@ -112,10 +123,11 @@ function Signup() {
             <input
                 type="submit"
                 id="signupButton"
-                className="buttons"
+                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 w-full"
                 value="Sign Up"
                 onClick={doSignup}
             />
+            <p>Already have an account? <a className="text-blue-500 underline" href="#" onClick={goToLogin}>Log in</a> here.</p>
             <span id="signupResult">{message}</span>
         </div>
     );
