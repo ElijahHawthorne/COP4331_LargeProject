@@ -6,7 +6,7 @@ function LoggedInName() {
   }
   return (
     <div id="loggedInDiv">
-      <span id="userName">Logged In As John Doe </span>
+      <span id="userName"></span>
       <br />
       <button
         type="button"
