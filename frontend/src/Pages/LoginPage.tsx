@@ -3,7 +3,7 @@ import Login from "../components/Login.tsx";
 
 const LoginPage = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white-100">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-primary">
       <PageTitle />
       <Login />
     </div>
