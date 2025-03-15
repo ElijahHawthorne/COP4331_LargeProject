@@ -159,8 +159,21 @@ app.post('/api/addexpense', async (req, res) => {
   let error = '';
   let success = false;
 
+  const db = client.db('777Finances');
+
+
+  const existingExpense = await db.collection('Data').findOne(
+    { userId: userId, "expenses.name": expenseName }
+  );
+
+
+  if (existingExpense) {
+    error = 'Expense with this name already exists';
+  } else{
+
+//
   try {
-    const db = client.db('777Finances');
+    
     const result = await db.collection('Data').updateOne(
       { userId: userId },
       {
@@ -178,9 +191,108 @@ app.post('/api/addexpense', async (req, res) => {
   } catch (e) {
     error = e.toString();
   }
+//
+  }
+  res.status(200).json({ success, error });
+});
+// ------------------------------------
+// EDIT EXPENSE ENDPOINT
+// ------------------------------------
+
+app.post('/api/updateexpense', async (req, res) => {
+  const { userId, expenseName, newExpenseCost } = req.body;
+
+  let error = '';
+  let success = false;
+
+  try {
+    const db = client.db('777Finances');
+
+    // Update the expense cost based on the userId and expenseName
+    const result = await db.collection('Data').updateOne(
+      {
+        userId: userId,  // Matching userId
+        "expenses.name": expenseName  // Matching expenseName in the expenses array
+      },
+      {
+        $set: { 
+          "expenses.$.cost": newExpenseCost  // Update the cost field of the matched expense object
+        }
+      }
+    );
+
+    if (result.modifiedCount > 0) {
+      success = true;
+    } else {
+      error = 'Failed to update expense or expense not found';
+    }
+  } catch (e) {
+    error = e.toString();
+  }
 
   res.status(200).json({ success, error });
 });
+// ------------------------------------
+// GET EXPENSES ENDPOINT
+// ------------------------------------
+app.post('/api/getexpenses', async (req, res) => {
+  const { userId } = req.body;
+  let error = '';
+  let expenses = [];
+
+  try {
+    const db = client.db('777Finances');
+
+    
+    const user = await db.collection('Data').findOne({ userId: userId });
+
+    if (user) {
+      expenses = user.expenses; 
+    } else {
+      error = 'User not found';
+    }
+  } catch (e) {
+    error = e.toString();
+  }
+
+  res.status(200).json({ expenses, error });
+});
+// ------------------------------------
+// REMOVE EXPENSES ENDPOINT
+// ------------------------------------
+
+
+app.post('/api/removeexpense', async (req, res) => {
+  const { userId, expenseName } = req.body;
+  let error = '';
+  let success = false;
+
+  try {
+    const db = client.db('777Finances');
+    
+    // Use $pull to remove the expense object with the given expenseName from the expenses array
+    const result = await db.collection('Data').updateOne(
+      { userId: userId },  // Find the user by userId
+      { 
+        $pull: { 
+          expenses: { name: expenseName }  // Remove the object with the matching expenseName
+        }
+      }
+    );
+
+    if (result.modifiedCount > 0) {
+      success = true;
+    } else {
+      error = 'Failed to remove expense or expense not found';
+    }
+  } catch (e) {
+    error = e.toString();
+  }
+
+  res.status(200).json({ success, error });
+});
+
+
 
 
 // ------------------------------------
