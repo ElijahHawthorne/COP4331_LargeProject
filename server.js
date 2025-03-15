@@ -1,5 +1,3 @@
-// server.js
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -15,121 +13,14 @@ const client = new MongoClient(url);
 // Connect to MongoDB once at server start
 client.connect();
 
-// Enable CORS and JSON parsing
+// Enable CORS and JSON parsing using the cors package
 app.use(cors());
 app.use(bodyParser.json());
 
 // ------------------------------------
-// EXAMPLE CARD LIST (LOCAL ARRAY)
-// ------------------------------------
-var cardList = [
-  'Roy Campanella',
-  'Paul Molitor',
-  'Tony Gwynn',
-  'Dennis Eckersley',
-  'Reggie Jackson',
-  'Gaylord Perry',
-  'Buck Leonard',
-  'Rollie Fingers',
-  'Charlie Gehringer',
-  'Wade Boggs',
-  'Carl Hubbell',
-  'Dave Winfield',
-  'Jackie Robinson',
-  'Ken Griffey, Jr.',
-  'Al Simmons',
-  'Chuck Klein',
-  'Mel Ott',
-  'Mark McGwire',
-  'Nolan Ryan',
-  'Ralph Kiner',
-  'Yogi Berra',
-  'Goose Goslin',
-  'Greg Maddux',
-  'Frankie Frisch',
-  'Ernie Banks',
-  'Ozzie Smith',
-  'Hank Greenberg',
-  'Kirby Puckett',
-  'Bob Feller',
-  'Dizzy Dean',
-  'Joe Jackson',
-  'Sam Crawford',
-  'Barry Bonds',
-  'Duke Snider',
-  'George Sisler',
-  'Ed Walsh',
-  'Tom Seaver',
-  'Willie Stargell',
-  'Bob Gibson',
-  'Brooks Robinson',
-  'Steve Carlton',
-  'Joe Medwick',
-  'Nap Lajoie',
-  'Cal Ripken, Jr.',
-  'Mike Schmidt',
-  'Eddie Murray',
-  'Tris Speaker',
-  'Al Kaline',
-  'Sandy Koufax',
-  'Willie Keeler',
-  'Pete Rose',
-  'Robin Roberts',
-  'Eddie Collins',
-  'Lefty Gomez',
-  'Lefty Grove',
-  'Carl Yastrzemski',
-  'Frank Robinson',
-  'Juan Marichal',
-  'Warren Spahn',
-  'Pie Traynor',
-  'Roberto Clemente',
-  'Harmon Killebrew',
-  'Satchel Paige',
-  'Eddie Plank',
-  'Josh Gibson',
-  'Oscar Charleston',
-  'Mickey Mantle',
-  'Cool Papa Bell',
-  'Johnny Bench',
-  'Mickey Cochrane',
-  'Jimmie Foxx',
-  'Jim Palmer',
-  'Cy Young',
-  'Eddie Mathews',
-  'Honus Wagner',
-  'Paul Waner',
-  'Grover Alexander',
-  'Rod Carew',
-  'Joe DiMaggio',
-  'Joe Morgan',
-  'Stan Musial',
-  'Bill Terry',
-  'Rogers Hornsby',
-  'Lou Brock',
-  'Ted Williams',
-  'Bill Dickey',
-  'Christy Mathewson',
-  'Willie McCovey',
-  'Lou Gehrig',
-  'George Brett',
-  'Hank Aaron',
-  'Harry Heilmann',
-  'Walter Johnson',
-  'Roger Clemens',
-  'Ty Cobb',
-  'Whitey Ford',
-  'Willie Mays',
-  'Rickey Henderson',
-  'Babe Ruth'
-];
-
-// ------------------------------------
 // ADD CARD ENDPOINT
 // ------------------------------------
-app.post('/api/addcard', async (req, res, next) => {
-  // incoming: userId, card
-  // outgoing: error
+app.post('/api/addcard', async (req, res) => {
   const { userId, card } = req.body;
   const newCard = { Card: card, UserId: userId };
   let error = '';
@@ -138,30 +29,24 @@ app.post('/api/addcard', async (req, res, next) => {
     const db = client.db('COP4331Cards');
     // Insert into MongoDB
     await db.collection('Cards').insertOne(newCard);
-
-    // Also push into local array (if you still want that behavior)
-    cardList.push(card);
   } catch (e) {
     error = e.toString();
   }
 
-  const ret = { error: error };
-  res.status(200).json(ret);
+  res.status(200).json({ error });
 });
 
 // ------------------------------------
 // SIGNUP ENDPOINT
 // ------------------------------------
-app.post('/api/signup', async (req, res, next) => {
-  // incoming: login, password, firstName, lastName
-  // outgoing: success, error
+app.post('/api/signup', async (req, res) => {
   let error = '';
   let success = false;
 
   const { login, password, firstName, lastName, email } = req.body;
 
   try {
-    const db = client.db('COP4331Cards');
+    const db = client.db('777Finances');
 
     // Check if user with this login already exists
     const existingUser = await db.collection('Users').findOne({ Login: login });
@@ -194,20 +79,15 @@ app.post('/api/signup', async (req, res, next) => {
     error = e.toString();
   }
 
-  const ret = { success, error };
-  res.status(200).json(ret);
+  res.status(200).json({ success, error });
 });
-
 
 // ------------------------------------
 // LOGIN ENDPOINT
 // ------------------------------------
-app.post('/api/login', async (req, res, next) => {
-  // incoming: login, password
-  // outgoing: id, firstName, lastName, error
-  let error = '';
+app.post('/api/login', async (req, res) => {
   const { login, password } = req.body;
-
+  let error = '';
   let id = -1;
   let fn = '';
   let ln = '';
@@ -232,58 +112,81 @@ app.post('/api/login', async (req, res, next) => {
     error = e.toString();
   }
 
-  const ret = { id: id, firstName: fn, lastName: ln, error: error };
-  res.status(200).json(ret);
+  res.status(200).json({ id, firstName: fn, lastName: ln, error });
 });
 
 // ------------------------------------
-// SEARCH CARDS ENDPOINT
+// initialize data endpoint
 // ------------------------------------
-app.post('/api/searchcards', async (req, res, next) => {
-  // incoming: userId, search
-  // outgoing: results[], error
+app.post('/api/datainit', async (req, res) => {
+  const { userId } = req.body;
   let error = '';
-  const { userId, search } = req.body;
+  let success = false;
 
   try {
-    const _search = search.trim();
-    const db = client.db('COP4331Cards');
+    const db = client.db('777Finances');
 
-    // Use case-insensitive regex to find matching cards
-    const results = await db
-      .collection('Cards')
-      .find({ Card: { $regex: _search + '.*', $options: 'i' } })
-      .toArray();
+    const userData = {
+      userId: userId,
+      income: null,
+      expenseCost: [],
+      expenseNames: []
+    };
 
-    // Collect card names
-    const _ret = results.map((item) => item.Card);
+    const result = await db.collection('Data').insertOne(userData);
 
-    const ret = { results: _ret, error: error };
-    res.status(200).json(ret);
+    if (result.insertedId) {
+      success = true;
+    } else {
+      error = 'Failed to initialize user';
+    }
   } catch (e) {
     error = e.toString();
-    const ret = { results: [], error: error };
-    res.status(200).json(ret);
   }
+
+  res.status(200).json({ success, error });
 });
+
+// ------------------------------------
+// ADD EXPENSE ENDPOINT
+// ------------------------------------
+app.post('/api/addexpense', async (req, res) => {
+  const { userId, expenseName, expenseCost } = req.body;
+
+  // Log the incoming data for debugging
+  console.log("Received expense data:", { userId, expenseName, expenseCost });
+
+  let error = '';
+  let success = false;
+
+  try {
+    const db = client.db('777Finances');
+    const result = await db.collection('Data').updateOne(
+      { userId: userId },
+      {
+        $push: {
+          expenses: { name: expenseName, cost: expenseCost }  // This is the key part
+        }
+      }
+    );
+
+    if (result.modifiedCount > 0) {
+      success = true;
+    } else {
+      error = 'Failed to add expense';
+    }
+  } catch (e) {
+    error = e.toString();
+  }
+
+  res.status(200).json({ success, error });
+});
+
 
 // ------------------------------------
 // CORS SETUP & START SERVER
 // ------------------------------------
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-  );
-  res.setHeader(
-    'Access-Control-Allow-Methods',
-    'GET, POST, PATCH, DELETE, OPTIONS'
-  );
-  next();
-});
-
-// Start the server on port 5000
+// No need for manual CORS setup anymore, `cors` middleware handles it
 app.listen(5000, () => {
   console.log('Server listening on port 5000');
 });
