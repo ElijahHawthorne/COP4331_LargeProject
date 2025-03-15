@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
+const bcrypt = require('bcryptjs');
+const saltRounds = 10;
 
 const MongoClient = require('mongodb').MongoClient;
 require('dotenv').config();
@@ -42,6 +44,7 @@ app.post('/api/addcard', async (req, res) => {
 app.post('/api/signup', async (req, res) => {
   let error = '';
   let success = false;
+  let userId = null; // Declare a variable to store the newly created userId
 
   const { login, password, firstName, lastName, email } = req.body;
 
@@ -52,61 +55,78 @@ app.post('/api/signup', async (req, res) => {
     const existingUser = await db.collection('Users').findOne({ Login: login });
     if (existingUser) {
       error = 'User already exists';
-    } else {
-      // Generate a simple numeric userId (for demo)
-      const userId = Date.now(); // or any unique approach
-
-      // Insert new user
-      const newUser = {
-        UserId: userId,
-        Login: login,
-        Password: password, // NOTE: In production, use bcrypt to hash passwords
-        FirstName: firstName,
-        LastName: lastName,
-        Email: email
-      };
-
-      const result = await db.collection('Users').insertOne(newUser);
-
-      // Check insertion success by verifying if insertedId exists
-      if (result.insertedId) {
-        success = true;
-      } else {
-        error = 'Failed to insert user';
-      }
+      return res.status(400).json({ success, error });
     }
-  } catch (e) {
-    error = e.toString();
-  }
 
-  res.status(200).json({ success, error });
+    // Generate a simple numeric userId (or use any unique method you want)
+    userId = Date.now(); // or UUID for better uniqueness
+
+    // Hash the password before storing it
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Insert new user with hashed password
+    const newUser = {
+      UserId: userId,
+      Login: login,
+      Password: hashedPassword,  // Store the hashed password
+      FirstName: firstName,
+      LastName: lastName,
+      Email: email
+    };
+
+    const result = await db.collection('Users').insertOne(newUser);
+
+    // Check if insertion was successful
+    if (result.insertedId) {
+      success = true;
+      return res.status(201).json({ success, userId, error });
+    } else {
+      error = 'Failed to insert user';
+      return res.status(500).json({ success, error });
+    }
+
+  } catch (e) {
+    console.error(e);
+    error = 'An unexpected error occurred';
+    return res.status(500).json({ success, error });
+  }
 });
 
 // ------------------------------------
 // LOGIN ENDPOINT
 // ------------------------------------
+
+
 app.post('/api/login', async (req, res) => {
-  const { login, password } = req.body;
   let error = '';
   let id = -1;
   let fn = '';
   let ln = '';
 
-  try {
-    const db = client.db('COP4331Cards');
+  const { login, password } = req.body;
 
-    // Find matching user
-    const results = await db
-      .collection('Users')
-      .find({ Login: login, Password: password })
-      .toArray();
+  try {
+    const db = client.db('777Finances');
+
+    // Find user by login
+    const results = await db.collection('Users').find({ Login: login }).toArray();
 
     if (results.length > 0) {
-      id = results[0].UserId;
-      fn = results[0].FirstName;
-      ln = results[0].LastName;
+      const user = results[0];
+
+      // Compare provided password with the hashed password
+      const match = await bcrypt.compare(password, user.Password);
+
+      if (match) {
+        // Passwords match, proceed with login
+        id = user.UserId;
+        fn = user.FirstName;
+        ln = user.LastName;
+      } else {
+        error = 'Invalid password';
+      }
     } else {
-      error = 'User not found or invalid credentials';
+      error = 'User not found';
     }
   } catch (e) {
     error = e.toString();
