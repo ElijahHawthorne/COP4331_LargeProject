@@ -16,7 +16,7 @@ function LoggedInName() {
       <button
         type="button"
         id="logoutButton"
-        className="buttons"
+        className="bg-accent text-white py-2 px-4 rounded hover:bg-orange w-full"
         onClick={doLogout}
       >
         {" "}

@@ -257,6 +257,7 @@ app.post('/api/updateexpense', async (req, res) => {
 // ------------------------------------
 app.post('/api/getexpenses', async (req, res) => {
   const { userId } = req.body;
+  console.log("Received userId:", userId);
   let error = '';
   let expenses = [];
 
@@ -311,8 +312,6 @@ app.post('/api/removeexpense', async (req, res) => {
 
   res.status(200).json({ success, error });
 });
-
-
 
 
 // ------------------------------------
