@@ -60,6 +60,16 @@ function Login() {
     navigate("/signup"); // Use the navigate function to go to the signup page
   }
 
+/*Primary: E43D12
+
+Secondary: D6536D
+
+Accent: FFA2B6
+
+Highlight: EFB11D
+
+Background: EBE9E1*/
+
   return (
     <div
       id="loginDiv"

@@ -1,10 +1,37 @@
 @import "tailwindcss";
 
+/*Primary: E43D12
+
+Secondary: D6536D
+
+Accent: FFA2B6
+
+Highlight: EFB11D
+
+Background: EBE9E1*/
+
 #root {
   max-width: 1280px;
-  margin: 0 auto;
+  /* margin: 0 auto; Removed to let sidebar go to left side
+  text-align: center; */
   padding: 2rem;
-  text-align: center;
+}
+
+.App {
+  width: 100vw;
+  height: 100vh;
+  background-color: #EBE9E1;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.SideBar {
+  height: 100%;
+  width: 300px;
+  background-color: #D6536D;
 }
 
 .logo {
