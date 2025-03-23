@@ -74,7 +74,13 @@ function Signup() {
             body: initBody,
             headers: { "Content-Type": "application/json" },
           }
+
         );
+        var initRes = JSON.parse(await initUser.text())
+
+        if (initRes.success) {
+          console.log("Data initialized for new user");
+        }
 
         setMessage("Signup successful! Redirecting to login...");
 
