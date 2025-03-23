@@ -6,5 +6,35 @@ export const SideBarData = [
         title: "Dashboard",
         icon: <DashboardIcon />,
         link: "/home"
-    }
+    },
+    {
+        title: "Dashboard",
+        icon: <DashboardIcon />,
+        link: "/home"
+    },
+    {
+        title: "Dashboard",
+        icon: <DashboardIcon />,
+        link: "/home"
+    },
+    {
+        title: "Dashboard",
+        icon: <DashboardIcon />,
+        link: "/home"
+    },
+    {
+        title: "Dashboard",
+        icon: <DashboardIcon />,
+        link: "/home"
+    },
+    {
+        title: "Dashboard",
+        icon: <DashboardIcon />,
+        link: "/home"
+    },
+    {
+        title: "Dashboard",
+        icon: <DashboardIcon />,
+        link: "/home"
+    },    
 ]

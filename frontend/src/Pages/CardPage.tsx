@@ -5,9 +5,9 @@ import SideBar from "../components/SideBar";
 const CardPage = () => {
   return (
     <div className="min-h-screen bg-[#EBE9E1] flex flex-col items-center justify-center">
-      <SideBar />
       <PageTitle />
       <LoggedInName />
+      <SideBar />
     </div>
   );
 };
