@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-function AddIncomes() {
-  const [incomeAmount, setIncomeAmount] = useState<number>(0);
+function SetStartFunds() {
+  const [startFunds, setFunds] = useState<number>(0);
   const [message, setMessage] = useState<string>("");
 
   const app_name = "777finances.com";
@@ -17,14 +17,14 @@ function AddIncomes() {
   let ud = JSON.parse(_ud);
   let userId: string = ud.id;
 
-  async function addIncome(event: React.FormEvent<HTMLFormElement>): Promise<void> {
+  async function setStartFunds(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
 
-    const obj = { userId, incomeAmount };
+    const obj = { userId, startFunds };
     const js = JSON.stringify(obj);
 
     try {
-      const response = await fetch(buildPath("api/addincome"), {
+      const response = await fetch(buildPath("api/setstartfunds"), {
         method: "POST",
         body: js,
         headers: { "Content-Type": "application/json" },
@@ -33,35 +33,35 @@ function AddIncomes() {
       const res = await response.json();
 
       if (res.success) {
-        setMessage("Income added successfully!");
+        setMessage("Funds set successfully!");
       } else {
-        setMessage("Failed to add income: " + res.error);
+        setMessage("Failed to set funds: " + res.error);
       }
     } catch (error: any) {
       setMessage("An error occurred: " + error.toString());
     }
   }
 
-  function handleIncomeAmountChange(e: React.ChangeEvent<HTMLInputElement>): void {
-    setIncomeAmount(parseFloat(e.target.value));
+  function handleStartFundsChange(e: React.ChangeEvent<HTMLInputElement>): void {
+    setFunds(parseFloat(e.target.value));
   }
 
   return (
     <div className="bg-primary mt-4 flex flex-col items-center justify-center p-6 rounded shadow-md w-full max-w-md">
-      <h2 className="text-2xl font-bold mb-4">Add Income</h2>
-      <form onSubmit={addIncome} className="w-full">
+      <h2 className="text-2xl font-bold mb-4">Set initial funds</h2>
+      <form onSubmit={setStartFunds} className="w-full">
         <input
           type="number"
           className="mb-4 p-2 border border-gray-300 rounded w-full"
-          placeholder="Income Amount"
-          value={incomeAmount}
-          onChange={handleIncomeAmountChange}
+          placeholder="Enter initial funds"
+          value={startFunds}
+          onChange={handleStartFundsChange}
         />
         <button
           type="submit"
           className="bg-accent text-white py-2 px-4 rounded hover:bg-orange w-full"
         >
-          Add Income
+          Set Funds
         </button>
       </form>
       {message && <p className="text-red-500 mt-4">{message}</p>}
@@ -69,4 +69,4 @@ function AddIncomes() {
   );
 }
 
-export default AddIncomes;
+export default SetStartFunds;

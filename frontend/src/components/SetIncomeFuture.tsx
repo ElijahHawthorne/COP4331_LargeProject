@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 function AddIncomes() {
   const [incomeAmount, setIncomeAmount] = useState<number>(0);
+  const [incomeName, setIncomeName] = useState<string>("");
   const [message, setMessage] = useState<string>("");
 
   const app_name = "777finances.com";
@@ -20,7 +21,7 @@ function AddIncomes() {
   async function addIncome(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
 
-    const obj = { userId, incomeAmount };
+    const obj = { userId, incomeName, incomeAmount };
     const js = JSON.stringify(obj);
 
     try {
@@ -42,6 +43,10 @@ function AddIncomes() {
     }
   }
 
+  function handleIncomeNameChange(e: React.ChangeEvent<HTMLInputElement>): void {
+    setIncomeName(e.target.value);
+  }
+
   function handleIncomeAmountChange(e: React.ChangeEvent<HTMLInputElement>): void {
     setIncomeAmount(parseFloat(e.target.value));
   }
@@ -50,6 +55,13 @@ function AddIncomes() {
     <div className="bg-primary mt-4 flex flex-col items-center justify-center p-6 rounded shadow-md w-full max-w-md">
       <h2 className="text-2xl font-bold mb-4">Add Income</h2>
       <form onSubmit={addIncome} className="w-full">
+        <input
+          type="text"
+          className="mb-4 p-2 border border-gray-300 rounded w-full"
+          placeholder="Income Name"
+          value={incomeName}
+          onChange={handleIncomeNameChange}
+        />
         <input
           type="number"
           className="mb-4 p-2 border border-gray-300 rounded w-full"
