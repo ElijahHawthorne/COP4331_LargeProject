@@ -8,6 +8,13 @@ const saltRounds = 10;
 const MongoClient = require('mongodb').MongoClient;
 require('dotenv').config();
 
+const mailjet = require('node-mailjet').connect( // Use connect for version 6.0.8
+  process.env.MAILJET_API_KEY, 
+  process.env.MAILJET_SECRET_KEY
+);
+
+
+
 // Load your MongoDB URI from environment variables (.env file)
 const url = process.env.MONGODB_URI;
 const client = new MongoClient(url);
@@ -311,6 +318,72 @@ app.post('/api/removeexpense', async (req, res) => {
 
   res.status(200).json({ success, error });
 });
+
+// ------------------------------------
+// SEND EMAIL ENDPOINT
+// ------------------------------------
+
+
+app.post('/api/send-email', async (req, res) => {
+  console.log("trying to send email...");
+
+  const { recipientEmail, subject, message } = req.body;
+
+  let error = '';
+  let success = false;
+  let mailjetResponse = null;
+  let result = null;  // Define 'result' outside of the try-catch block
+
+  try {
+    // Sending the email using Mailjet API v3.1
+    const request = mailjet
+      .post('send', { version: 'v3.1' })
+      .request({
+        Messages: [
+          {
+            From: {
+              Email: 'noreply@777finances.com', // Replace with your email
+              Name: '777finances' // Replace with your name
+            },
+            To: [
+              {
+                Email: recipientEmail // Use recipientEmail from the request body
+              }
+            ],
+            Subject: subject, // Use the subject from the request body
+            TextPart: message // Use the message from the request body
+          }
+        ]
+      });
+
+    // Wait for the result of the email send
+    result = await request;  // Store the result here
+    
+    // Log Mailjet's full response for better debugging
+    console.log('Mailjet Response:', result.body);
+
+    if (result.status === 200 && result.body && result.body.Messages && result.body.Messages.length > 0) {
+      const messageStatus = result.body.Messages[0].Status;
+      if (messageStatus === 'success') {
+        success = true;
+      } else {
+        error = `Failed to send email: ${result.body.Messages[0].Errors[0]?.Text || 'Unknown error'}`;
+      }
+    } else {
+      error = `Failed to send email: No response or message received from Mailjet.`;
+    }
+  } catch (e) {
+    console.error('Error during Mailjet API request:', e);
+    error = e.toString();
+  }
+
+  // Log the result after the try-catch block
+  mailjetResponse = result ? result.body : null;
+
+  // Return the result back to the client with more info
+  res.status(200).json({ success, error, mailjetResponse });
+});
+
 
 
 
