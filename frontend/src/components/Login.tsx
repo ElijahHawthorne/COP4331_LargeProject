@@ -1,22 +1,19 @@
-import { useState } from 'react';
+//import React, { useState } from "react";
+import { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const navigate = useNavigate();
+  // const app_name = "777finances.com";
+  const navigate = useNavigate(); // Get the navigate function
 
   const [message, setMessage] = useState("");
   const [loginName, setLoginName] = useState("");
   const [loginPassword, setPassword] = useState("");
 
   async function doLogin(event: any): Promise<void> {
-    event.preventDefault();  // Prevent form default submission behavior
-
-    // Check if either loginName or loginPassword is empty
-    if (!loginName || !loginPassword) {
-      setMessage("Please enter both username and password.");
-      return; // Exit the function early if any field is empty
-    }
-
+    console.log("dologin...");
+    event.preventDefault();
     const obj = { login: loginName, password: loginPassword };
     const js = JSON.stringify(obj);
 
@@ -26,11 +23,9 @@ function Login() {
         body: js,
         headers: { "Content-Type": "application/json" },
       });
+      let res = JSON.parse(await response.text());
 
-      const res = await response.json(); // Simplified parsing
-
-
-      console.log('API Response:', res);
+      console.log(res);
 
       if (res.id <= 0) {
         setMessage("User/Password combination incorrect");
@@ -63,50 +58,61 @@ function Login() {
     navigate("/signup");
   }
 
+  /*Primary: E43D12
+
+Secondary: D6536D
+
+Accent: FFA2B6
+
+Highlight: EFB11D
+
+Background: EBE9E1*/
+
   return (
     <div
       id="loginDiv"
-      className="bg-primary mt-4 flex flex-col items-center justify-center p-6 rounded shadow-md w-full max-w-md"
+      className="mt-4 flex flex-col items-center justify-center bg-white p-6 rounded shadow-md"
     >
       <span id="inner-title" className="text-3xl font-bold mb-6">
         PLEASE LOG IN
       </span>
-      
-      <form onSubmit={doLogin} className="w-full">
-        <input
-          type="text"
-          className="mb-4 p-2 border border-gray-300 rounded w-full"
-          id="loginName"
-          placeholder="Username"
-          value={loginName}
-          onChange={handleSetLoginName}
-        />
-        <input
-          type="password"
-          className="mb-4 p-2 border border-gray-300 rounded w-full"
-          id="loginPassword"
-          placeholder="Password"
-          value={loginPassword}
-          onChange={handleSetPassword}
-        />
-        <button
-          type="submit"
-          id="loginButton"
-          className="bg-accent text-white py-2 px-4 rounded hover:bg-orange w-full"
-        >
-          Do It
-        </button>
-      </form>
-
-      <p>
+      <br />
+      <input
+        type="text"
+        className="input-style"
+        id="loginName"
+        placeholder="Username"
+        onChange={handleSetLoginName}
+      />
+      <br />
+      <input
+        type="password"
+        className="input-style"
+        id="loginPassword"
+        placeholder="Password"
+        onChange={handleSetPassword}
+      />
+      <br />
+      <input
+        type="submit"
+        id="loginButton"
+        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 w-[60%]"
+        value="Do It"
+        onClick={doLogin}
+      />
+      <p className="text-black">
         Don't have an account?{" "}
         <a className="text-blue-500 underline" href="#" onClick={goToSignup}>
           Sign up
         </a>{" "}
         here.
       </p>
-
-      {message && <span id="loginResult" className="text-red-500">{message}</span>}
+      <span
+        id="loginResult"
+        className="block mt-4 p-2 text-red-500" // You can adjust the color based on success/error
+      >
+        {message}
+      </span>
     </div>
   );
 }
