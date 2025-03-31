@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../App.css";
 import { SideBarData } from "./SideBarData";
 import logo from "../assets/LBJlogo.png";
+import UserProfile from "./UserProfile";
 
 function SideBar() {
   const navigate = useNavigate();
@@ -35,7 +36,22 @@ function SideBar() {
           </li>
         ))}
       </ul>
-
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <UserProfile />
+      <br/>
+      <br/>
       {/* Logout Button */}
       <div className="logout-container">
         <button onClick={handleLogout} className="logout-button">

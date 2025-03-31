@@ -1,76 +1,75 @@
 @import "tailwindcss";
 
-/*Primary: E43D12
-
-Secondary: D6536D
-
-Accent: FFA2B6
-
-Highlight: EFB11D
-
-Background: EBE9E1*/
+/* Color Palette */
+:root {
+  --primary: #E43D12;
+  --secondary: #D6536D;
+  --accent: #FFA2B6;
+  --highlight: #EFB11D;
+  --background: #EBE9E1;
+}
 
 #root {
   max-width: 1280px;
-  /* margin: 0 auto; Removed to let sidebar go to left side
-  text-align: center;
-  padding: 2rem; */
 }
 
 .App {
   width: 100vw;
   height: 100vh;
-  background-color: #EBE9E1;
+  background-color: var(--background);
+  display: flex;
+  flex-direction: row;
 }
 
 body {
   margin: 0;
   padding: 0;
   display: flex;
-  align-items: center;
+  align-items: stretch;
+  justify-content: flex-start;
   height: 100%;
 }
 
 .SideBar {
   height: 100%;
   width: 300px;
-  background-color: #D6536D;
+  background-color: var(--secondary);
+  display: flex;
+  flex-direction: column;
 }
 
-.SideBarList{
-  height: auto;
+.SideBarList {
   width: 100%;
   padding: 0;
+  margin: 0;
 }
 
-.SideBarList .row{
+.SideBarList .row {
   width: 100%;
   height: 50px;
   border: 1px solid black;
   list-style-type: none;
-  margin: 0%;
   display: flex;
   flex-direction: row;
-  color: white;
   justify-content: center;
   align-items: center;
+  color: white;
   font-family: 'Courier New', Courier, monospace;
 }
 
-.row #icon{
+.row #icon {
   flex: 30%;
   display: grid;
   place-items: center;
 }
 
-.row #title{
+.row #title {
   flex: 70%;
 }
 
-.title{
+.title {
   text-align: center;
-  justify-content: center;
-  font-size: 12px;
+  font-size: 25px;
 }
 
 .logo {
@@ -79,26 +78,9 @@ body {
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
 }
 
 .card {
@@ -107,4 +89,19 @@ body {
 
 .read-the-docs {
   color: #888;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .SideBar {
+    width: 200px; /* Reduce sidebar width on mobile */
+  }
+
+  .SideBarList .row {
+    height: 40px; /* Adjust row height */
+  }
+
+  .App {
+    padding: 1rem; /* Add padding on small screens */
+  }
 }

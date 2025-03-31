@@ -3,38 +3,18 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 
 export const SideBarData = [
     {
-        title: "Dashboard",
+        title: "View Expenses",
         icon: <DashboardIcon />,
         link: "/home"
     },
     {
-        title: "Dashboard",
+        title: "Edit Expenses",
         icon: <DashboardIcon />,
         link: "/home"
     },
     {
-        title: "Dashboard",
+        title: "Account Settings",
         icon: <DashboardIcon />,
         link: "/home"
-    },
-    {
-        title: "Dashboard",
-        icon: <DashboardIcon />,
-        link: "/home"
-    },
-    {
-        title: "Dashboard",
-        icon: <DashboardIcon />,
-        link: "/home"
-    },
-    {
-        title: "Dashboard",
-        icon: <DashboardIcon />,
-        link: "/home"
-    },
-    {
-        title: "Dashboard",
-        icon: <DashboardIcon />,
-        link: "/home"
-    },    
+    } 
 ]

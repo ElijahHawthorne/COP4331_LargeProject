@@ -1,10 +1,10 @@
 //import React, { useState } from "react";
-import { useState } from 'react';
+import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
 function Login() {
- // const app_name = "777finances.com";
+  // const app_name = "777finances.com";
   const navigate = useNavigate(); // Get the navigate function
 
   /*function buildPath(route: string): string {
@@ -20,16 +20,20 @@ function Login() {
   const [loginPassword, setPassword] = useState("");
 
   async function doLogin(event: any): Promise<void> {
+    console.log("dologin...");
     event.preventDefault();
     const obj = { login: loginName, password: loginPassword };
     const js = JSON.stringify(obj);
     try {
-      const response = await fetch("http://777finances.com:5000/api/signup", {
+      const response = await fetch("http://777finances.com:5000/api/login", {
         method: "POST",
         body: js,
         headers: { "Content-Type": "application/json" },
       });
       let res = JSON.parse(await response.text());
+
+      console.log(res);
+
       if (res.id <= 0) {
         setMessage("User/Password combination incorrect");
       } else {
@@ -60,7 +64,7 @@ function Login() {
     navigate("/signup"); // Use the navigate function to go to the signup page
   }
 
-/*Primary: E43D12
+  /*Primary: E43D12
 
 Secondary: D6536D
 
@@ -73,7 +77,7 @@ Background: EBE9E1*/
   return (
     <div
       id="loginDiv"
-      className="mt-4 flex flex-col items-center justify-center bg-white p-6 rounded shadow-md w-full max-w-md"
+      className="mt-4 flex flex-col items-center justify-center bg-white p-6 rounded shadow-md"
     >
       <span id="inner-title" className="text-3xl font-bold mb-6">
         PLEASE LOG IN
@@ -81,7 +85,7 @@ Background: EBE9E1*/
       <br />
       <input
         type="text"
-        className="mb-4 p-2 border border-gray-300 rounded w-full"
+        className="input-style"
         id="loginName"
         placeholder="Username"
         onChange={handleSetLoginName}
@@ -89,7 +93,7 @@ Background: EBE9E1*/
       <br />
       <input
         type="password"
-        className="mb-4 p-2 border border-gray-300 rounded w-full"
+        className="input-style"
         id="loginPassword"
         placeholder="Password"
         onChange={handleSetPassword}
@@ -98,18 +102,23 @@ Background: EBE9E1*/
       <input
         type="submit"
         id="loginButton"
-        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 w-full"
+        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 w-[60%]"
         value="Do It"
         onClick={doLogin}
       />
-      <p>
+      <p className="text-black">
         Don't have an account?{" "}
         <a className="text-blue-500 underline" href="#" onClick={goToSignup}>
           Sign up
         </a>{" "}
         here.
       </p>
-      <span id="loginResult">{message}</span>
+      <span
+        id="loginResult"
+        className="block mt-4 p-2 text-red-500" // You can adjust the color based on success/error
+      >
+        {message}
+      </span>
     </div>
   );
 }
