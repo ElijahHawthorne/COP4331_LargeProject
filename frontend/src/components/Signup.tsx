@@ -100,6 +100,24 @@ function Signup() {
       var res = JSON.parse(await response.text());
 
       if (res.success) {
+        //// Inititalize new user in data table
+
+        var initBody = JSON.stringify({ userId: res.userId });
+ 
+        const initUser = await fetch(
+          "http://777finances.com:5000/api/datainit",
+          {
+            method: "POST",
+            body: initBody,
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+
+
+
+        ////
+
+
 
         setSignupSuccess(true);
         setMessage("Signup successful! Redirecting to login...");

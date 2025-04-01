@@ -156,8 +156,8 @@ app.post('/api/datainit', async (req, res) => {
     const userData = {
       userId: userId,
       income: null,
-      expenseCost: [],
-      expenseNames: []
+      expenses:[]
+     
     };
 
     const result = await db.collection('Data').insertOne(userData);
