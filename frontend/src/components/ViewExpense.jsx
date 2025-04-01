@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { PieChart } from '@mui/x-charts';
 
 function ViewExpense() {
   const [expenses, setExpenses] = useState([]);
@@ -43,16 +44,33 @@ function ViewExpense() {
 
   return (
     <div className="bg-primary mt-4 flex flex-col items-center justify-center p-6 rounded shadow-md w-full max-w-md">
-      <h2 className="text-2xl font-bold mb-4">Your Expenses</h2>
-      {message && <p className="text-red-500 mb-4">{message}</p>}
-      <ul className="w-full">
-        {expenses.map((expense, index) => (
-          <li key={index} className="mb-2 p-2 border border-gray-300 rounded">
-            <p className="font-bold">{expense.name}</p>
-            <p>Cost: ${expense.cost}</p>
-          </li>
-        ))}
-      </ul>
+      <div className="bg-primary mt-4 flex flex-col items-center justify-center p-6 rounded shadow-md w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-4">Your Expenses</h2>
+        {message && <p className="text-red-500 mb-4">{message}</p>}
+        <ul className="w-full">
+          {expenses.map((expense, index) => (
+            <li key={index} className="mb-2 p-2 border border-gray-300 rounded">
+              <p className="font-bold">{expense.name}</p>
+              <p>Cost: ${expense.cost}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="bg-primary mt-4 flex flex-col items-center justify-center p-6 rounded shadow-md w-full max-w-md">
+      <PieChart
+        series={[
+          {
+            data: expenses.map((expense, index) => ({
+              id: index,
+              value: expense.cost,
+              label: expense.name
+            })),
+          },
+        ]}
+        width={400}
+        height={200}
+      />
+      </div>
     </div>
   );
 }
