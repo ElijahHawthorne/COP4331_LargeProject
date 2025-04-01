@@ -148,7 +148,10 @@ app.post('/api/datainit', async (req, res) => {
 
     const userData = {
       userId: userId,
-      income: null,
+      startFunds: null,
+      curFunds: null,
+      incomeAmount: [],
+      incomeNames: [],
       expenseCost: [],
       expenseNames: []
     };
@@ -199,6 +202,10 @@ app.post('/api/addexpense', async (req, res) => {
       {
         $push: {
           expenses: { name: expenseName, cost: expenseCost }  // This is the key part
+        }
+        ,
+        $inc: {
+          curFunds: -expenseCost
         }
       }
     );
@@ -291,12 +298,22 @@ app.post('/api/removeexpense', async (req, res) => {
   try {
     const db = client.db('777Finances');
     
+    const expense = await db.collection('Data').findOne(
+      { userId: userId, "expenses.name": expenseName },
+      { projection: { "expenses.$": 1 } }
+    );
+
+    const expenseCost = expense.expenses[0].cost;
+    
     // Use $pull to remove the expense object with the given expenseName from the expenses array
     const result = await db.collection('Data').updateOne(
       { userId: userId },  // Find the user by userId
       { 
         $pull: { 
           expenses: { name: expenseName }  // Remove the object with the matching expenseName
+        },
+        $inc: {
+          curFunds: expenseCost
         }
       }
     );
@@ -313,7 +330,112 @@ app.post('/api/removeexpense', async (req, res) => {
   res.status(200).json({ success, error });
 });
 
+// ------------------------------------
+// ADD INCOME ENDPOINT
+// ------------------------------------
+app.post('/api/addincome', async (req, res) => {
+  const { userId, incomeAmount } = req.body;
 
+  // Log the incoming data for debugging
+  console.log("Received income data:", { userId, incomeAmount });
+
+  let error = '';
+  let success = false;
+
+  const db = client.db('777Finances');
+
+//
+  try {
+    await db.collection('Data').updateOne(
+      { userId: userId, income: { $eq: null } },
+      { $set: { income: 0 } }
+    );
+    
+    const result = await db.collection('Data').updateOne(
+      { userId: userId },
+      {
+        $inc: {
+          income: incomeAmount,
+          curFunds: incomeAmount
+        }
+      }
+    );
+
+    if (result.modifiedCount > 0) {
+      success = true;
+    } else {
+      error = 'Failed to add income';
+    }
+  } catch (e) {
+    error = e.toString();
+  }
+//
+  res.status(200).json({ success, error });
+});
+
+// ------------------------------------
+// SET START FUNDS ENDPOINT
+// ------------------------------------
+app.post('/api/setstartfunds', async (req, res) => {
+  const { userId, startFunds } = req.body;
+
+  // Log the incoming data for debugging
+  console.log("Starting fund data:", { userId, startFunds });
+
+  let error = '';
+  let success = false;
+
+  const db = client.db('777Finances');
+
+//
+  try {
+    
+    const result = await db.collection('Data').updateOne(
+      { userId: userId },
+      {
+        $set: {
+          startFunds: startFunds,
+          curFunds: startFunds
+        }
+      }
+    );
+
+    if (result.modifiedCount > 0) {
+      success = true;
+    } else {
+      error = 'Failed to set start funds';
+    }
+  } catch (e) {
+    error = e.toString();
+  }
+//
+  res.status(200).json({ success, error });
+});
+// ------------------------------------
+// GET TOTAL FUNDS ENDPOINT
+// ------------------------------------
+app.post('/api/getfunds', async (req, res) => {
+  const { userId } = req.body;
+  console.log("Received userId:", userId);
+  let error = '';
+  let funds = 0;
+
+  try {
+    const db = client.db('777Finances');
+
+    const user = await db.collection('Data').findOne({ userId: userId });
+
+    if (user) {
+      funds = user.curFunds; 
+    } else {
+      error = 'User not found';
+    }
+  } catch (e) {
+    error = e.toString();
+  }
+
+  res.status(200).json({ funds, error });
+});
 // ------------------------------------
 // CORS SETUP & START SERVER
 // ------------------------------------
