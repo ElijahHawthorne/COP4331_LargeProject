@@ -14,7 +14,6 @@ function Signup() {
 
   const [SignupSuccess, setSignupSuccess] = useState<boolean | null>(null);
 
-
   // Regex for email validation
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -48,23 +47,21 @@ function Signup() {
       return;
     }
 
-
     // Validate email
     if (!validateEmail(email)) {
       setSignupSuccess(false);
       setMessage("Invalid email format");
       return;
     }
-  
-     // Validate password
-     if (!validatePassword(signupPassword)) {
+
+    // Validate password
+    if (!validatePassword(signupPassword)) {
       setSignupSuccess(false);
       setMessage(
         "Password must be at least 8 characters long, contain an uppercase letter, a number, and a special character."
       );
       return;
     }
-
 
     // Check if password and confirm password match
     if (signupPassword !== confirmPassword) {
@@ -73,12 +70,6 @@ function Signup() {
 
       return;
     }
-
-
-
-    
-
-   
 
     let obj = {
       login: signupName, // Matching API field name
@@ -103,7 +94,7 @@ function Signup() {
         //// Inititalize new user in data table
 
         var initBody = JSON.stringify({ userId: res.userId });
- 
+
         const initUser = await fetch(
           "http://777finances.com:5000/api/datainit",
           {
@@ -112,12 +103,9 @@ function Signup() {
             headers: { "Content-Type": "application/json" },
           }
         );
-
-
+        console.log(initUser);
 
         ////
-
-
 
         setSignupSuccess(true);
         setMessage("Signup successful! Redirecting to login...");
@@ -125,7 +113,6 @@ function Signup() {
         setTimeout(() => {
           navigate("/login"); // Use navigate function to redirect
         }, 2000);
-        
       } else {
         setSignupSuccess(false);
 
@@ -234,11 +221,14 @@ function Signup() {
         </a>{" "}
         here.
       </p>
-      <span id="signupResult"
-      
-      className={`block mt-4 p-2 ${SignupSuccess ? 'text-black' : 'text-red-500'}`} 
-      
-      >{message}{(SignupSuccess === false) ? "!" : ""}
+      <span
+        id="signupResult"
+        className={`block mt-4 p-2 ${
+          SignupSuccess ? "text-black" : "text-red-500"
+        }`}
+      >
+        {message}
+        {SignupSuccess === false ? "!" : ""}
       </span>
     </div>
   );

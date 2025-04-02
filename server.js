@@ -155,9 +155,11 @@ app.post('/api/datainit', async (req, res) => {
 
     const userData = {
       userId: userId,
-      income: null,
-      expenses:[]
-     
+      income: 0,
+      currentBalance: 0,
+      expenses:[],
+      goals:[],
+      debt:[]
     };
 
     const result = await db.collection('Data').insertOne(userData);
@@ -260,12 +262,12 @@ app.post('/api/updateexpense', async (req, res) => {
   res.status(200).json({ success, error });
 });
 // ------------------------------------
-// GET EXPENSES ENDPOINT
+// GET Data ENDPOINT
 // ------------------------------------
-app.post('/api/getexpenses', async (req, res) => {
+app.post('/api/getdata', async (req, res) => {
   const { userId } = req.body;
   let error = '';
-  let expenses = [];
+  let userData = {};
 
   try {
     const db = client.db('777Finances');
@@ -274,7 +276,7 @@ app.post('/api/getexpenses', async (req, res) => {
     const user = await db.collection('Data').findOne({ userId: userId });
 
     if (user) {
-      expenses = user.expenses; 
+      userData = user; 
     } else {
       error = 'User not found';
     }
@@ -282,7 +284,7 @@ app.post('/api/getexpenses', async (req, res) => {
     error = e.toString();
   }
 
-  res.status(200).json({ expenses, error });
+  res.status(200).json({ userData, error });
 });
 // ------------------------------------
 // REMOVE EXPENSES ENDPOINT
@@ -318,6 +320,325 @@ app.post('/api/removeexpense', async (req, res) => {
 
   res.status(200).json({ success, error });
 });
+
+
+
+
+
+
+// ------------------------------------
+// EDIT BALANCE
+// ------------------------------------
+
+app.post('/api/editbalance', async (req, res) => {
+  const { userId, newBalance } = req.body;
+
+  // Log the incoming data for debugging
+  console.log("Received request to edit balance:", { userId, newBalance });
+
+  let error = '';
+  let success = false;
+
+  const db = client.db('777Finances');
+
+  try {
+    // Update the balance field for the user
+    const result = await db.collection('Data').updateOne(
+      { userId: userId },  // Match the user by their userId
+      {
+        $set: { currentBalance: newBalance }  // Set the new balance amount
+      }
+    );
+
+    // Check if the document was modified
+    if (result.modifiedCount > 0) {
+      success = true;
+    } else {
+      error = 'Failed to update balance, user not found or no change made';
+    }
+  } catch (e) {
+    error = e.toString();
+  }
+
+  res.status(200).json({ success, error });
+});
+
+
+
+// ------------------------------------
+// ADD GOAL
+// ------------------------------------
+app.post('/api/addgoal', async (req, res) => {
+  const { userId, goalName, paymentAmount, payDate, paymentProgress  } = req.body;
+
+  // Log the incoming data for debugging
+  console.log("Received goal data:", { userId, goalName, paymentAmount, payDate, paymentProgress  });
+
+  let error = '';
+  let success = false;
+
+  const db = client.db('777Finances');
+
+
+  const existingExpense = await db.collection('Data').findOne(
+    { userId: userId, "goals.name": goalName }
+  );
+
+
+  if (existingExpense) {
+    error = 'Goal with this name already exists';
+  } else{
+
+//
+  try {
+    
+    const result = await db.collection('Data').updateOne(
+      { userId: userId },
+      {
+        $push: {
+          goals: { name: goalName, cost: goalCost, progress: paymentProgress, date: payDate }  // This is the key part
+        }
+      }
+    );
+
+    if (result.modifiedCount > 0) {
+      success = true;
+    } else {
+      error = 'Failed to add goal';
+    }
+  } catch (e) {
+    error = e.toString();
+  }
+//
+  }
+  res.status(200).json({ success, error });
+});
+
+// ------------------------------------
+// DELETE GOAL
+// ------------------------------------
+
+
+app.post('/api/removegoal', async (req, res) => {
+  const { userId, goalName } = req.body;
+
+  // Log the incoming data for debugging
+  console.log("Received request to remove goal:", { userId, goalName });
+
+  let error = '';
+  let success = false;
+
+  const db = client.db('777Finances');
+
+  // Check if the goal exists for the given user
+  const existingGoal = await db.collection('Data').findOne(
+    { userId: userId, "goals.name": goalName }
+  );
+
+  if (!existingGoal) {
+    error = 'Goal not found';
+  } else {
+    try {
+      // Remove the goal from the user's goals array
+      const result = await db.collection('Data').updateOne(
+        { userId: userId },
+        {
+          $pull: { 
+            goals: { name: goalName }  // Remove goal by name
+          }
+        }
+      );
+
+      if (result.modifiedCount > 0) {
+        success = true;
+      } else {
+        error = 'Failed to remove goal';
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+  }
+
+  res.status(200).json({ success, error });
+});
+
+
+
+
+
+// ------------------------------------
+// ADD DEBT
+// ------------------------------------
+
+app.post('/api/adddebt', async (req, res) => {
+  const { userId, debtName, debtAmount, paymentDate, paymentProgress } = req.body;
+
+  // Log the incoming data for debugging
+  console.log("Received debt data:", { userId, debtName, debtAmount, paymentDate, paymentProgress });
+
+  let error = '';
+  let success = false;
+
+  const db = client.db('777Finances');
+
+  // Check if the debt already exists for this user
+  const existingDebt = await db.collection('Data').findOne(
+    { userId: userId, "debts.name": debtName }
+  );
+
+  if (existingDebt) {
+    error = 'Debt with this name already exists';
+  } else {
+    try {
+      const result = await db.collection('Data').updateOne(
+        { userId: userId },
+        {
+          $push: {
+            debt: { name: debtName, amount: debtAmount, progress: paymentProgress, date: paymentDate } // Add debt to the 'debts' array
+          }
+        }
+      );
+
+      if (result.modifiedCount > 0) {
+        success = true;
+      } else {
+        error = 'Failed to add debt';
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+  }
+
+  res.status(200).json({ success, error });
+});
+
+
+
+// ------------------------------------
+// DELETE DEBT
+// ------------------------------------
+
+app.post('/api/deletedebt', async (req, res) => {
+  const { userId, debtName } = req.body;
+
+  // Log the incoming data for debugging
+  console.log("Received request to remove debt:", { userId, debtName });
+
+  let error = '';
+  let success = false;
+
+  const db = client.db('777Finances');
+
+  // Check if the debt exists for the given user
+  const existingDebt = await db.collection('Data').findOne(
+    { userId: userId, "debts.name": debtName }
+  );
+
+  if (!existingDebt) {
+    error = 'Debt not found';
+  } else {
+    try {
+      // Remove the debt from the user's debts array
+      const result = await db.collection('Data').updateOne(
+        { userId: userId },
+        {
+          $pull: { 
+            debts: { name: debtName }  // Remove debt by name
+          }
+        }
+      );
+
+      if (result.modifiedCount > 0) {
+        success = true;
+      } else {
+        error = 'Failed to remove debt';
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+  }
+
+  res.status(200).json({ success, error });
+});
+
+
+// ------------------------------------
+// ADD INCOME
+// ------------------------------------
+
+
+app.post('/api/addincome', async (req, res) => {
+  const { userId, incomeAmount } = req.body;
+
+  // Log the incoming data for debugging
+  console.log("Received income data:", { userId, incomeAmount });
+
+  let error = '';
+  let success = false;
+
+  const db = client.db('777Finances');
+
+  try {
+    // Ensure income is initialized if it doesn't exist
+    const result = await db.collection('Data').updateOne(
+      { userId: userId },
+      {
+        $setOnInsert: { income: 0 },  // Initialize income to 0 if it doesn't exist
+        $inc: { income: incomeAmount }  // Increment income by incomeAmount
+      },
+      { upsert: true }  // If the user doesn't exist, insert a new document with the default values
+    );
+
+    if (result.modifiedCount > 0 || result.upsertedCount > 0) {
+      success = true;
+    } else {
+      error = 'Failed to add income';
+    }
+  } catch (e) {
+    error = e.toString();
+  }
+
+  res.status(200).json({ success, error });
+});
+
+
+
+// ------------------------------------
+// EDIT INCOME
+// ------------------------------------
+
+app.post('/api/editincome', async (req, res) => {
+  const { userId, newIncomeAmount } = req.body;
+
+  // Log the incoming data for debugging
+  console.log("Received request to edit income:", { userId, newIncomeAmount });
+
+  let error = '';
+  let success = false;
+
+  const db = client.db('777Finances');
+
+  try {
+    // Update the income for the user
+    const result = await db.collection('Data').updateOne(
+      { userId: userId },  // Match the user by their userId
+      {
+        $set: { income: newIncomeAmount }  // Set the new income amount
+      }
+    );
+
+    if (result.modifiedCount > 0) {
+      success = true;
+    } else {
+      error = 'Failed to update income, user not found or no change made';
+    }
+  } catch (e) {
+    error = e.toString();
+  }
+
+  res.status(200).json({ success, error });
+});
+
 
 // ------------------------------------
 // SEND EMAIL ENDPOINT

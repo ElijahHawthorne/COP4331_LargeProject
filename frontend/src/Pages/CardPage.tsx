@@ -15,15 +15,23 @@
 //Just saved this before adding all the extra cards
 //*************************************************************************************************** */
 import { useState, useEffect } from "react";
-import PageTitle from "../components/PageTitle";
-import LoggedInName from "../components/LoggedInName";
+
 import SideBar from "../components/SideBar";
 import AddExpenses from "../components/AddExpense";
 import ViewExpense from "../components/ViewExpense";
 
 function CardPage() {
   const [sessionId, setSessionId] = useState<number | null>(null);
-  const [curUserExpenses, setCurUserExpenses] = useState([]);
+  const [curUserData, setCurUserData] = useState({
+    income:0,
+    currentBalance:0,
+    expenses:[],
+    Goals:[],
+    Debt:[],
+  
+  
+  
+  });
 
   const [error, setError] = useState("");
 
@@ -42,11 +50,11 @@ function CardPage() {
 
   useEffect(() => {
     if (sessionId !== null) {
-      fetchExpenses();
+      fetchUserData();
     }
   }, [sessionId]);
 
-  const fetchExpenses = async () => {
+  const fetchUserData = async () => {
     try {
       const response = await fetch("http://777finances.com:5000/api/getexpenses", {
         method: "POST",
@@ -57,7 +65,7 @@ function CardPage() {
       });
 
       const data = await response.json();
-      setCurUserExpenses(data.expenses);
+      setCurUserData(data);
       
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -72,7 +80,7 @@ function CardPage() {
   // Function to trigger a re-fetch of expenses
   const handleRerender = () => {
     
-    fetchExpenses(); // Re-fetch the expenses
+    fetchUserData(); // Re-fetch the expenses
   };
 
   
@@ -98,7 +106,7 @@ function CardPage() {
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-white p-4 rounded shadow">
             <h2 className="text-lg font-bold">Profit and Loss</h2>
-            <ViewExpense expenseList={curUserExpenses} />
+            <ViewExpense expenseList={curUserData.expenses} />
           </div>
           <div className="bg-white p-4 rounded shadow">
             <h2 className="text-lg font-bold">Revenue & Expenses Over Time</h2>
