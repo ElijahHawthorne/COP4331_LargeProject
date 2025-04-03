@@ -4,6 +4,7 @@ const cors = require('cors');
 const app = express();
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
+const cron = require('node-cron')
 
 const MongoClient = require('mongodb').MongoClient;
 require('dotenv').config();
@@ -150,10 +151,8 @@ app.post('/api/datainit', async (req, res) => {
       userId: userId,
       startFunds: null,
       curFunds: null,
-      incomeAmount: [],
-      incomeNames: [],
-      expenseCost: [],
-      expenseNames: []
+      income: [],
+      expenses: []
     };
 
     const result = await db.collection('Data').insertOne(userData);
@@ -178,6 +177,7 @@ app.post('/api/addexpense', async (req, res) => {
 
   // Log the incoming data for debugging
   console.log("Received expense data:", { userId, expenseName, expenseCost });
+  
 
   let error = '';
   let success = false;
@@ -193,7 +193,11 @@ app.post('/api/addexpense', async (req, res) => {
   if (existingExpense) {
     error = 'Expense with this name already exists';
   } else{
-
+    const newExpense = {
+      name: expenseName,
+      cost: expenseCost,
+      timestamp: new Date().toISOString()
+    }
 //
   try {
     
@@ -201,7 +205,7 @@ app.post('/api/addexpense', async (req, res) => {
       { userId: userId },
       {
         $push: {
-          expenses: { name: expenseName, cost: expenseCost }  // This is the key part
+          expenses: newExpense  // This is the key part
         }
         ,
         $inc: {
@@ -267,6 +271,7 @@ app.post('/api/getexpenses', async (req, res) => {
   console.log("Received userId:", userId);
   let error = '';
   let expenses = [];
+
 
   try {
     const db = client.db('777Finances');
@@ -334,7 +339,7 @@ app.post('/api/removeexpense', async (req, res) => {
 // ADD INCOME ENDPOINT
 // ------------------------------------
 app.post('/api/addincome', async (req, res) => {
-  const { userId, incomeAmount } = req.body;
+  const { userId, incomeName, incomeAmount } = req.body;
 
   // Log the incoming data for debugging
   console.log("Received income data:", { userId, incomeAmount });
@@ -343,19 +348,21 @@ app.post('/api/addincome', async (req, res) => {
   let success = false;
 
   const db = client.db('777Finances');
-
+  const newIncome = {
+    name: incomeName,
+    amount: incomeAmount,
+    timestamp: new Date().toISOString()
+  }
 //
   try {
-    await db.collection('Data').updateOne(
-      { userId: userId, income: { $eq: null } },
-      { $set: { income: 0 } }
-    );
-    
     const result = await db.collection('Data').updateOne(
       { userId: userId },
       {
+        $push: {
+          income: newIncome 
+        }
+        ,
         $inc: {
-          income: incomeAmount,
           curFunds: incomeAmount
         }
       }
@@ -369,6 +376,7 @@ app.post('/api/addincome', async (req, res) => {
   } catch (e) {
     error = e.toString();
   }
+  
 //
   res.status(200).json({ success, error });
 });

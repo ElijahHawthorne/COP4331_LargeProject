@@ -52,6 +52,7 @@ function ViewExpense() {
             <li key={index} className="mb-2 p-2 border border-gray-300 rounded">
               <p className="font-bold">{expense.name}</p>
               <p>Cost: ${expense.cost}</p>
+              <p>Time: {expense.timestamp}</p>
             </li>
           ))}
         </ul>

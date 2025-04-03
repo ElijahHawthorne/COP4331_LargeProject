@@ -23,7 +23,6 @@ function AddExpenses() {
 
     const obj = { userId, expenseName, expenseCost };
     const js = JSON.stringify(obj);
-
     try {
       const response = await fetch(buildPath("api/addexpense"), {
         method: "POST",
