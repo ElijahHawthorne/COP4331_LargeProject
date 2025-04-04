@@ -1,9 +1,6 @@
 
 
-interface Expense {
-    name: string;
-    cost: number;
-  }
+import { Expense } from "../Types";
   
   interface ViewExpenseProps {
     expenseList: Expense[]; // Define the type for the expenseList prop

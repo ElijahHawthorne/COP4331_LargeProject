@@ -180,10 +180,10 @@ app.post('/api/datainit', async (req, res) => {
 // ADD EXPENSE ENDPOINT
 // ------------------------------------
 app.post('/api/addexpense', async (req, res) => {
-  const { userId, expenseName, expenseCost } = req.body;
+  const { userId, expenseName, expenseCost, expenseDate, expenseCategory } = req.body;
 
   // Log the incoming data for debugging
-  console.log("Received expense data:", { userId, expenseName, expenseCost });
+  console.log("Received expense data:", { userId, expenseName, expenseCost, expenseDate, expenseCategory });
 
   let error = '';
   let success = false;
@@ -207,7 +207,7 @@ app.post('/api/addexpense', async (req, res) => {
       { userId: userId },
       {
         $push: {
-          expenses: { name: expenseName, cost: expenseCost }  // This is the key part
+          expenses: { name: expenseName, cost: expenseCost, date: expenseDate, category: expenseCategory }  // This is the key part
         }
       }
     );
@@ -369,50 +369,56 @@ app.post('/api/editbalance', async (req, res) => {
 // ADD GOAL
 // ------------------------------------
 app.post('/api/addgoal', async (req, res) => {
-  const { userId, goalName, paymentAmount, payDate, paymentProgress  } = req.body;
+  const { userId, goalName, cost, paymentAmount, payDate, paymentProgress } = req.body;
 
   // Log the incoming data for debugging
-  console.log("Received goal data:", { userId, goalName, paymentAmount, payDate, paymentProgress  });
+  console.log("Received goal data:", { userId, goalName, cost, paymentAmount, payDate, paymentProgress });
 
   let error = '';
   let success = false;
 
   const db = client.db('777Finances');
 
-
+  // Check if goal with the same name already exists for the user
   const existingExpense = await db.collection('Data').findOne(
     { userId: userId, "goals.name": goalName }
   );
 
-
   if (existingExpense) {
     error = 'Goal with this name already exists';
-  } else{
-
-//
-  try {
-    
-    const result = await db.collection('Data').updateOne(
-      { userId: userId },
-      {
-        $push: {
-          goals: { name: goalName, cost: goalCost, progress: paymentProgress, date: payDate }  // This is the key part
+  } else {
+    try {
+      // Update the Data collection by pushing the new goal
+      const result = await db.collection('Data').updateOne(
+        { userId: userId },
+        {
+          $push: {
+            goals: { 
+              name: goalName, 
+              cost: cost,              // Use the total cost
+              paymentAmount: paymentAmount, // Monthly payment amount
+              progress: paymentProgress, 
+              date: payDate 
+            }
+          }
         }
-      }
-    );
+      );
 
-    if (result.modifiedCount > 0) {
-      success = true;
-    } else {
-      error = 'Failed to add goal';
+      // Check if the update was successful
+      if (result.modifiedCount > 0) {
+        success = true;
+      } else {
+        error = 'Failed to add goal';
+      }
+    } catch (e) {
+      error = e.toString();
     }
-  } catch (e) {
-    error = e.toString();
   }
-//
-  }
+
+  // Send response back to the client
   res.status(200).json({ success, error });
 });
+
 
 // ------------------------------------
 // DELETE GOAL
