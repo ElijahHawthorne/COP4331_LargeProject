@@ -1,6 +1,6 @@
 
 
-import React, { useRef } from "react";
+
 
 interface ExpandableCardProps {
   title: string;
@@ -21,6 +21,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
   componentExpanded,
   cardRef,
 }) => {
+    console.log(index);
   const handleCardClick = (event: React.MouseEvent) => {
     event.stopPropagation(); // Prevent the event from propagating to the global listener
     onClick(event); // Call the passed onClick handler

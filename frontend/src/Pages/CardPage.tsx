@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import SideBar from "../components/SideBar";
 import ExpandableCard from "../components/ExpandableCard";
 import ViewGoals from "../components/ViewGoals";
@@ -73,7 +73,7 @@ function CardPage() {
 
 
   const goals = curUserData?.goals || [];
-  const expenses = curUserData?.expenses || [];
+  
 
   if (error) {
     return <div>Error: {error}</div>;
