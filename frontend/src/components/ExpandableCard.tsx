@@ -41,6 +41,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
         height: "300px",
         overflowY: isActive? "hidden": "auto",
         transform: isActive ? "translate(-50%, -50%) scale(1.5)" : "scale(1)",
+        
       }}
       onClick={handleCardClick} // Use the handleCardClick to stop propagation
     >

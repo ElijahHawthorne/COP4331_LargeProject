@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 import type {} from '@mui/x-date-pickers/themeAugmentation';
 import type {} from '@mui/x-charts/themeAugmentation';
 import type {} from '@mui/x-data-grid-pro/themeAugmentation';
@@ -32,7 +32,7 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
     <AppTheme {...props} themeComponents={xThemeComponents}>
       <CssBaseline enableColorScheme />
       <Box sx={{ display: 'flex' }}>
-        <SideMenu />
+        
         <AppNavbar />
         {/* Main content */}
         <Box

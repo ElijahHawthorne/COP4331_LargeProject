@@ -1,16 +1,16 @@
-import * as React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Copyright from '../internals/components/Copyright';
-import ChartUserByCountry from './ChartUserByCountry';
-import CustomizedTreeView from './CustomizedTreeView';
-import CustomizedDataGrid from './CustomizedDataGrid';
-import HighlightedCard from './HighlightedCard';
-import PageViewsBarChart from './PageViewsBarChart';
-import SessionsChart from './SessionsChart';
 import StatCard, { StatCardProps } from './StatCard';
+import ViewGoals from '../../components/ViewGoals';
+import { Goal } from '../../Types';
+import ExpandableCard from '../../components/ExpandableCard';
+import { UserData } from '../../Types';
+import AddGoal from '../../components/AddGoal';
+import AddExpenses from '../../components/AddExpense';
 
 const data: StatCardProps[] = [
   {
@@ -45,7 +45,133 @@ const data: StatCardProps[] = [
   },
 ];
 
+const TestGoals : Goal[] = [
+  {
+      "name": "Buy a Car",
+      "cost": 20000,
+      "paymentAmount": 1000,
+      "progress": 5000,
+      "date": "2025-12-31"
+  },
+  {
+      "name": "Buy PS5",
+      "cost": 500,
+      "paymentAmount": 20,
+      "progress": 140,
+      "date": "2025-12-31"
+  },
+  {
+      "name": "Student Loan",
+      "cost": 20000,
+      "paymentAmount": 150,
+      "progress": 5000,
+      "date": "2025-12-31"
+  }
+]
+
+
 export default function MainGrid() {
+//////////////
+
+
+
+const [sessionId, setSessionId] = useState<number | null>(null);
+  const [curUserData, setCurUserData] = useState<UserData>({
+    income: 0,
+    currentBalance: 0,
+    expenses: [],
+    goals: [],
+    Debt: [],
+  });
+  const [activeCard, setActiveCard] = useState<number | null>(null);
+  const [error, setError] = useState("");
+
+  // Initialize individual refs for each card
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const storedUserData = localStorage.getItem("user_data");
+    if (storedUserData) {
+      try {
+        const userData = JSON.parse(storedUserData);
+        setSessionId(userData.id);
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (sessionId !== null) {
+      fetchUserData();
+    }
+  }, [sessionId]);
+
+  const fetchUserData = async () => {
+    try {
+      const response = await fetch("http://777finances.com:5000/api/getdata", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: sessionId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user data");
+      }
+
+      const data = await response.json();
+      const userData: UserData = data.userData;
+
+      setCurUserData(userData);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unknown error occurred");
+      }
+    }
+  };
+
+  const handleCardClick = (cardIndex: number) => {
+    setActiveCard((prevIndex) => (prevIndex === cardIndex ? cardIndex : cardIndex));
+  };
+
+  
+
+
+  const goals = curUserData?.goals || [];
+  const expenses = curUserData?.expenses || [];
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  // Handle click outside to collapse card
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        cardRefs.current.every(
+          (ref) => ref && !ref.contains(event.target as Node)
+        )
+      ) {
+        setActiveCard(null); // Close the card if clicked outside
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+
+
+
+
+////////////////////
   return (
     <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
       {/* cards */}
@@ -60,17 +186,26 @@ export default function MainGrid() {
       >
         {data.map((card, index) => (
           <Grid key={index} size={{ xs: 12, sm: 6, lg: 3 }}>
-            <StatCard {...card} />
+          <p>card here</p>  
           </Grid>
         ))}
         <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
-          <HighlightedCard />
+          <AddExpenses onRerender= {fetchUserData}/>
+        </Grid>
+        <Grid  className = ""size={{ xs: 12, md: 6 }}>
+         
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
-          <SessionsChart />
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <PageViewsBarChart />
+        <ExpandableCard
+            title="goals"
+            index={0}
+            onClick={() => handleCardClick(0)}
+            isActive={activeCard === 0}
+            componentCollapsed={<ViewGoals goals={TestGoals} />}
+            componentExpanded={<AddGoal userId={null} onGoalAdded={fetchUserData }  />}
+            // Pass the specific ref for each card
+            cardRef={(el) => (cardRefs.current[0] = el)}
+          />
         </Grid>
       </Grid>
       <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
@@ -78,12 +213,11 @@ export default function MainGrid() {
       </Typography>
       <Grid container spacing={2} columns={12}>
         <Grid size={{ xs: 12, lg: 9 }}>
-          <CustomizedDataGrid />
+         
         </Grid>
         <Grid size={{ xs: 12, lg: 3 }}>
           <Stack gap={2} direction={{ xs: 'column', sm: 'row', lg: 'column' }}>
-            <CustomizedTreeView />
-            <ChartUserByCountry />
+            
           </Stack>
         </Grid>
       </Grid>
