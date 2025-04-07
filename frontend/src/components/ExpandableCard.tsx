@@ -41,6 +41,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
         height: "300px",
         overflowY: isActive? "hidden": "auto",
         transform: isActive ? "translate(-50%, -50%) scale(1.5)" : "scale(1)",
+        
       }}
       onClick={handleCardClick} // Use the handleCardClick to stop propagation
     >
@@ -53,7 +54,6 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
         </div>
         
         <div style={{ width: "150px", overflowY: "auto", height: "100%" }}>
-  <strong className="text-[20px] border-black">Add Goal</strong> {/* Corrected Tailwind font size */}
   {componentExpanded}
 </div>
       </div>

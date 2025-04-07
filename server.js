@@ -13,8 +13,6 @@ const mailjet = require('node-mailjet').connect( // Use connect for version 6.0.
   process.env.MAILJET_SECRET_KEY
 );
 
-
-
 // Load your MongoDB URI from environment variables (.env file)
 const url = process.env.MONGODB_URI;
 const client = new MongoClient(url);
@@ -103,7 +101,6 @@ app.post('/api/signup', async (req, res) => {
 // LOGIN ENDPOINT
 // ------------------------------------
 
-
 app.post('/api/login', async (req, res) => {
   let error = '';
   let id = -1;
@@ -190,40 +187,35 @@ app.post('/api/addexpense', async (req, res) => {
 
   const db = client.db('777Finances');
 
-
   const existingExpense = await db.collection('Data').findOne(
     { userId: userId, "expenses.name": expenseName }
   );
 
-
   if (existingExpense) {
     error = 'Expense with this name already exists';
-  } else{
-
-//
-  try {
-    
-    const result = await db.collection('Data').updateOne(
-      { userId: userId },
-      {
-        $push: {
-          expenses: { name: expenseName, cost: expenseCost, date: expenseDate, category: expenseCategory }  // This is the key part
+  } else {
+    try {
+      const result = await db.collection('Data').updateOne(
+        { userId: userId },
+        {
+          $push: {
+            expenses: { name: expenseName, cost: expenseCost, date: expenseDate, category: expenseCategory }  // This is the key part
+          }
         }
-      }
-    );
+      );
 
-    if (result.modifiedCount > 0) {
-      success = true;
-    } else {
-      error = 'Failed to add expense';
+      if (result.modifiedCount > 0) {
+        success = true;
+      } else {
+        error = 'Failed to add expense';
+      }
+    } catch (e) {
+      error = e.toString();
     }
-  } catch (e) {
-    error = e.toString();
-  }
-//
   }
   res.status(200).json({ success, error });
 });
+
 // ------------------------------------
 // EDIT EXPENSE ENDPOINT
 // ------------------------------------
@@ -261,6 +253,7 @@ app.post('/api/updateexpense', async (req, res) => {
 
   res.status(200).json({ success, error });
 });
+
 // ------------------------------------
 // GET Data ENDPOINT
 // ------------------------------------
@@ -272,7 +265,6 @@ app.post('/api/getdata', async (req, res) => {
   try {
     const db = client.db('777Finances');
 
-    
     const user = await db.collection('Data').findOne({ userId: userId });
 
     if (user) {
@@ -286,10 +278,10 @@ app.post('/api/getdata', async (req, res) => {
 
   res.status(200).json({ userData, error });
 });
+
 // ------------------------------------
 // REMOVE EXPENSES ENDPOINT
 // ------------------------------------
-
 
 app.post('/api/removeexpense', async (req, res) => {
   const { userId, expenseName } = req.body;
@@ -320,11 +312,6 @@ app.post('/api/removeexpense', async (req, res) => {
 
   res.status(200).json({ success, error });
 });
-
-
-
-
-
 
 // ------------------------------------
 // EDIT BALANCE
@@ -362,8 +349,6 @@ app.post('/api/editbalance', async (req, res) => {
 
   res.status(200).json({ success, error });
 });
-
-
 
 // ------------------------------------
 // ADD GOAL
@@ -419,11 +404,9 @@ app.post('/api/addgoal', async (req, res) => {
   res.status(200).json({ success, error });
 });
 
-
 // ------------------------------------
 // DELETE GOAL
 // ------------------------------------
-
 
 app.post('/api/removegoal', async (req, res) => {
   const { userId, goalName } = req.body;
@@ -467,10 +450,6 @@ app.post('/api/removegoal', async (req, res) => {
 
   res.status(200).json({ success, error });
 });
-
-
-
-
 
 // ------------------------------------
 // ADD DEBT
@@ -517,8 +496,6 @@ app.post('/api/adddebt', async (req, res) => {
 
   res.status(200).json({ success, error });
 });
-
-
 
 // ------------------------------------
 // DELETE DEBT
@@ -567,11 +544,9 @@ app.post('/api/deletedebt', async (req, res) => {
   res.status(200).json({ success, error });
 });
 
-
 // ------------------------------------
 // ADD INCOME
 // ------------------------------------
-
 
 app.post('/api/addincome', async (req, res) => {
   const { userId, incomeAmount } = req.body;
@@ -607,8 +582,6 @@ app.post('/api/addincome', async (req, res) => {
   res.status(200).json({ success, error });
 });
 
-
-
 // ------------------------------------
 // EDIT INCOME
 // ------------------------------------
@@ -625,6 +598,10 @@ app.post('/api/editincome', async (req, res) => {
   const db = client.db('777Finances');
 
   try {
+    // Log the current user data before updating
+    const currentUser = await db.collection('Data').findOne({ userId: userId });
+    console.log("Current user data:", currentUser);
+
     // Update the income for the user
     const result = await db.collection('Data').updateOne(
       { userId: userId },  // Match the user by their userId
@@ -633,23 +610,30 @@ app.post('/api/editincome', async (req, res) => {
       }
     );
 
+    // Log the result of the update operation
+    console.log("Update result:", result);
+
     if (result.modifiedCount > 0) {
       success = true;
+      console.log("Income updated successfully for userId:", userId);
     } else {
       error = 'Failed to update income, user not found or no change made';
+      console.log("No changes made or user not found for userId:", userId);
     }
   } catch (e) {
     error = e.toString();
+    console.error("Error updating income:", error);
   }
+
+  // Log the final response being sent back to the client
+  console.log("Response being sent:", { success, error });
 
   res.status(200).json({ success, error });
 });
 
-
 // ------------------------------------
 // SEND EMAIL ENDPOINT
 // ------------------------------------
-
 
 app.post('/api/send-email', async (req, res) => {
   console.log("trying to send email...");
@@ -710,10 +694,6 @@ app.post('/api/send-email', async (req, res) => {
   // Return the result back to the client with more info
   res.status(200).json({ success, error, mailjetResponse });
 });
-
-
-
-
 
 // ------------------------------------
 // CORS SETUP & START SERVER

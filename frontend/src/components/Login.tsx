@@ -37,7 +37,7 @@ function Login() {
         };
         localStorage.setItem("user_data", JSON.stringify(user));
         
-       navigate("/cards");
+       navigate("/dashboard");
       }
     } catch (error: any) {
       setMessage("An error occurred. Please try again later.");

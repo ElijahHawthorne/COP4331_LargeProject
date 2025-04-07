@@ -1,22 +1,19 @@
-import * as React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Copyright from '../internals/components/Copyright';
-import ChartUserByCountry from './ChartUserByCountry';
-import CustomizedTreeView from './CustomizedTreeView';
-import CustomizedDataGrid from './CustomizedDataGrid';
-import HighlightedCard from './HighlightedCard';
-import PageViewsBarChart from './PageViewsBarChart';
-import SessionsChart from './SessionsChart';
 import StatCard, { StatCardProps } from './StatCard';
 import ExpandableCard from '../../components/ExpandableCard';
 import ViewGoals from '../../components/ViewGoals';
 import AddGoal from '../../components/AddGoal';
 import UpcomingExpensesCard from '../../components/UpcomingExpenses';
 import { UserData } from "../../Types";
-import { useState, useEffect, useRef} from 'react';
+import { Goal } from '../../Types';
+import AddExpenses from '../../components/AddExpense';
+import ViewExpense from '../../components/ViewExpense';
+import AddIncome from '../../components/AddIncome';
 
 const sampleExpenses = [
   {
@@ -38,7 +35,6 @@ const sampleExpenses = [
     dueDate: "2023-09-05T00:00:00.000Z",
   },
 ];
-
 
 const data: StatCardProps[] = [
   {
@@ -73,6 +69,31 @@ const data: StatCardProps[] = [
   },
 ];
 
+const TestGoals : Goal[] = [
+  {
+      "name": "Buy a Car",
+      "cost": 20000,
+      "paymentAmount": 1000,
+      "progress": 5000,
+      "date": "2025-12-31"
+  },
+  {
+      "name": "Buy PS5",
+      "cost": 500,
+      "paymentAmount": 20,
+      "progress": 140,
+      "date": "2025-12-31"
+  },
+  {
+      "name": "Student Loan",
+      "cost": 20000,
+      "paymentAmount": 150,
+      "progress": 5000,
+      "date": "2025-12-31"
+  }
+]
+
+
 export default function MainGrid() {
 //
 const [sessionId, setSessionId] = useState<number | null>(null);
@@ -95,6 +116,7 @@ const [sessionId, setSessionId] = useState<number | null>(null);
       try {
         const userData = JSON.parse(storedUserData);
         setSessionId(userData.id);
+        console.log("UserData:", userData);
       } catch (error) {
         console.error("Error parsing user data:", error);
       }
@@ -166,7 +188,9 @@ const [sessionId, setSessionId] = useState<number | null>(null);
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-//
+
+  console.log("Current User Data:", curUserData);
+////////////////////
   return (
     <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
       {/* cards */}
@@ -181,26 +205,72 @@ const [sessionId, setSessionId] = useState<number | null>(null);
       >
         {data.map((card, index) => (
           <Grid key={index} size={{ xs: 12, sm: 6, lg: 3 }}>
+          <p>card here</p>  
+          </Grid>
+        ))}
+        <Grid item xs={12} sm={6} lg={3}>
+          <ExpandableCard
+            title="Expenses"
+            index={1}
+            onClick={() => handleCardClick(1)}
+            isActive={activeCard === 1}
+            componentCollapsed={<ViewExpense expenseList={expenses} />}
+            componentExpanded={
+              <div className="flex">
+                <div>
+                  {sessionId ? (
+                    <AddExpenses userId={sessionId} onRerender={fetchUserData} />
+                  ) : (
+                    <p>Loading...</p>
+                  )}
+                </div>
+              </div>
+            }
+            cardRef={(el) => (cardRefs.current[1] = el)}
+          />
+
             <ExpandableCard
-            title="goals"
+            title="Income"
+            index={2} // Unique index for the Income card
+            onClick={() => handleCardClick(2)}
+            isActive={activeCard === 2}
+            componentCollapsed={<p>Your total income: ${curUserData.income}</p>}
+
+            componentExpanded={
+              <div className="flex">
+                {/* Left Section: Income Details */}
+                <div className="w-1/2">
+                  <p className="text-lg font-medium">
+                    Your current income is: ${curUserData.income}
+                  </p>
+                </div>
+
+                {/* Right Section: Add Income Form */}
+                <div className="w-1/2">
+                  {sessionId ? (
+                    <AddIncome userId={sessionId} onIncomeAdded={fetchUserData} />
+                  ) : (
+                    <p>Loading...</p>
+                  )}
+                </div>
+              </div>
+            }
+            cardRef={(el) => (cardRefs.current[2] = el)}
+          /> 
+        </Grid>
+        <Grid  className = ""size={{ xs: 12, md: 6 }}>
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+        <ExpandableCard
+            title="Goals"
             index={0}
             onClick={() => handleCardClick(0)}
             isActive={activeCard === 0}
-            componentCollapsed={<ViewGoals goals={goals} />}
+            componentCollapsed={<ViewGoals goals={TestGoals} />}
             componentExpanded={<AddGoal userId={null} onGoalAdded={fetchUserData }  />}
             // Pass the specific ref for each card
             cardRef={(el) => (cardRefs.current[0] = el)}
           />
-          </Grid>
-        ))}
-        <Grid item xs={12} sm={6} lg={3}>
-          <UpcomingExpensesCard expenses={sampleExpenses} />
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <SessionsChart />
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <PageViewsBarChart />
         </Grid>
       </Grid>
       <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
@@ -208,12 +278,11 @@ const [sessionId, setSessionId] = useState<number | null>(null);
       </Typography>
       <Grid container spacing={2} columns={12}>
         <Grid size={{ xs: 12, lg: 9 }}>
-          <CustomizedDataGrid />
+         
         </Grid>
         <Grid size={{ xs: 12, lg: 3 }}>
           <Stack gap={2} direction={{ xs: 'column', sm: 'row', lg: 'column' }}>
-            <CustomizedTreeView />
-            <ChartUserByCountry />
+            
           </Stack>
         </Grid>
       </Grid>
