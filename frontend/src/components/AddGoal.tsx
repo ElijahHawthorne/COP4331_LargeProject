@@ -93,64 +93,67 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
   };
 
   return (
+    <> 
+  <h2 className="text-lg font-bold mb-2">Add a New Goal</h2>
     <form onSubmit={handleGoalSubmit}>
-      <div>
-        <label>
-          Goal Name:
-          <input
-            type="text"
-            value={goalName}
-            onChange={(e) => setGoalName(e.target.value)}
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Goal Cost:
-          <input
-            type="text"  // Using text input instead of number input
-            value={goalCost}
-            onChange={(e) => setGoalCost(e.target.value)}
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Payment Amount:
-          <input
-            type="text"  // Using text input instead of number input
-            value={paymentAmount}
-            onChange={(e) => setPaymentAmount(e.target.value)}
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Target Date:
-          <input
-            type="date"
-            value={goalDate}
-            onChange={(e) => setGoalDate(e.target.value)}
-            required
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Progress:
-          <input
-            type="text" // Progress can be a number
-            value={progress}
-            onChange={(e) => setProgress(Number(e.target.value))}  // Handling progress value
-            required
-          />
-        </label>
-      </div>
-      <button type="submit">Add Goal</button>
-    </form>
+    <div>
+      <label>
+        Goal Name:
+        <input
+          type="text"
+          value={goalName}
+          onChange={(e) => setGoalName(e.target.value)}
+          required
+        />
+      </label>
+    </div>
+    <div>
+      <label>
+        Goal Cost:
+        <input
+          type="text"  // Using text input instead of number input
+          value={goalCost}
+          onChange={(e) => setGoalCost(e.target.value)}
+          required
+        />
+      </label>
+    </div>
+    <div>
+      <label>
+        Payment Amount:
+        <input
+          type="text"  // Using text input instead of number input
+          value={paymentAmount}
+          onChange={(e) => setPaymentAmount(e.target.value)}
+          required
+        />
+      </label>
+    </div>
+    <div>
+      <label>
+        Target Date:
+        <input
+          type="date"
+          value={goalDate}
+          onChange={(e) => setGoalDate(e.target.value)}
+          required
+        />
+      </label>
+    </div>
+    <div>
+      <label>
+        Progress:
+        <input
+          type="text" // Progress can be a number
+          value={progress}
+          onChange={(e) => setProgress(Number(e.target.value))}  // Handling progress value
+          required
+        />
+      </label>
+    </div>
+    <button type="submit">Add Goal</button>
+  </form> </>
+    
   );
 };
 

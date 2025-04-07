@@ -2,6 +2,8 @@ import { useState } from "react";
 
 interface AddExpensesProps {
   onRerender: () => void; // onRerender is a function with no arguments and no return value
+  userId: number;
+
 }
 
 

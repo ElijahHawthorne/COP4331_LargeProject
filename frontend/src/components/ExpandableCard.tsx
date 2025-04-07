@@ -54,7 +54,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
         </div>
         
         <div style={{ width: "150px", overflowY: "auto", height: "100%" }}>
-  <strong className="text-[20px] border-black"></strong> {/* Corrected Tailwind font size */}
+  <strong className="text-[20px] border-black">Add Goal</strong> {/* Corrected Tailwind font size */}
   {componentExpanded}
 </div>
       </div>
