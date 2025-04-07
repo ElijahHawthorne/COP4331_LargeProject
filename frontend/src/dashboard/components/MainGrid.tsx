@@ -4,15 +4,16 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Copyright from '../internals/components/Copyright';
-import StatCard, { StatCardProps } from './StatCard';
 import ViewGoals from '../../components/ViewGoals';
 import { Goal } from '../../Types';
 import ExpandableCard from '../../components/ExpandableCard';
 import { UserData } from '../../Types';
 import AddGoal from '../../components/AddGoal';
 import AddExpenses from '../../components/AddExpense';
+import Viewdebt from '../../components/ViewDebt';
+import AddDebt from '../../components/AddDebt';
 
-const data: StatCardProps[] = [
+const data: Object[] = [
   {
     title: 'Users',
     value: '14k',
@@ -81,7 +82,7 @@ const [sessionId, setSessionId] = useState<number | null>(null);
     currentBalance: 0,
     expenses: [],
     goals: [],
-    Debt: [],
+    debt: [],
   });
   const [activeCard, setActiveCard] = useState<number | null>(null);
   const [error, setError] = useState("");
@@ -169,7 +170,7 @@ const [sessionId, setSessionId] = useState<number | null>(null);
 
 
 
-
+console.log(curUserData);
 
 ////////////////////
   return (
@@ -193,7 +194,16 @@ const [sessionId, setSessionId] = useState<number | null>(null);
           <AddExpenses onRerender= {fetchUserData}/>
         </Grid>
         <Grid  className = ""size={{ xs: 12, md: 6 }}>
-         
+        <ExpandableCard
+            title="debt"
+            index={1}
+            onClick={() => handleCardClick(1)}
+            isActive={activeCard === 1}
+            componentCollapsed={<Viewdebt debt = {curUserData.debt} />}
+            componentExpanded={<AddDebt userId={sessionId} onDebtAdded={fetchUserData }  />}
+            // Pass the specific ref for each card
+            cardRef={(el) => (cardRefs.current[1] = el)}
+          />
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
         <ExpandableCard
@@ -201,8 +211,8 @@ const [sessionId, setSessionId] = useState<number | null>(null);
             index={0}
             onClick={() => handleCardClick(0)}
             isActive={activeCard === 0}
-            componentCollapsed={<ViewGoals goals={TestGoals} />}
-            componentExpanded={<AddGoal userId={null} onGoalAdded={fetchUserData }  />}
+            componentCollapsed={<ViewGoals goals={curUserData.goals} />}
+            componentExpanded={<AddGoal userId={sessionId} onGoalAdded={fetchUserData}  />}
             // Pass the specific ref for each card
             cardRef={(el) => (cardRefs.current[0] = el)}
           />
@@ -213,7 +223,7 @@ const [sessionId, setSessionId] = useState<number | null>(null);
       </Typography>
       <Grid container spacing={2} columns={12}>
         <Grid size={{ xs: 12, lg: 9 }}>
-         
+        
         </Grid>
         <Grid size={{ xs: 12, lg: 3 }}>
           <Stack gap={2} direction={{ xs: 'column', sm: 'row', lg: 'column' }}>

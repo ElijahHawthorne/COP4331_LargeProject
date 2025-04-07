@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
+import { Goal } from '../Types';
 
-interface Goal {
-  name: string;
-  cost: number;
-  paymentAmount: number;
-  progress: number;
-  date: string;
-}
+
 
 interface AddGoalProps {
   userId: number | null;  // Allow null as userId is optional at first

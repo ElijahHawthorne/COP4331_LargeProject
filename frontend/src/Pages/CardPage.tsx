@@ -12,7 +12,7 @@ function CardPage() {
     currentBalance: 0,
     expenses: [],
     goals: [],
-    Debt: [],
+    debt: [],
   });
   const [activeCard, setActiveCard] = useState<number | null>(null);
   const [error, setError] = useState("");

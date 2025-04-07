@@ -7,6 +7,15 @@ export interface Goal {
     date: string;
   }
   
+  export interface Debt {
+    name: string;
+    cost: number;
+    paymentAmount: number;
+    progress: number;
+    date: string;
+  }
+
+
   export interface Expense {
     name: string;
     cost: number;
@@ -19,6 +28,6 @@ export interface Goal {
     currentBalance: number;
     expenses: Expense[];
     goals: Goal[];
-    Debt: any[];
+    debt: Debt[];
   }
   
