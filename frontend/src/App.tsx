@@ -10,7 +10,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        {/* <Route path="/" element={<LoginPage />} /> */}
         <Route path="/" element={<Dashboard />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="*" element={<Navigate to="/" />} />

@@ -11,6 +11,34 @@ import HighlightedCard from './HighlightedCard';
 import PageViewsBarChart from './PageViewsBarChart';
 import SessionsChart from './SessionsChart';
 import StatCard, { StatCardProps } from './StatCard';
+import ExpandableCard from '../../components/ExpandableCard';
+import ViewGoals from '../../components/ViewGoals';
+import AddGoal from '../../components/AddGoal';
+import UpcomingExpensesCard from '../../components/UpcomingExpenses';
+import { UserData } from "../../Types";
+import { useState, useEffect, useRef} from 'react';
+
+const sampleExpenses = [
+  {
+    id: 1,
+    description: "Electricity Bill",
+    amount: 100.50,
+    dueDate: "2023-08-30T00:00:00.000Z",
+  },
+  {
+    id: 2,
+    description: "Water Bill",
+    amount: 45.75,
+    dueDate: "2023-09-01T00:00:00.000Z",
+  },
+  {
+    id: 3,
+    description: "Internet Bill",
+    amount: 60.00,
+    dueDate: "2023-09-05T00:00:00.000Z",
+  },
+];
+
 
 const data: StatCardProps[] = [
   {
@@ -46,6 +74,99 @@ const data: StatCardProps[] = [
 ];
 
 export default function MainGrid() {
+//
+const [sessionId, setSessionId] = useState<number | null>(null);
+  const [curUserData, setCurUserData] = useState<UserData>({
+    income: 0,
+    currentBalance: 0,
+    expenses: [],
+    goals: [],
+    Debt: [],
+  });
+  const [activeCard, setActiveCard] = useState<number | null>(null);
+  const [error, setError] = useState("");
+
+  // Initialize individual refs for each card
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const storedUserData = localStorage.getItem("user_data");
+    if (storedUserData) {
+      try {
+        const userData = JSON.parse(storedUserData);
+        setSessionId(userData.id);
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (sessionId !== null) {
+      fetchUserData();
+    }
+  }, [sessionId]);
+
+  const fetchUserData = async () => {
+    try {
+      const response = await fetch("http://777finances.com:5000/api/getdata", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: sessionId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user data");
+      }
+
+      const data = await response.json();
+      const userData: UserData = data.userData;
+
+      setCurUserData(userData);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unknown error occurred");
+      }
+    }
+  };
+
+  const handleCardClick = (cardIndex: number) => {
+    setActiveCard((prevIndex) => (prevIndex === cardIndex ? cardIndex : cardIndex));
+  };
+
+  
+
+
+  const goals = curUserData?.goals || [];
+  const expenses = curUserData?.expenses || [];
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  // Handle click outside to collapse card
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        cardRefs.current.every(
+          (ref) => ref && !ref.contains(event.target as Node)
+        )
+      ) {
+        setActiveCard(null); // Close the card if clicked outside
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+//
   return (
     <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
       {/* cards */}
@@ -60,11 +181,20 @@ export default function MainGrid() {
       >
         {data.map((card, index) => (
           <Grid key={index} size={{ xs: 12, sm: 6, lg: 3 }}>
-            <StatCard {...card} />
+            <ExpandableCard
+            title="goals"
+            index={0}
+            onClick={() => handleCardClick(0)}
+            isActive={activeCard === 0}
+            componentCollapsed={<ViewGoals goals={goals} />}
+            componentExpanded={<AddGoal userId={null} onGoalAdded={fetchUserData }  />}
+            // Pass the specific ref for each card
+            cardRef={(el) => (cardRefs.current[0] = el)}
+          />
           </Grid>
         ))}
-        <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
-          <HighlightedCard />
+        <Grid item xs={12} sm={6} lg={3}>
+          <UpcomingExpensesCard expenses={sampleExpenses} />
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
           <SessionsChart />
