@@ -11,6 +11,8 @@ import ExpandableCard from '../../components/ExpandableCard';
 import { UserData } from '../../Types';
 import AddGoal from '../../components/AddGoal';
 import AddExpenses from '../../components/AddExpense';
+import ViewExpense from '../../components/ViewExpense';
+import AddIncome from '../../components/AddIncome';
 
 const data: StatCardProps[] = [
   {
@@ -95,6 +97,7 @@ const [sessionId, setSessionId] = useState<number | null>(null);
       try {
         const userData = JSON.parse(storedUserData);
         setSessionId(userData.id);
+        console.log("UserData:", userData);
       } catch (error) {
         console.error("Error parsing user data:", error);
       }
@@ -167,10 +170,7 @@ const [sessionId, setSessionId] = useState<number | null>(null);
     };
   }, []);
 
-
-
-
-
+  console.log("Current User Data:", curUserData);
 ////////////////////
   return (
     <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
@@ -189,15 +189,61 @@ const [sessionId, setSessionId] = useState<number | null>(null);
           <p>card here</p>  
           </Grid>
         ))}
-        <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
-          <AddExpenses onRerender= {fetchUserData}/>
+        <Grid item xs={12} sm={6} lg={3}>
+          <ExpandableCard
+            title="Expenses"
+            index={1}
+            onClick={() => handleCardClick(1)}
+            isActive={activeCard === 1}
+            componentCollapsed={<ViewExpense expenseList={expenses} />}
+            componentExpanded={
+              <div className="flex">
+                <div>
+                  {sessionId ? (
+                    <AddExpenses userId={sessionId} onRerender={fetchUserData} />
+                  ) : (
+                    <p>Loading...</p>
+                  )}
+                </div>
+              </div>
+            }
+            cardRef={(el) => (cardRefs.current[1] = el)}
+          />
+
+            <ExpandableCard
+            title="Income"
+            index={2} // Unique index for the Income card
+            onClick={() => handleCardClick(2)}
+            isActive={activeCard === 2}
+            componentCollapsed={<p>Your total income: ${curUserData.income}</p>}
+
+            componentExpanded={
+              <div className="flex">
+                {/* Left Section: Income Details */}
+                <div className="w-1/2">
+                  <p className="text-lg font-medium">
+                    Your current income is: ${curUserData.income}
+                  </p>
+                </div>
+
+                {/* Right Section: Add Income Form */}
+                <div className="w-1/2">
+                  {sessionId ? (
+                    <AddIncome userId={sessionId} onIncomeAdded={fetchUserData} />
+                  ) : (
+                    <p>Loading...</p>
+                  )}
+                </div>
+              </div>
+            }
+            cardRef={(el) => (cardRefs.current[2] = el)}
+          /> 
         </Grid>
         <Grid  className = ""size={{ xs: 12, md: 6 }}>
-         
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
         <ExpandableCard
-            title="goals"
+            title="Goals"
             index={0}
             onClick={() => handleCardClick(0)}
             isActive={activeCard === 0}
