@@ -353,11 +353,13 @@ app.post('/api/editbalance', async (req, res) => {
 // ------------------------------------
 // ADD GOAL
 // ------------------------------------
+
+
 app.post('/api/addgoal', async (req, res) => {
-  const { userId, goalName, cost, paymentAmount, payDate, paymentProgress } = req.body;
+  const { userId, goalName, goalCost, paymentAmount, payDate, paymentProgress } = req.body;
 
   // Log the incoming data for debugging
-  console.log("Received goal data:", { userId, goalName, cost, paymentAmount, payDate, paymentProgress });
+  console.log("Received goal data:", { userId, goalName, goalCost, paymentAmount, payDate, paymentProgress });
 
   let error = '';
   let success = false;
@@ -380,7 +382,7 @@ app.post('/api/addgoal', async (req, res) => {
           $push: {
             goals: { 
               name: goalName, 
-              cost: cost,              // Use the total cost
+              cost: goalCost,              // Use the total cost
               paymentAmount: paymentAmount, // Monthly payment amount
               progress: paymentProgress, 
               date: payDate 
@@ -456,7 +458,7 @@ app.post('/api/removegoal', async (req, res) => {
 // ------------------------------------
 
 app.post('/api/adddebt', async (req, res) => {
-  const { userId, debtName, debtAmount, paymentDate, paymentProgress } = req.body;
+  const { userId, debtName, debtAmount, paymentDate, paymentAmount,paymentProgress } = req.body;
 
   // Log the incoming data for debugging
   console.log("Received debt data:", { userId, debtName, debtAmount, paymentDate, paymentProgress });
@@ -464,38 +466,69 @@ app.post('/api/adddebt', async (req, res) => {
   let error = '';
   let success = false;
 
-  const db = client.db('777Finances');
-
-  // Check if the debt already exists for this user
-  const existingDebt = await db.collection('Data').findOne(
-    { userId: userId, "debts.name": debtName }
-  );
-
-  if (existingDebt) {
-    error = 'Debt with this name already exists';
-  } else {
-    try {
-      const result = await db.collection('Data').updateOne(
-        { userId: userId },
-        {
-          $push: {
-            debt: { name: debtName, amount: debtAmount, progress: paymentProgress, date: paymentDate } // Add debt to the 'debts' array
-          }
-        }
-      );
-
-      if (result.modifiedCount > 0) {
-        success = true;
-      } else {
-        error = 'Failed to add debt';
-      }
-    } catch (e) {
-      error = e.toString();
-    }
+  // Input validation
+  if (!debtName || !debtAmount || !paymentDate || !paymentProgress||!paymentAmount) {
+    return res.status(400).json({
+      success: false,
+      error: 'Missing required fields: debtName, debtAmount, paymentDate, or paymentProgress'
+    });
   }
 
-  res.status(200).json({ success, error });
+  // Check if debtAmount and paymentProgress are valid numbers
+  if (isNaN(debtAmount) || isNaN(paymentProgress)) {
+    return res.status(400).json({
+      success: false,
+      error: 'Debt amount and payment progress must be valid numbers'
+    });
+  }
+
+  // Make sure debtAmount and paymentProgress are positive numbers
+  if (debtAmount <= 0 || paymentProgress < 0) {
+    return res.status(400).json({
+      success: false,
+      error: 'Debt amount must be greater than 0, and payment progress must not be negative'
+    });
+  }
+
+  const db = client.db('777Finances');
+
+  try {
+    // Check if the debt already exists for the user
+    const existingDebt = await db.collection('Data').findOne(
+      { userId: userId, "debts.name": { $regex: new RegExp(debtName, 'i') } } // Case insensitive check
+    );
+
+    if (existingDebt) {
+      return res.status(400).json({
+        success: false,
+        error: 'Debt with this name already exists'
+      });
+    }
+
+    // Add the new debt to the debts array
+    const result = await db.collection('Data').updateOne(
+      { userId: userId },
+      {
+        $push: {
+          debt: { name: debtName, amount: debtAmount, progress: paymentProgress, date: paymentDate, paymentAmount:paymentAmount }
+        }
+      }
+    );
+
+    // Check if the debt was successfully added
+    if (result.modifiedCount > 0) {
+      success = true;
+    } else {
+      error = 'Failed to add debt';
+    }
+  } catch (e) {
+    console.error("Error adding debt:", e);
+    error = e.toString();
+  }
+
+  res.status(success ? 200 : 500).json({ success, error });
 });
+
 
 // ------------------------------------
 // DELETE DEBT
@@ -512,21 +545,21 @@ app.post('/api/deletedebt', async (req, res) => {
 
   const db = client.db('777Finances');
 
-  // Check if the debt exists for the given user
+  // Check if the debt exists for the given user in the 'debts' array
   const existingDebt = await db.collection('Data').findOne(
-    { userId: userId, "debts.name": debtName }
+    { userId: userId, "debt.name": debtName }  // Make sure to query the 'debt.name'
   );
 
   if (!existingDebt) {
     error = 'Debt not found';
   } else {
     try {
-      // Remove the debt from the user's debts array
+      // Remove the debt from the user's debts array using the correct structure
       const result = await db.collection('Data').updateOne(
         { userId: userId },
         {
           $pull: { 
-            debts: { name: debtName }  // Remove debt by name
+            debt: { name: debtName }  // Remove the debt by name from the 'debt' array
           }
         }
       );
@@ -543,6 +576,7 @@ app.post('/api/deletedebt', async (req, res) => {
 
   res.status(200).json({ success, error });
 });
+
 
 // ------------------------------------
 // ADD INCOME

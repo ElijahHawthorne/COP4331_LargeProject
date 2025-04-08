@@ -212,9 +212,9 @@ export default function MainGrid() {
         <Grid key={10} size={{ xs: 12, sm: 6, lg: 3 }}>
           <ExpandableCard
             title="Expenses"
-            index={1}
-            onClick={() => handleCardClick(1)}
-            isActive={activeCard === 1}
+            index={3}
+            onClick={() => handleCardClick(3)}
+            isActive={activeCard === 3}
             componentCollapsed={<ViewExpense expenseList={expenses} />}
             componentExpanded={
               <div className="flex">
@@ -239,38 +239,18 @@ export default function MainGrid() {
             onClick={() => handleCardClick(2)}
             isActive={activeCard === 2}
             componentCollapsed={<p>Your total income: ${curUserData.income}</p>}
-            componentExpanded={
-              <div className="flex">
-                {/* Left Section: Income Details */}
-                <div className="w-1/2">
-                  <p className="text-lg font-medium">
-                    Your current income is: ${curUserData.income}
-                  </p>
-                </div>
-
-                {/* Right Section: Add Income Form */}
-                <div className="w-1/2">
-                  {sessionId ? (
-                    <AddIncome
-                      userId={sessionId}
-                      onIncomeAdded={fetchUserData}
-                    />
-                  ) : (
-                    <p>Loading...</p>
-                  )}
-                </div>
-              </div>
-            }
+            componentExpanded={<AddIncome userId={sessionId} onIncomeAdded={fetchUserData}/>}
+            
             cardRef={(el) => (cardRefs.current[2] = el)}
           />
         </Grid>
         <Grid className="" size={{ xs: 12, md: 6 }}>
           <ExpandableCard
-            title="debt"
+            title="Debt"
             index={1}
             onClick={() => handleCardClick(1)}
             isActive={activeCard === 1}
-            componentCollapsed={<Viewdebt debt={curUserData.debt} />}
+            componentCollapsed={<Viewdebt userId={sessionId} onDebtDeleted={fetchUserData} debt={curUserData.debt} />}
             componentExpanded={
               <AddDebt userId={sessionId} onDebtAdded={fetchUserData} />
             }
@@ -284,7 +264,7 @@ export default function MainGrid() {
             index={0}
             onClick={() => handleCardClick(0)}
             isActive={activeCard === 0}
-            componentCollapsed={<ViewGoals goals={curUserData.goals} />}
+            componentCollapsed={<ViewGoals userId={sessionId} onGoalDeleted={fetchUserData} goals={curUserData.goals} />}
             componentExpanded={
               <AddGoal userId={sessionId} onGoalAdded={fetchUserData} />
             }

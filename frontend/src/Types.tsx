@@ -9,7 +9,7 @@ export interface Goal {
   
   export interface Debt {
     name: string;
-    cost: number;
+    amount: number;
     paymentAmount: number;
     progress: number;
     date: string;
