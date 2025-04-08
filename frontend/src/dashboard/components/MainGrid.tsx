@@ -247,7 +247,6 @@ export default function MainGrid() {
                     Your current income is: ${curUserData.income}
                   </p>
                 </div>
-
                 {/* Right Section: Add Income Form */}
                 <div className="w-1/2">
                   {sessionId ? (
@@ -267,15 +266,15 @@ export default function MainGrid() {
         <Grid className="" size={{ xs: 12, md: 6 }}>
           <ExpandableCard
             title="debt"
-            index={1}
-            onClick={() => handleCardClick(1)}
-            isActive={activeCard === 1}
+            index={3}
+            onClick={() => handleCardClick(3)}
+            isActive={activeCard === 3}
             componentCollapsed={<Viewdebt debt={curUserData.debt} />}
             componentExpanded={
               <AddDebt userId={sessionId} onDebtAdded={fetchUserData} />
             }
             // Pass the specific ref for each card
-            cardRef={(el) => (cardRefs.current[1] = el)}
+            cardRef={(el) => (cardRefs.current[3] = el)}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
