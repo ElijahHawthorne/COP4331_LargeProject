@@ -30,18 +30,20 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
     <div
       ref={cardRef} // Pass the cardRef here
       className={`bg-white p-4 rounded shadow transform transition-all duration-300 ease-in-out ${
-        isActive ? "scale-105 z-50 fixed inset-0" : ""
+        isActive ? "scale-105 z-50" : ""
       }`}
       style={{
-        transition: "transform 0.3s ease, z-index 0.3s ease",
-        zIndex: isActive ? 50 : 1,
-        position: isActive ? "absolute" : "relative",
-        top: isActive ? "50%" : "auto",
-        left: isActive ? "50%" : "auto",
-        height: "300px",
-        overflowY: isActive? "hidden": "auto",
-        transform: isActive ? "translate(-50%, -50%) scale(1.5)" : "scale(1)",
-        
+        transition: "transform 0.3s ease, z-index 0.3s ease, height 0.3s ease",
+        zIndex: isActive ? 9999 : 1, // Ensure it's on top of everything else
+        position: isActive ? "fixed" : "relative", // Fixed position when expanded
+        top: isActive ? "50%" : "auto", // Center vertically
+        left: isActive ? "50%" : "auto", // Center horizontally
+        transform: isActive
+          ? "translate(-50%, -50%) scale(1.5)" // Scale and center
+          : "scale(1)", // Normal scale when not expanded
+        height: isActive ? "500px" : "300px", // Adjust expanded height
+        width: isActive ? "500px" : "300px", // Adjust expanded width
+        overflowY: isActive ? "auto" : "hidden", // Show overflow when expanded
       }}
       onClick={handleCardClick} // Use the handleCardClick to stop propagation
     >
@@ -49,15 +51,15 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
       {!isActive && componentCollapsed}
       {isActive && (
         <div className="flex justify-between gap-4" style={{ height: "100%" }}>
-        <div style={{ width: "200px", overflowY: "auto", height: "100%" }}>
-          {componentCollapsed}
+          <div style={{ width: "200px", overflowY: "auto", height: "100%" }}>
+            {componentCollapsed}
+          </div>
+
+          <div style={{ width: "150px", overflowY: "auto", height: "100%" }}>
+            {/* Corrected Tailwind font size */}
+            {componentExpanded}
+          </div>
         </div>
-        
-        <div style={{ width: "150px", overflowY: "auto", height: "100%" }}>
-   {/* Corrected Tailwind font size */}
-  {componentExpanded}
-</div>
-      </div>
       )}
     </div>
   );

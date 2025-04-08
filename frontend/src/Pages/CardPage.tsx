@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import SideBar from "../components/SideBar";
 import ExpandableCard from "../components/ExpandableCard";
 import ViewGoals from "../components/ViewGoals";
@@ -73,7 +73,7 @@ function CardPage() {
 
 
   const goals = curUserData?.goals || [];
-  const expenses = curUserData?.expenses || [];
+ 
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -109,7 +109,7 @@ function CardPage() {
             index={0}
             onClick={() => handleCardClick(0)}
             isActive={activeCard === 0}
-            componentCollapsed={<ViewGoals goals={goals} />}
+            componentCollapsed={<ViewGoals onGoalDeleted={fetchUserData} userId={sessionId} goals={goals} />}
             componentExpanded={<AddGoal userId={null} onGoalAdded={fetchUserData }  />}
             // Pass the specific ref for each card
             cardRef={(el) => (cardRefs.current[0] = el)}
@@ -121,7 +121,7 @@ function CardPage() {
             onClick={() => handleCardClick(1)}
             isActive={activeCard === 1}
             componentCollapsed={<p>Click to view your expenses</p>}
-            componentExpanded={<ViewGoals goals={goals} />}
+            componentExpanded={<ViewGoals onGoalDeleted={fetchUserData} userId={sessionId} goals={goals} />}
             // Pass the specific ref for each card
             cardRef={(el) => (cardRefs.current[1] = el)}
           />
