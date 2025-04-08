@@ -1,6 +1,6 @@
 
 
-import React, { useRef } from "react";
+
 
 interface ExpandableCardProps {
   title: string;
@@ -43,7 +43,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
           : "scale(1)", // Normal scale when not expanded
         height: isActive ? "500px" : "300px", // Adjust expanded height
         width: isActive ? "500px" : "300px", // Adjust expanded width
-        overflowY: isActive ? "auto" : "hidden", // Show overflow when expanded
+        overflowY: isActive ? "hidden" : "auto", // Show overflow when expanded
       }}
       onClick={handleCardClick} // Use the handleCardClick to stop propagation
     >
@@ -51,11 +51,11 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
       {!isActive && componentCollapsed}
       {isActive && (
         <div className="flex justify-between gap-4" style={{ height: "100%" }}>
-          <div style={{ width: "200px", overflowY: "auto", height: "100%" }}>
+          <div style={{ flex:3,width: "200px", overflowY: "auto", height: "100%" }}>
             {componentCollapsed}
           </div>
 
-          <div style={{ width: "150px", overflowY: "auto", height: "100%" }}>
+          <div style={{ flex:2, width: "150px", overflowY: "auto", height: "100%" }}>
             {/* Corrected Tailwind font size */}
             {componentExpanded}
           </div>

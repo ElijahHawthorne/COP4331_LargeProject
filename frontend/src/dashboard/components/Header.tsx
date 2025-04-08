@@ -1,31 +1,25 @@
-import * as React from 'react';
 import Stack from '@mui/material/Stack';
-import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 import CustomDatePicker from './CustomDatePicker';
 import NavbarBreadcrumbs from './NavbarBreadcrumbs';
-import MenuButton from './MenuButton';
 import ColorModeIconDropdown from '../../shared-theme/ColorModeIconDropdown';
-
-import Search from './Search';
 
 export default function Header() {
   return (
     <Stack
       direction="row"
       sx={{
-        display: { xs: 'none', md: 'flex' },
+        display: 'flex', // Ensure the Header is always visible across all screen sizes
         width: '100%',
-        alignItems: { xs: 'flex-start', md: 'center' },
+        alignItems: 'center', // Center the content vertically
         justifyContent: 'space-between',
-        maxWidth: { sm: '100%', md: '1700px' },
+        maxWidth: '1700px',  // Max width set to 1700px for medium and larger screens
         pt: 1.5,
+        px: 3, // Add horizontal padding to ensure space on small screens
       }}
       spacing={2}
     >
-      <NavbarBreadcrumbs />
+      
       <Stack direction="row" sx={{ gap: 1 }}>
-        
-        <CustomDatePicker />
         
         <ColorModeIconDropdown />
       </Stack>
