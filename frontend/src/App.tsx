@@ -3,6 +3,7 @@ import './App.css';
 //import LoginPage from './Pages/LoginPage';
 import SignUpPage from './Pages/SignupPage';
 import Dashboard from './dashboard/Dashboard';
+<<<<<<< HEAD
 import { ThemeProvider, CssBaseline,} from '@mui/material';
 import theme from './dashboard/theme/customizations/lightTheme';
 
@@ -19,6 +20,25 @@ function App() {
         </Routes>
       </Router>
     </ThemeProvider>
+=======
+import AccountSettingsPage from './Pages/AccountSettingsPage';
+
+
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        {/* <Route path="/" element={<LoginPage />} /> */}
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/accountsettings" element={<AccountSettingsPage/>} />
+        <Route path="/signup" element={<SignUpPage />} />
+
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </Router>
+>>>>>>> origin/NewEliBranch
   );
 }
 

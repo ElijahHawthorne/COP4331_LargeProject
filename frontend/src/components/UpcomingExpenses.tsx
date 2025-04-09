@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { Expense } from "../Types";
 import {
-  Card,
-  CardHeader,
-  CardContent,
+  Box,
   Divider,
   List,
   ListItem,
@@ -12,20 +11,17 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-interface Expense {
-  id: number;
-  description: string;
-  amount: number;
-  dueDate: string; // ISO date string
-}
-
 interface UpcomingExpensesCardProps {
   expenses: Expense[];
 }
 
 const UpcomingExpensesCard: React.FC<UpcomingExpensesCardProps> = ({ expenses }) => {
+<<<<<<< HEAD
   const theme = useTheme();
   // Local state to track current expenses
+=======
+  // Local state to track upcoming expenses
+>>>>>>> origin/NewEliBranch
   const [localExpenses, setLocalExpenses] = useState<Expense[]>(expenses);
 
   // Update local state when props change
@@ -33,6 +29,7 @@ const UpcomingExpensesCard: React.FC<UpcomingExpensesCardProps> = ({ expenses })
     setLocalExpenses(expenses);
   }, [expenses]);
 
+<<<<<<< HEAD
   // When an expense is marked as paid, remove it from the list.
   const handleExpensePaid = (id: number) => {
     setLocalExpenses((prev) => prev.filter((expense) => expense.id !== id));
@@ -81,12 +78,44 @@ const UpcomingExpensesCard: React.FC<UpcomingExpensesCardProps> = ({ expenses })
                     {`Due: ${new Date(expense.dueDate).toLocaleDateString()} — $${expense.amount.toFixed(2)}`}
                   </Typography>
                 }
+=======
+  // Get today's date and the date 7 days from now
+  const today = new Date();
+  const sevenDaysFromNow = new Date();
+  sevenDaysFromNow.setDate(today.getDate() + 7);
+
+  // Filter the expenses to only include those within the next 7 days
+  const upcomingExpenses = localExpenses.filter((expense) => {
+    const expenseDate = new Date(expense.date);
+    return expenseDate >= today && expenseDate <= sevenDaysFromNow;
+  });
+
+  return (
+    <Box sx={{ padding: 2, backgroundColor: 'background.paper', borderRadius: 1, boxShadow: 1 }}>
+      <Typography variant="h6" gutterBottom>
+        Upcoming Expenses
+      </Typography>
+      <Divider sx={{ marginBottom: 2 }} />
+      <List>
+        {upcomingExpenses.length > 0 ? (
+          upcomingExpenses.map((expense) => (
+            <ListItem key={expense.name}>
+              <ListItemText
+                primary={expense.name}
+                secondary={`Due: ${new Date(expense.date).toLocaleDateString()} — $${expense.cost.toFixed(2)}`}
+>>>>>>> origin/NewEliBranch
               />
+              {/* Optional: Add a checkbox or other actions here */}
+              <Checkbox />
             </ListItem>
-          ))}
-        </List>
-      </CardContent>
-    </Card>
+          ))
+        ) : (
+          <ListItem>
+            <ListItemText primary="No upcoming expenses within the next 7 days." />
+          </ListItem>
+        )}
+      </List>
+    </Box>
   );
 };
 

@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  Divider,
-  TextField,
-  Button,
-  Typography,
-} from "@mui/material";
+import { Box, TextField, Button, Typography } from "@mui/material";
 
 interface AddIncomeProps {
   userId: number | null;
@@ -58,36 +50,42 @@ const AddIncome: React.FC<AddIncomeProps> = ({ userId, onIncomeAdded }) => {
   };
 
   return (
-    <Card>
-      <CardHeader title="Add Income" />
-      <Divider />
-      <CardContent>
-        <form onSubmit={handleAddIncome} noValidate>
-          <TextField
-            fullWidth
-            variant="outlined"
-            label="Income Amount"
-            type="number"
-            value={incomeAmount}
-            onChange={(e) => setIncomeAmount(e.target.value)}
-            margin="normal"
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            sx={{ mt: 2 }}
-          >
-            Add Income
-          </Button>
-        </form>
-        {message && (
-          <Typography variant="body2" color="error" sx={{ mt: 2 }}>
-            {message}
-          </Typography>
-        )}
-      </CardContent>
-    </Card>
+    <Box sx={{ maxWidth: 400, margin: "0 auto", padding: 2 }}>
+      <Typography variant="h6" gutterBottom>
+        Add Income
+      </Typography>
+
+      {message && (
+        <Typography
+          variant="body2"
+          sx={{ marginBottom: 2, color: message.includes("success") ? "green" : "red" }}
+        >
+          {message}
+        </Typography>
+      )}
+
+      <form onSubmit={handleAddIncome}>
+        <TextField
+          label="Income Amount"
+          type="text" // Keep input type as text for better validation
+          value={incomeAmount}
+          onChange={(e) => setIncomeAmount(e.target.value)}
+          fullWidth
+          required
+          margin="normal"
+          placeholder="Enter your income amount"
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
+          sx={{ marginTop: 2 }}
+        >
+          Add Income
+        </Button>
+      </form>
+    </Box>
   );
 };
 

@@ -1,5 +1,9 @@
 import { createTheme, alpha, PaletteMode, Shadows } from '@mui/material/styles';
 
+//0295CA Blue
+//86DEFE Baby blue
+//BFC0C0 Silver
+
 declare module '@mui/material/Paper' {
   interface PaperPropsVariantOverrides {
     highlighted: true;
@@ -273,8 +277,8 @@ export const colorSchemes = {
       },
       divider: alpha(gray[300], 0.4),
       background: {
-        default: 'hsl(220, 35%, 97%)',  // Swapped: now this is the main page background
-        paper: 'hsl(0, 0%, 99%)',        // Swapped: now this is the card background
+        default: 'hsl(220, 35%, 97%)',
+        paper: 'hsl(0, 0%, 99%)',
       },
       text: {
         primary: gray[800],

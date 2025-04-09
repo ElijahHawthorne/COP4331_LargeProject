@@ -11,6 +11,7 @@ import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import MenuButton from './MenuButton';
 import ColorModeIconDropdown from '../../shared-theme/ColorModeIconDropdown';
 
+
 const Toolbar = styled(MuiToolbar)({
   width: '100%',
   padding: '12px',
@@ -40,7 +41,7 @@ export default function AppNavbar() {
     <AppBar
       position="fixed"
       sx={{
-        display: { xs: 'auto', md: 'none' },
+        display: { xs: 'auto', md: 'auto' },
         boxShadow: 0,
         bgcolor: 'background.paper',
         backgroundImage: 'none',
