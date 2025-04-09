@@ -97,6 +97,58 @@ app.post('/api/signup', async (req, res) => {
   }
 });
 
+///----------------------------
+/// UPDATE PASSWORD ENDPOINT
+///----------------------------
+
+
+app.post('/api/updatepassword', async (req, res) => {
+  let error = '';
+  let success = false;
+
+  const { userId, newPassword } = req.body;
+
+  try {
+    const db = client.db('777Finances');
+
+    // Find the user by their userId
+    const existingUser = await db.collection('Users').findOne({ UserId: userId });
+    if (!existingUser) {
+      error = 'User not found';
+      return res.status(404).json({ success, error });
+    }
+
+    // Hash the new password before storing it
+    const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
+
+    // Update the password in the database
+    const result = await db.collection('Users').updateOne(
+      { UserId: userId },
+      { $set: { Password: hashedNewPassword } }
+    );
+
+    // Check if the update was successful
+    if (result.modifiedCount === 1) {
+      success = true;
+      return res.status(200).json({ success, error });
+    } else {
+      error = 'Failed to update password';
+      return res.status(500).json({ success, error });
+    }
+
+  } catch (e) {
+    console.error(e);
+    error = 'An unexpected error occurred';
+    return res.status(500).json({ success, error });
+  }
+});
+
+
+
+
+
+
+
 // ------------------------------------
 // LOGIN ENDPOINT
 // ------------------------------------
@@ -664,20 +716,63 @@ app.post('/api/editincome', async (req, res) => {
 
   res.status(200).json({ success, error });
 });
+// ------------------------------------
+// GET USER INFO ENDPOINT
+// ------------------------------------
+
+app.post('/api/getinfo', async (req, res) => {
+  let error = '';
+  let success = false;
+  let user = null; // Declare a variable to store the retrieved user data
+
+  const { userId } = req.body;  // Expecting a userId from the request body
+
+  try {
+    const db = client.db('777Finances');  // Access your database
+
+    if (!userId) {
+      error = 'userId is required';
+      return res.status(400).json({ success, error });
+    }
+
+    // Find the user in the database based on the userId
+    user = await db.collection('Users').findOne({ UserId: userId });
+
+    // If user does not exist, return an error
+    if (!user) {
+      error = 'User not found';
+      return res.status(404).json({ success, error });
+    }
+
+    // If user is found, send the user data
+    success = true;
+    return res.status(200).json({ success, user, error });
+
+  } catch (e) {
+    console.error(e);
+    error = 'An unexpected error occurred';
+    return res.status(500).json({ success, error });
+  }
+});
+
+
+
+
+
 
 // ------------------------------------
 // SEND EMAIL ENDPOINT
 // ------------------------------------
 
 app.post('/api/send-email', async (req, res) => {
-  console.log("trying to send email...");
+  console.log("Trying to send email...");
 
   const { recipientEmail, subject, message } = req.body;
 
   let error = '';
   let success = false;
   let mailjetResponse = null;
-  let result = null;  // Define 'result' outside of the try-catch block
+  let result = null;
 
   try {
     // Sending the email using Mailjet API v3.1
@@ -703,31 +798,42 @@ app.post('/api/send-email', async (req, res) => {
 
     // Wait for the result of the email send
     result = await request;  // Store the result here
-    
-    // Log Mailjet's full response for better debugging
-    console.log('Mailjet Response:', result.body);
 
-    if (result.status === 200 && result.body && result.body.Messages && result.body.Messages.length > 0) {
-      const messageStatus = result.body.Messages[0].Status;
+    // Log Mailjet's full response for better debugging
+    console.log('Mailjet Response:', JSON.stringify(result.body.Messages, null, 2));
+
+      
+
+    // Check if the Mailjet response was successful and whether the message status is success
+    if (result.body.Messages && result.body.Messages[0]) {
+      const messageStatus = result.body.Messages[0].Status; 
+      console.log(result.body.Messages[0].Status === 'success');
       if (messageStatus === 'success') {
         success = true;
       } else {
+        // If the message status is not 'success', return the error message
         error = `Failed to send email: ${result.body.Messages[0].Errors[0]?.Text || 'Unknown error'}`;
       }
     } else {
-      error = `Failed to send email: No response or message received from Mailjet.`;
+      // If there's no valid response or message received, return a more informative error message
+      error = `Failed to send email: No response or message received from Mailjet. Status Code: ${result.status}`;
     }
   } catch (e) {
     console.error('Error during Mailjet API request:', e);
-    error = e.toString();
+    error = e.toString(); // Capture the error and return it in the response
   }
 
-  // Log the result after the try-catch block
+  // Log the result after the try-catch block for debugging purposes
   mailjetResponse = result ? result.body : null;
 
   // Return the result back to the client with more info
-  res.status(200).json({ success, error, mailjetResponse });
+  res.status(200).json({
+    success, 
+    error, 
+    mailjetResponse  // Include the full response from Mailjet to inspect the details in case of failure.
+  });
 });
+
 
 // ------------------------------------
 // CORS SETUP & START SERVER
