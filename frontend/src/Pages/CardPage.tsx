@@ -4,7 +4,10 @@ import AddExpenses from "../components/AddExpenses";
 import AddIncomes from "../components/SetIncome";
 import ViewExpense from "../components/ViewExpense";
 import SetStartFunds from "../components/SetStartFunds";
+import CategoryChart from "../components/CategoryChart";
 import TotalAssets from "../components/TotalAssets";
+import TimeChart from "../components/TimeChart";
+import CurFundChart from "../components/curFundChart";
 //import CardUI from "../components/CardUI";
 const CardPage = () => {
   return (
@@ -16,6 +19,8 @@ const CardPage = () => {
       <AddIncomes />
       <ViewExpense />
       <TotalAssets />
+      <CategoryChart />
+      <TimeChart />
     </div>
   );
 };
