@@ -32,36 +32,6 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
     <Card
       ref={cardRef}
       onClick={handleCardClick}
-<<<<<<< HEAD
-      sx={(theme) => ({
-        backgroundColor: theme.palette.background.paper,
-        p: 2,
-        // Use a fixed, lower borderRadius for sharper corners:
-        borderRadius: "4px",
-        // A lighter shadow for a modern, minimal look:
-        boxShadow: theme.shadows[1],
-        height: 300,
-        overflowY: isActive ? "hidden" : "auto",
-        transition: theme.transitions.create(["transform", "z-index"], {
-          duration: theme.transitions.duration.short,
-        }),
-        ...(isActive
-          ? {
-              transform: "translate(-50%, -50%) scale(1.5)",
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              zIndex: 50,
-            }
-          : {
-              transform: "scale(1)",
-              position: "relative",
-            }),
-      })}
-    >
-      <CardHeader title={title} />
-      <CardContent>
-=======
       sx={{
         backgroundColor: "white",
         p: 2,
@@ -80,7 +50,6 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
     >
       <CardHeader title={title} />
       <CardContent sx={{ padding: 0 }}>
->>>>>>> origin/NewEliBranch
         {!isActive && componentCollapsed}
         {isActive && (
           <Box
@@ -88,15 +57,6 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
               display: "flex",
               justifyContent: "space-between",
               gap: 2,
-<<<<<<< HEAD
-              height: "100%",
-            }}
-          >
-            <Box sx={{ width: "200px", overflowY: "auto", height: "100%" }}>
-              {componentCollapsed}
-            </Box>
-            <Box sx={{ width: "150px", overflowY: "auto", height: "100%" }}>
-=======
               height: "100%", // Make sure the Box fills the height of the Card
               position:"fixed"
             }}
@@ -123,7 +83,6 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
     
               }}
             >
->>>>>>> origin/NewEliBranch
               <Typography
                 variant="h6"
                 sx={{

@@ -1,5 +1,4 @@
 import Stack from '@mui/material/Stack';
-import CustomDatePicker from './CustomDatePicker';
 import NavbarBreadcrumbs from './NavbarBreadcrumbs';
 import ColorModeIconDropdown from '../../shared-theme/ColorModeIconDropdown';
 
@@ -20,7 +19,6 @@ export default function Header() {
       <NavbarBreadcrumbs />
       <Stack direction="row" sx={{ gap: 1 }}>
         
-        <CustomDatePicker />
         
         <ColorModeIconDropdown />
       </Stack>

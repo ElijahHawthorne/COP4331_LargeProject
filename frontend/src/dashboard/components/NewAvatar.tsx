@@ -1,5 +1,3 @@
-
-
 interface Props {
   currentFirstname: string|null;
 }

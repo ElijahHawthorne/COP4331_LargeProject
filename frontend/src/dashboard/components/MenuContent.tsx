@@ -8,14 +8,6 @@ import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import { useNavigate } from 'react-router-dom';
 
-
-
-
-
-
-
-
-
 export default function MenuContent() {
 
 
