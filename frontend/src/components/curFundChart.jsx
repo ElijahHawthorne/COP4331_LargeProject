@@ -2,6 +2,7 @@ import React from "react";
 import { LineChart } from '@mui/x-charts/LineChart';
 import { totalFunds as useTotalFunds } from "../hooks/totalFunds";
 import { useExpenses } from "../hooks/useExpenses";
+import { useIncomes } from "../hooks/useIncomes";
 
 function CurFundChart() {
   let _ud = localStorage.getItem("user_data");
@@ -13,7 +14,7 @@ function CurFundChart() {
 
   const sortedExpenses = [...expenses].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
-  let runningBalance = totalFunds || 0;
+  let runningBalance = curFunds || 0;
   const xLabels = [];
   const yValues = [];
 

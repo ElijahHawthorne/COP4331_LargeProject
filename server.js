@@ -342,7 +342,7 @@ app.post('/api/addincome', async (req, res) => {
   const { userId, incomeName, incomeAmount } = req.body;
 
   // Log the incoming data for debugging
-  console.log("Received income data:", { userId, incomeAmount });
+  console.log("Received income data:", { userId, incomeName, incomeAmount });
 
   let error = '';
   let success = false;
@@ -353,13 +353,15 @@ app.post('/api/addincome', async (req, res) => {
     amount: incomeAmount,
     timestamp: new Date().toISOString()
   }
-//
+
   try {
+    console.log("Adding income to userId:", JSON.stringify(newIncome, null, 2));
+
     const result = await db.collection('Data').updateOne(
       { userId: userId },
       {
         $push: {
-          income: newIncome 
+          income: newIncome  // This is the key part
         }
         ,
         $inc: {
@@ -377,10 +379,36 @@ app.post('/api/addincome', async (req, res) => {
     error = e.toString();
   }
   
-//
+
   res.status(200).json({ success, error });
 });
+// ------------------------------------
+// GET INCOME ENDPOINT
+// ------------------------------------
+app.post('/api/getincomes', async (req, res) => {
+  const { userId } = req.body;
+  console.log("Received userId:", userId);
+  let error = '';
+  let income = [];
 
+
+  try {
+    const db = client.db('777Finances');
+
+    
+    const user = await db.collection('Data').findOne({ userId: userId });
+
+    if (user) {
+      income = user.income; 
+    } else {
+      error = 'User not found';
+    }
+  } catch (e) {
+    error = e.toString();
+  }
+
+  res.status(200).json({ income, error });
+});
 // ------------------------------------
 // SET START FUNDS ENDPOINT
 // ------------------------------------

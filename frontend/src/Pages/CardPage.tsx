@@ -1,7 +1,7 @@
 import PageTitle from "../components/PageTitle";
 import LoggedInName from "../components/LoggedInName";
 import AddExpenses from "../components/AddExpenses";
-import AddIncomes from "../components/SetIncome";
+import AddIncomes from "../components/SetIncomeFuture";
 import ViewExpense from "../components/ViewExpense";
 import SetStartFunds from "../components/SetStartFunds";
 import CategoryChart from "../components/CategoryChart";
@@ -21,6 +21,7 @@ const CardPage = () => {
       <TotalAssets />
       <CategoryChart />
       <TimeChart />
+      <CurFundChart />
     </div>
   );
 };
