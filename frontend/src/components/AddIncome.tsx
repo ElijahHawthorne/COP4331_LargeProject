@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Box, TextField, Button, Typography } from "@mui/material";
 
 interface AddIncomeProps {
   userId: number | null;
@@ -49,25 +50,42 @@ const AddIncome: React.FC<AddIncomeProps> = ({ userId, onIncomeAdded }) => {
   };
 
   return (
-    <div className="p-4 bg-gray-100 rounded shadow-md">
-      <h2 className="text-lg font-bold mb-2">Add Income</h2>
+    <Box sx={{ maxWidth: 400, margin: "0 auto", padding: 2 }}>
+      <Typography variant="h6" gutterBottom>
+        Add Income
+      </Typography>
+
+      {message && (
+        <Typography
+          variant="body2"
+          sx={{ marginBottom: 2, color: message.includes("success") ? "green" : "red" }}
+        >
+          {message}
+        </Typography>
+      )}
+
       <form onSubmit={handleAddIncome}>
-        <input
-          type="text" // Change input type to text
-          placeholder="Income Amount"
+        <TextField
+          label="Income Amount"
+          type="text" // Keep input type as text for better validation
           value={incomeAmount}
-          onChange={(e) => setIncomeAmount(e.target.value)} // Update state with text input
-          className="border p-2 rounded w-full mb-2"
+          onChange={(e) => setIncomeAmount(e.target.value)}
+          fullWidth
+          required
+          margin="normal"
+          placeholder="Enter your income amount"
         />
-        <button
+        <Button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          variant="contained"
+          color="primary"
+          fullWidth
+          sx={{ marginTop: 2 }}
         >
           Add Income
-        </button>
+        </Button>
       </form>
-      {message && <p className="mt-2 text-sm text-red-500">{message}</p>}
-    </div>
+    </Box>
   );
 };
 

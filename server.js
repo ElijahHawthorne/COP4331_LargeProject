@@ -313,7 +313,7 @@ app.post('/api/getdata', async (req, res) => {
   const { userId } = req.body;
   let error = '';
   let userData = {};
-
+  console.log("Received request to get data for userId:", userId);
   try {
     const db = client.db('777Finances');
 

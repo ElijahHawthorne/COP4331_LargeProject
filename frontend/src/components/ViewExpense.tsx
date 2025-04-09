@@ -1,24 +1,80 @@
 import { Expense } from "../Types";
+import { Box, Typography, IconButton } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface ViewExpenseProps {
-  expenseList: Expense[]; // Define the type for the expenseList prop
+  expenseList?: Expense[]; // Make the prop optional
+  onEdit?: (expense: Expense) => void; // Callback for editing an expense
+  onDelete?: (expense: Expense) => void; // Callback for deleting an expense
 }
 
-const ViewExpense: React.FC<ViewExpenseProps> = ({ expenseList }) => {
+const ViewExpense: React.FC<ViewExpenseProps> = ({
+  expenseList = [],
+  onEdit,
+  onDelete,
+}) => {
   return (
-    <div className="overflow-y-auto p-4">
-      <div className="text-[30px] mb-4">Expense List</div>
-      <ul className="flex flex-col gap-6">
-        {expenseList.map((expense, index) => (
-          <li
+    <Box>
+      <Typography variant="h4" gutterBottom>
+        Your Expenses
+      </Typography>
+
+      {expenseList.length > 0 ? (
+        expenseList.map((expense, index) => (
+          <Box
             key={index}
-            className="text-lg font-medium text-gray-800 border-2 rounded-lg p-4"
+            sx={{
+              mb: 3,
+              padding: 2,
+              border: "1px solid #ddd",
+              borderRadius: 2,
+              position: "relative",
+              backgroundColor: "#f9f9f9",
+              "&:hover .action-buttons": {
+                opacity: 1,
+              },
+            }}
           >
-            <strong>{expense.name}</strong>: ${expense.cost}
-          </li>
-        ))}
-      </ul>
-    </div>
+            <Typography variant="h6">{expense.name}</Typography>
+            <Typography variant="body1">Cost: ${expense.cost}</Typography>
+            <Typography variant="body2">Category: {expense.category || "N/A"}</Typography>
+            <Typography variant="body2">Date: {expense.date || "N/A"}</Typography>
+
+            {/* Action Buttons */}
+            <Box
+              className="action-buttons"
+              sx={{
+                position: "absolute",
+                top: 8,
+                right: 8,
+                display: "flex",
+                gap: 1,
+                opacity: 0,
+                transition: "opacity 0.3s",
+              }}
+            >
+              <IconButton
+                size="small"
+                color="primary"
+                onClick={() => onEdit && onEdit(expense)} // Trigger the onEdit callback
+              >
+                <EditIcon />
+              </IconButton>
+              <IconButton
+                size="small"
+                color="secondary"
+                onClick={() => onDelete && onDelete(expense)} // Trigger the onDelete callback
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Box>
+          </Box>
+        ))
+      ) : (
+        <Typography>No expenses to display</Typography>
+      )}
+    </Box>
   );
 };
 
