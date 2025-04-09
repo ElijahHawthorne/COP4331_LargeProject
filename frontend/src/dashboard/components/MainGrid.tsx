@@ -196,11 +196,11 @@ export default function MainGrid() {
       {/*TOP ROW*/}
       <Grid
         container
-        spacing={4}
+        spacing={3}
         columns={15} // Use 15 columns so 5 cards each with lg={3} fit on one row
         sx={{ mb: (theme) => theme.spacing(2) }}
       >
-        {/* 1. Upcoming Expenses */}
+        {/*Upcoming Expenses*/}
         <Grid item xs={12} sm={6} lg={4}>
           <UpcomingExpensesCard expenses={sampleExpenses} />
         </Grid>
