@@ -1,6 +1,9 @@
-
-
-import React, { useRef } from "react";
+import React from "react";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardContent from "@mui/material/CardContent";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 interface ExpandableCardProps {
   title: string;
@@ -9,7 +12,7 @@ interface ExpandableCardProps {
   isActive: boolean;
   componentCollapsed: React.ReactNode;
   componentExpanded: React.ReactNode;
-  cardRef: (el: HTMLDivElement | null) => void; // Accept a function to set the ref
+  cardRef: (el: HTMLDivElement | null) => void;
 }
 
 const ExpandableCard: React.FC<ExpandableCardProps> = ({
@@ -22,44 +25,72 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
   cardRef,
 }) => {
   const handleCardClick = (event: React.MouseEvent) => {
-    event.stopPropagation(); // Prevent the event from propagating to the global listener
-    onClick(event); // Call the passed onClick handler
+    event.stopPropagation();
+    onClick(event);
   };
 
   return (
-    <div
-      ref={cardRef} // Pass the cardRef here
-      className={`bg-white p-4 rounded shadow transform transition-all duration-300 ease-in-out ${
-        isActive ? "scale-105 z-50 fixed inset-0" : ""
-      }`}
-      style={{
-        transition: "transform 0.3s ease, z-index 0.3s ease",
-        zIndex: isActive ? 50 : 1,
-        position: isActive ? "absolute" : "relative",
-        top: isActive ? "50%" : "auto",
-        left: isActive ? "50%" : "auto",
-        height: "300px",
-        overflowY: isActive? "hidden": "auto",
-        transform: isActive ? "translate(-50%, -50%) scale(1.5)" : "scale(1)",
-        
-      }}
-      onClick={handleCardClick} // Use the handleCardClick to stop propagation
+    <Card
+      ref={cardRef}
+      onClick={handleCardClick}
+      sx={(theme) => ({
+        backgroundColor: theme.palette.background.paper,
+        p: 2,
+        // Use a fixed, lower borderRadius for sharper corners:
+        borderRadius: "4px",
+        // A lighter shadow for a modern, minimal look:
+        boxShadow: theme.shadows[1],
+        height: 300,
+        overflowY: isActive ? "hidden" : "auto",
+        transition: theme.transitions.create(["transform", "z-index"], {
+          duration: theme.transitions.duration.short,
+        }),
+        ...(isActive
+          ? {
+              transform: "translate(-50%, -50%) scale(1.5)",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              zIndex: 50,
+            }
+          : {
+              transform: "scale(1)",
+              position: "relative",
+            }),
+      })}
     >
-      <h2 className="text-lg font-bold">{title}</h2>
-      {!isActive && componentCollapsed}
-      {isActive && (
-        <div className="flex justify-between gap-4" style={{ height: "100%" }}>
-        <div style={{ width: "200px", overflowY: "auto", height: "100%" }}>
-          {componentCollapsed}
-        </div>
-        
-        <div style={{ width: "150px", overflowY: "auto", height: "100%" }}>
-  <strong className="text-[20px] border-black">Add {title}</strong> {/* Corrected Tailwind font size */}
-  {componentExpanded}
-</div>
-      </div>
-      )}
-    </div>
+      <CardHeader title={title} />
+      <CardContent>
+        {!isActive && componentCollapsed}
+        {isActive && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: 2,
+              height: "100%",
+            }}
+          >
+            <Box sx={{ width: "200px", overflowY: "auto", height: "100%" }}>
+              {componentCollapsed}
+            </Box>
+            <Box sx={{ width: "150px", overflowY: "auto", height: "100%" }}>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: "bold",
+                  borderBottom: "1px solid",
+                  mb: 1,
+                }}
+              >
+                Add {title}
+              </Typography>
+              {componentExpanded}
+            </Box>
+          </Box>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 

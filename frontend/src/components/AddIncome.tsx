@@ -1,4 +1,13 @@
 import React, { useState } from "react";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  Divider,
+  TextField,
+  Button,
+  Typography,
+} from "@mui/material";
 
 interface AddIncomeProps {
   userId: number | null;
@@ -6,7 +15,7 @@ interface AddIncomeProps {
 }
 
 const AddIncome: React.FC<AddIncomeProps> = ({ userId, onIncomeAdded }) => {
-  const [incomeAmount, setIncomeAmount] = useState<string>(""); // Use string for text input
+  const [incomeAmount, setIncomeAmount] = useState<string>("");
   const [message, setMessage] = useState<string>("");
 
   const handleAddIncome = async (e: React.FormEvent) => {
@@ -42,32 +51,43 @@ const AddIncome: React.FC<AddIncomeProps> = ({ userId, onIncomeAdded }) => {
       } else {
         setMessage(`Error: ${result.error}`);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       setMessage("An error occurred while adding income.");
       console.error("Error adding income:", error);
     }
   };
 
   return (
-    <div className="p-4 bg-gray-100 rounded shadow-md">
-      <h2 className="text-lg font-bold mb-2">Add Income</h2>
-      <form onSubmit={handleAddIncome}>
-        <input
-          type="text" // Change input type to text
-          placeholder="Income Amount"
-          value={incomeAmount}
-          onChange={(e) => setIncomeAmount(e.target.value)} // Update state with text input
-          className="border p-2 rounded w-full mb-2"
-        />
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Add Income
-        </button>
-      </form>
-      {message && <p className="mt-2 text-sm text-red-500">{message}</p>}
-    </div>
+    <Card>
+      <CardHeader title="Add Income" />
+      <Divider />
+      <CardContent>
+        <form onSubmit={handleAddIncome} noValidate>
+          <TextField
+            fullWidth
+            variant="outlined"
+            label="Income Amount"
+            type="number"
+            value={incomeAmount}
+            onChange={(e) => setIncomeAmount(e.target.value)}
+            margin="normal"
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{ mt: 2 }}
+          >
+            Add Income
+          </Button>
+        </form>
+        {message && (
+          <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+            {message}
+          </Typography>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 
