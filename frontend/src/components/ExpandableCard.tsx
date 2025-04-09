@@ -17,7 +17,6 @@ interface ExpandableCardProps {
 
 const ExpandableCard: React.FC<ExpandableCardProps> = ({
   title,
-  index,
   onClick,
   isActive,
   componentCollapsed,

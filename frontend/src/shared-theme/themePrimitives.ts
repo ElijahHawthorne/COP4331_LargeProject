@@ -273,8 +273,8 @@ export const colorSchemes = {
       },
       divider: alpha(gray[300], 0.4),
       background: {
-        default: 'hsl(0, 0%, 99%)',
-        paper: 'hsl(220, 35%, 97%)',
+        default: 'hsl(220, 35%, 97%)',  // Swapped: now this is the main page background
+        paper: 'hsl(0, 0%, 99%)',        // Swapped: now this is the card background
       },
       text: {
         primary: gray[800],
@@ -323,8 +323,8 @@ export const colorSchemes = {
       },
       divider: alpha(gray[700], 0.6),
       background: {
-        default: gray[900],
-        paper: 'hsl(220, 30%, 7%)',
+        default: gray[900], // Swapped here: dark global bg becomes the card background value
+        paper: 'hsl(220, 30%, 7%)',            // Swapped: dark cards now have a different dark background
       },
       text: {
         primary: 'hsl(0, 0%, 100%)',
