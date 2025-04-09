@@ -11,6 +11,7 @@ import AddIncome from "../../components/AddIncome";
 import Viewdebt from "../../components/ViewDebt";
 import AddDebt from "../../components/AddDebt";
 import { Stack } from "@mui/material";
+import { on } from "events";
 
 export default function MainGrid() {
   const [sessionId, setSessionId] = useState<number | null>(null);
@@ -79,6 +80,71 @@ export default function MainGrid() {
     );
   };
 
+  const handleEditExpense = (expense: any) => {
+    console.log("Edit expense:", expense);
+
+    // Prompt the user for the new cost of the expense
+    const newCost = prompt("Enter new cost for the expense:", expense.cost);
+
+    // Validate the input
+    if (!newCost || isNaN(parseFloat(newCost))) {
+      alert("Invalid input. Please enter a valid number.");
+      return;
+    }
+
+    // Send the updated expense cost to the backend
+    const updatedExpense = {
+      userId: sessionId,
+      expenseName: expense.name, // Use the existing name to identify the expense
+      newExpenseCost: parseFloat(newCost), // Only update the cost
+    };
+
+    fetch("http://777finances.com:5000/api/updateexpense", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedExpense),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.success) {
+          console.log("Expense updated successfully");
+          fetchUserData(); // Refresh the expense list
+        } else {
+          console.error("Failed to update expense:", result.error);
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating expense:", error);
+      });
+  };
+
+  const handleDeleteExpense = async (expense: any) => {
+    console.log("Delete expense:", expense);
+    if (!sessionId) return;
+
+    try {
+      const response = await fetch("http://777finances.com:5000/api/removeexpense", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: sessionId, expenseName: expense.name }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        console.log("Expense deleted successfully");
+        fetchUserData(); // Refresh the data after deletion
+      } else {
+        console.error("Failed to delete expense:", result.error);
+      }
+    } catch (error) {
+      console.error("Error deleting expense:", error);
+    }
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       // Check if the click happened outside all cards
@@ -95,12 +161,6 @@ export default function MainGrid() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-
-
-
-
-
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -179,7 +239,13 @@ export default function MainGrid() {
           index={3}
           onClick={() => handleCardClick(3)}
           isActive={activeCard === 3}
-          componentCollapsed={<ViewExpense expenseList={curUserData.expenses} />}
+          componentCollapsed={
+            <ViewExpense
+              expenseList={curUserData.expenses}
+              onEdit={handleEditExpense}
+              onDelete={handleDeleteExpense}
+            />
+          }
           componentExpanded={<AddExpenses userId={sessionId} onRerender={fetchUserData} />}
           cardRef={(el) => (cardRefs.current[3] = el)}
         />
@@ -216,8 +282,6 @@ export default function MainGrid() {
           cardRef={(el) => (cardRefs.current[5] = el)}  // Add to card refs array
         />
       </Box>
-
-
     </Box>
   );
 }
