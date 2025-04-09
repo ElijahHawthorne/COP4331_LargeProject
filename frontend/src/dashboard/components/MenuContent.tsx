@@ -7,18 +7,38 @@ import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
+import { useNavigate } from 'react-router-dom';
 
-const mainListItems = [
-  { text: 'Home', icon: <HomeRoundedIcon /> }
-  
-];
 
-const secondaryListItems = [
-  { text: 'Settings', icon: <SettingsRoundedIcon /> },
-  
-];
+
+
+
+
+
+
 
 export default function MenuContent() {
+
+
+  const navigator = useNavigate();
+
+
+
+  function goToSettings(){
+    navigator("/accountsettings");
+  }
+
+
+  const mainListItems = [
+    { text: 'Home', icon: <HomeRoundedIcon /> }
+    
+  ];
+  
+  const secondaryListItems = [
+    { text: 'Settings', icon: <SettingsRoundedIcon onClick={goToSettings} /> },
+    
+  ];
+
   return (
     <Stack sx={{ flexGrow: 1, p: 1, justifyContent: 'space-between' }}>
       <List dense>

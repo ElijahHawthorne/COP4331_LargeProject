@@ -1,29 +1,21 @@
-// src/components/UpcomingExpensesCard.tsx
 import React, { useState, useEffect } from "react";
+import { Expense } from "../Types";
 import {
-  Card,
-  CardHeader,
-  CardContent,
+  Box,
   Divider,
   List,
   ListItem,
   ListItemText,
   Checkbox,
+  Typography,
 } from "@mui/material";
-
-interface Expense {
-  id: number;
-  description: string;
-  amount: number;
-  dueDate: string; // ISO date string
-}
 
 interface UpcomingExpensesCardProps {
   expenses: Expense[];
 }
 
 const UpcomingExpensesCard: React.FC<UpcomingExpensesCardProps> = ({ expenses }) => {
-  // Local state to track current expenses
+  // Local state to track upcoming expenses
   const [localExpenses, setLocalExpenses] = useState<Expense[]>(expenses);
 
   // Update local state when props change
@@ -31,39 +23,42 @@ const UpcomingExpensesCard: React.FC<UpcomingExpensesCardProps> = ({ expenses })
     setLocalExpenses(expenses);
   }, [expenses]);
 
-  // When an expense is marked as paid, remove it from the list.
-  // You could also add an animation or strike-through effect here.
-  const handleExpensePaid = (id: number) => {
-    setLocalExpenses((prev) => prev.filter((expense) => expense.id !== id));
-  };
+  // Get today's date and the date 7 days from now
+  const today = new Date();
+  const sevenDaysFromNow = new Date();
+  sevenDaysFromNow.setDate(today.getDate() + 7);
+
+  // Filter the expenses to only include those within the next 7 days
+  const upcomingExpenses = localExpenses.filter((expense) => {
+    const expenseDate = new Date(expense.date);
+    return expenseDate >= today && expenseDate <= sevenDaysFromNow;
+  });
 
   return (
-    <Card>
-      <CardHeader title="Upcoming Expenses" />
-      <Divider />
-      <CardContent>
-        <List>
-          {localExpenses.map((expense) => (
-            <ListItem
-              key={expense.id}
-              // Secondary action places the Checkbox on the right; 
-              // to move it to the left, you can restructure the ListItem
-              secondaryAction={
-                <Checkbox
-                  edge="end"
-                  onChange={() => handleExpensePaid(expense.id)}
-                />
-              }
-            >
+    <Box sx={{ padding: 2, backgroundColor: 'background.paper', borderRadius: 1, boxShadow: 1 }}>
+      <Typography variant="h6" gutterBottom>
+        Upcoming Expenses
+      </Typography>
+      <Divider sx={{ marginBottom: 2 }} />
+      <List>
+        {upcomingExpenses.length > 0 ? (
+          upcomingExpenses.map((expense) => (
+            <ListItem key={expense.name}>
               <ListItemText
-                primary={expense.description}
-                secondary={`Due: ${new Date(expense.dueDate).toLocaleDateString()} — $${expense.amount.toFixed(2)}`}
+                primary={expense.name}
+                secondary={`Due: ${new Date(expense.date).toLocaleDateString()} — $${expense.cost.toFixed(2)}`}
               />
+              {/* Optional: Add a checkbox or other actions here */}
+              <Checkbox />
             </ListItem>
-          ))}
-        </List>
-      </CardContent>
-    </Card>
+          ))
+        ) : (
+          <ListItem>
+            <ListItemText primary="No upcoming expenses within the next 7 days." />
+          </ListItem>
+        )}
+      </List>
+    </Box>
   );
 };
 

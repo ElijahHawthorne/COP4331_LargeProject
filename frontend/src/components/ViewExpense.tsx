@@ -30,7 +30,7 @@ const ViewExpense: React.FC<ViewExpenseProps> = ({
               border: "1px solid #ddd",
               borderRadius: 2,
               position: "relative",
-              backgroundColor: "white",
+
               "&:hover .action-buttons": {
                 opacity: 1,
               },

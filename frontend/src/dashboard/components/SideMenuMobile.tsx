@@ -53,6 +53,7 @@ export default function SideMenuMobile({ open, toggleDrawer }: SideMenuMobilePro
     navigate("/login");
   }
 
+  
 
 
 

@@ -14,7 +14,7 @@ const NewAvatar = ({ currentFirstname }: Props) => {
         width: '50px',
         height: '50px',
         borderRadius: '50%',  // Make it circular
-        backgroundColor: '#3f51b5',  // You can change the background color
+        backgroundColor: '#33ccff',  // You can change the background color
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

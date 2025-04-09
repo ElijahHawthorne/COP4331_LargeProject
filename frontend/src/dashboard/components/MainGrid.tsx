@@ -12,6 +12,9 @@ import Viewdebt from "../../components/ViewDebt";
 import AddDebt from "../../components/AddDebt";
 import { Stack } from "@mui/material";
 import { on } from "events";
+import UpcomingExpensesCard from "../../components/UpcomingExpenses";
+
+
 
 export default function MainGrid() {
   const [sessionId, setSessionId] = useState<number | null>(null);
@@ -282,15 +285,7 @@ export default function MainGrid() {
           width: 'calc(33.33% - 16px)',  // Maintain the same width as other cards
         }}
       >
-        <ExpandableCard
-          title="New Card"
-          index={5}  // Ensure the index is unique
-          onClick={() => handleCardClick(5)}
-          isActive={activeCard === 5}
-          componentCollapsed={<div>Content for New Card</div>}  // Customize this
-          componentExpanded={<div>Expanded Content for New Card</div>}  // Customize this
-          cardRef={(el) => (cardRefs.current[5] = el)}  // Add to card refs array
-        />
+       <UpcomingExpensesCard expenses={curUserData.expenses} />
       </Box>
     </Box>
   );

@@ -99,6 +99,8 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
             },
           }}
         />
+        
+        {/* Category was previously a TextField, but now it will be the Select component */}
         <TextField
           label="Expense Category"
           value={expenseCategory}
@@ -108,14 +110,6 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
           margin="normal"
           placeholder="Enter the category of the expense"
           select
-          MenuProps={{
-            PaperProps: {
-              onMouseDown: (e) => e.stopPropagation(), // Prevent the click from propagating
-              sx: {
-                zIndex: 1300, // Ensure the dropdown appears above other elements
-              },
-            },
-          }}
         >
           <MenuItem value="Food">Food</MenuItem>
           <MenuItem value="Transportation">Transportation</MenuItem>
@@ -123,6 +117,7 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
           <MenuItem value="Entertainment">Entertainment</MenuItem>
           <MenuItem value="Other">Other</MenuItem>
         </TextField>
+
         <TextField
           label="Expense Date"
           type="date"
