@@ -147,8 +147,17 @@ export default function MainGrid() {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      // Ignore clicks inside dropdowns or other specific elements
+      if ((event.target as HTMLElement).closest(".MuiMenu-paper")) {
+        return; // Do nothing if the click is inside a Material-UI dropdown
+      }
+
       // Check if the click happened outside all cards
-      if (cardRefs.current.every((ref) => ref && !ref.contains(event.target as Node))) {
+      if (
+        cardRefs.current.every(
+          (ref) => ref && !ref.contains(event.target as Node)
+        )
+      ) {
         setActiveCard(null); // Collapse all cards if clicked outside
       }
     };
@@ -160,7 +169,7 @@ export default function MainGrid() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [cardRefs]);
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -222,7 +231,7 @@ export default function MainGrid() {
           index={2}
           onClick={() => handleCardClick(2)}
           isActive={activeCard === 2}
-          componentCollapsed={<p>Your total income: ${curUserData.income}</p>}
+          componentCollapsed={<p>Monthly Income: ${curUserData.income}</p>}
           componentExpanded={<AddIncome userId={sessionId} onIncomeAdded={fetchUserData} />}
           cardRef={(el) => (cardRefs.current[2] = el)}
         />
@@ -231,6 +240,7 @@ export default function MainGrid() {
       {/* Expense Card */}
       <Box
         sx={{
+          zIndex: 2,
           width: 'calc(33.33% - 16px)',
         }}
       >

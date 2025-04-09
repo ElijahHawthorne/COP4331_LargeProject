@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, TextField, Button, Typography } from "@mui/material";
+import { Box, TextField, Button, Typography, MenuItem } from "@mui/material";
 
 interface AddExpensesProps {
   onRerender: () => void; // onRerender is a function with no arguments and no return value
@@ -9,6 +9,8 @@ interface AddExpensesProps {
 function AddExpenses({ onRerender, userId }: AddExpensesProps) {
   const [expenseName, setExpenseName] = useState<string>("");
   const [expenseCost, setExpenseCost] = useState<number | null>(null);
+  const [expenseCategory, setExpenseCategory] = useState<string>(""); // New state for category
+  const [expenseDate, setExpenseDate] = useState<string>(""); // New state for date
   const [message, setMessage] = useState<string>("");
   const [messageColor, setMessageColor] = useState<string>("");
 
@@ -26,7 +28,7 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
       return;
     }
 
-    const obj = { userId, expenseName, expenseCost };
+    const obj = { userId, expenseName, expenseCost, expenseCategory, expenseDate };
     const js = JSON.stringify(obj);
 
     try {
@@ -42,6 +44,10 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
         setMessage("Expense added successfully!");
         setMessageColor("success");
         onRerender(); // Trigger re-render by calling parent function
+        setExpenseName(""); // Reset fields
+        setExpenseCost(null);
+        setExpenseCategory("");
+        setExpenseDate("");
       } else {
         setMessage("Failed to add expense: " + res.error);
         setMessageColor("error");
@@ -91,6 +97,42 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
             inputProps: {
               style: { WebkitAppearance: "none", MozAppearance: "textfield" }, // Hide arrows in number input
             },
+          }}
+        />
+        <TextField
+          label="Expense Category"
+          value={expenseCategory}
+          onChange={(e) => setExpenseCategory(e.target.value)}
+          fullWidth
+          required
+          margin="normal"
+          placeholder="Enter the category of the expense"
+          select
+          MenuProps={{
+            PaperProps: {
+              onMouseDown: (e) => e.stopPropagation(), // Prevent the click from propagating
+              sx: {
+                zIndex: 1300, // Ensure the dropdown appears above other elements
+              },
+            },
+          }}
+        >
+          <MenuItem value="Food">Food</MenuItem>
+          <MenuItem value="Transportation">Transportation</MenuItem>
+          <MenuItem value="Utilities">Utilities</MenuItem>
+          <MenuItem value="Entertainment">Entertainment</MenuItem>
+          <MenuItem value="Other">Other</MenuItem>
+        </TextField>
+        <TextField
+          label="Expense Date"
+          type="date"
+          value={expenseDate}
+          onChange={(e) => setExpenseDate(e.target.value)}
+          fullWidth
+          required
+          margin="normal"
+          InputLabelProps={{
+            shrink: true, // Ensure the label stays above the input
           }}
         />
         <Button
