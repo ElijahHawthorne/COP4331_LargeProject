@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Typography, TextField, Box, Stack, IconButton, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import the back arrow icon
 import { useNavigate } from "react-router-dom";
-import NewAvatar from "../dashboard/components/newAvatar";
+import NewAvatar from "../dashboard/components/NewAvatar";
 import PasswordChangeDialog from "../dashboard/components/PasswordChangeDialogue";
 
 interface Data {

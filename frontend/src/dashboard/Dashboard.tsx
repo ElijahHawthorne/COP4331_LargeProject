@@ -9,10 +9,6 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import AppNavbar from './components/AppNavbar';
 import MainGrid from './components/MainGrid';
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/NewEliBranch
 import AppTheme from '../shared-theme/AppTheme';
 import type {} from '@mui/material/themeCssVarsAugmentation';
 import {

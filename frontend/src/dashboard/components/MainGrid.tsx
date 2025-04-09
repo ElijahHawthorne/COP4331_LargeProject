@@ -12,9 +12,7 @@ import ViewExpense from "../../components/ViewExpense";
 import AddIncome from "../../components/AddIncome";
 import Viewdebt from "../../components/ViewDebt";
 import AddDebt from "../../components/AddDebt";
-import { Stack } from "@mui/material";
-import { on } from "events";
-import UpcomingExpensesCard from "../../components/UpcomingExpenses";
+
 
 const sampleExpenses = [
   {
@@ -208,146 +206,6 @@ export default function MainGrid() {
   }
 
   return (
-<<<<<<< HEAD
-    <Box sx={{ width: "100%", maxWidth: "none", p: 4 }}>
-      {/*TOP SECTION*/}
-      <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
-        Overview
-      </Typography>
-
-      {/*TOP ROW*/}
-      <Grid
-        container
-        spacing={3}
-        columns={15} // Use 15 columns so 5 cards each with lg={3} fit on one row
-        sx={{ mb: (theme) => theme.spacing(2) }}
-      >
-        {/*Upcoming Expenses*/}
-        <Grid item xs={12} sm={6} lg={4}>
-          <UpcomingExpensesCard expenses={sampleExpenses} />
-        </Grid>
-        {/*Expenses*/}
-        <Grid item xs={12} sm={6} lg={4}>
-          <ExpandableCard
-            title="Expenses"
-            index={1}
-            onClick={() => handleCardClick(1)}
-            isActive={activeCard === 1}
-            componentCollapsed={<ViewExpense expenseList={expenses} />}
-            componentExpanded={
-              <div className="flex">
-                <div>
-                  {sessionId ? (
-                    <AddExpenses userId={sessionId} onRerender={fetchUserData} />
-                  ) : (
-                    <p>Loading...</p>
-                  )}
-                </div>
-              </div>
-            }
-            cardRef={(el) => (cardRefs.current[1] = el)}
-          />
-        </Grid>
-
-        {/*Income*/}
-        <Grid item xs={12} sm={6} lg={4}>
-          <ExpandableCard
-            title="Income"
-            index={2}
-            onClick={() => handleCardClick(2)}
-            isActive={activeCard === 2}
-            componentCollapsed={<p>Your total income: ${curUserData.income}</p>}
-            componentExpanded={
-              <div className="flex">
-                <div className="w-1/2">
-                  <p className="text-lg font-medium">
-                    Your current income is: ${curUserData.income}
-                  </p>
-                </div>
-                <div className="w-1/2">
-                  {sessionId ? (
-                    <AddIncome userId={sessionId} onIncomeAdded={fetchUserData} />
-                  ) : (
-                    <p>Loading...</p>
-                  )}
-                </div>
-              </div>
-            }
-            cardRef={(el) => (cardRefs.current[2] = el)}
-          />
-        </Grid>
-
-        {/*Debt*/}
-        <Grid item xs={12} sm={6} lg={4}>
-          <ExpandableCard
-            title="Debt"
-            index={3}
-            onClick={() => handleCardClick(3)}
-            isActive={activeCard === 3}
-            componentCollapsed={<Viewdebt debt={curUserData.debt} />}
-            componentExpanded={<AddDebt userId={sessionId} onDebtAdded={fetchUserData} />}
-            cardRef={(el) => (cardRefs.current[3] = el)}
-          />
-        </Grid>
-
-        {/*Goals*/}
-        <Grid item xs={12} sm={6} lg={4}>
-          <ExpandableCard
-            title="Goals"
-            index={0}
-            onClick={() => handleCardClick(0)}
-            isActive={activeCard === 0}
-            componentCollapsed={<ViewGoals goals={curUserData.goals} />}
-            componentExpanded={<AddGoal userId={sessionId} onGoalAdded={fetchUserData} />}
-            cardRef={(el) => (cardRefs.current[0] = el)}
-          />
-        </Grid>
-      </Grid>
-
-      {/* BOTTOM SECTION */}
-      <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
-        Details
-      </Typography>
-
-      {/*BOTTOM ROW (TWO BLANK CARDS)*/}
-      <Grid container spacing={4} columns={15}>
-        <Grid item xs={12} sm={6} lg={6}>
-          <Box
-            sx={{
-              border: '1px solid',
-              borderColor: 'divider',
-              borderRadius: 1,
-              p: 2,
-              height: '200px', // Adjust as needed
-            }}
-          >
-            <Typography variant="body1">
-              {/*Empty card 1*/}
-              Eddy's Graph
-            </Typography>
-          </Box>
-        </Grid>
-
-        <Grid item xs={12} sm={6} lg={6}>
-          <Box
-            sx={{
-              border: '1px solid',
-              borderColor: 'divider',
-              borderRadius: 1,
-              p: 2,
-              height: '200px', // Adjust as needed
-            }}
-          >
-            <Typography variant="body1">
-              {/*Empty card 2*/}
-              Eddy's Graph
-            </Typography>
-          </Box>
-        </Grid>
-      </Grid>
-
-      <Copyright sx={{ my: 4 }} />
-=======
     <Box
       sx={{
         display: 'flex',
@@ -456,7 +314,6 @@ export default function MainGrid() {
       >
        <UpcomingExpensesCard expenses={curUserData.expenses} />
       </Box>
->>>>>>> origin/NewEliBranch
     </Box>
   );
 }
