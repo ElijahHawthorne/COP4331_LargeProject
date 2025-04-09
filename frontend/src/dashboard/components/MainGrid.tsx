@@ -32,7 +32,7 @@ export default function MainGrid() {
       try {
         const userData = JSON.parse(storedUserData);
         setSessionId(userData.id);
-        console.log("UserData:", userData);
+        console.log("UserData.id:", userData.id);
       } catch (error) {
         console.error("Error parsing user data:", error);
       }
@@ -60,6 +60,7 @@ export default function MainGrid() {
       }
 
       const data = await response.json();
+      console.log("Fetched User Data:", data);
       const userData = data.userData;
 
       setCurUserData(userData);

@@ -1,10 +1,10 @@
 import { Expense } from "../Types";
 
 interface ViewExpenseProps {
-  expenseList: Expense[]; // Define the type for the expenseList prop
+  expenseList?: Expense[]; // Make the prop optional
 }
 
-const ViewExpense: React.FC<ViewExpenseProps> = ({ expenseList }) => {
+const ViewExpense: React.FC<ViewExpenseProps> = ({ expenseList = [] }) => {
   return (
     <div className="overflow-y-auto p-4">
       <div className="text-[30px] mb-4">Expense List</div>
