@@ -473,6 +473,31 @@ app.post('/api/getfunds', async (req, res) => {
   res.status(200).json({ funds, error });
 });
 // ------------------------------------
+// GET START FUNDS ENDPOINT
+// ------------------------------------
+app.post('/api/getstartfunds', async (req, res) => {
+  const { userId } = req.body;
+  console.log("Received userId:", userId);
+  let error = '';
+  let funds = 0;
+
+  try {
+    const db = client.db('777Finances');
+
+    const user = await db.collection('Data').findOne({ userId: userId });
+
+    if (user) {
+      funds = user.startFundsFunds; 
+    } else {
+      error = 'User not found';
+    }
+  } catch (e) {
+    error = e.toString();
+  }
+
+  res.status(200).json({ funds, error });
+});
+// ------------------------------------
 // CORS SETUP & START SERVER
 // ------------------------------------
 // No need for manual CORS setup anymore, `cors` middleware handles it
