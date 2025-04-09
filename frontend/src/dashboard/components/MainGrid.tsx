@@ -35,6 +35,13 @@ const sampleExpenses = [
     amount: 60.0,
     dueDate: "2023-09-05T00:00:00.000Z",
   },
+  {
+    id: 4,
+    description: "Food Bill",
+    amount: 200.0,
+    dueDate: "2023-09-05T00:00:00.000Z",
+  },
+
 ];
 
 const data: Object[] = [
