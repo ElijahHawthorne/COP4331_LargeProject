@@ -16,7 +16,7 @@ const ViewExpense: React.FC<ViewExpenseProps> = ({
 }) => {
   return (
     <Box>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h3" gutterBottom>
         Your Expenses
       </Typography>
 
@@ -30,7 +30,6 @@ const ViewExpense: React.FC<ViewExpenseProps> = ({
               border: "1px solid #ddd",
               borderRadius: 2,
               position: "relative",
-              backgroundColor: "#f9f9f9",
               "&:hover .action-buttons": {
                 opacity: 1,
               },
