@@ -40,7 +40,7 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
               ? `rgba(${theme.vars.palette.background.defaultChannel} / 1)`
               : alpha(theme.palette.background.default, 1),
             overflow: 'auto',
-            paddingTop: '800px', // Add padding at the top to avoid content hiding behind the navbar
+            paddingTop: '400px', // Add padding at the top to avoid content hiding behind the navbar
           })}
         >
           <Stack
