@@ -37,7 +37,7 @@ const UpcomingExpensesCard: React.FC<UpcomingExpensesCardProps> = ({ expenses })
   });
 
   return (
-    <Box sx={{ padding: 2, backgroundColor: 'background.paper', borderRadius: 1, boxShadow: 1 }}>
+    <Box sx={{ padding: 2, borderRadius: 1, boxShadow: 1 }}>
       <Typography variant="h6" gutterBottom>
         Upcoming Expenses
       </Typography>
