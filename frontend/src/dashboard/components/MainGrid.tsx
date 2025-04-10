@@ -15,7 +15,7 @@ import { on } from "events";
 import UpcomingExpensesCard from "../../components/UpcomingExpenses";
 import PieChartComponent from "../../components/ExpensesPieChart";
 import BalanceCard from "../../components/Balance";
-
+import SpendingOverTimeChart from "../../components/ExpenseOverTime";
 
 
 export default function MainGrid() {
@@ -283,13 +283,20 @@ export default function MainGrid() {
       </Box>
       <Box
         sx={{
-          width: '100%', // Span the full width of the container
+          width: '50%', // Span the full width of the container
           marginTop: 2,  // Add some space before the large card
         }}
       >
         <PieChartComponent expenses={curUserData.expenses} />
       </Box>
-
+      <Box
+        sx={{
+          width: '50%', // Span the full width of the container
+          marginTop: 2,  // Add some space before the large card
+        }}
+      >
+        <SpendingOverTimeChart expenses={curUserData.expenses} />
+      </Box>
 
 
     </Box>
