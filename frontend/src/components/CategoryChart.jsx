@@ -1,41 +1,50 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { PieChart } from '@mui/x-charts';
 import { useExpenses } from "../hooks/useExpenses";
 
 function CategoryChart() {
+  const _ud = localStorage.getItem("user_data");
+  const ud = JSON.parse(_ud);
+  const userId = ud.id;
 
-    const app_name = "777finances.com";
-    function buildPath(route) {
-        if (process.env.NODE_ENV !== "development") {
-            return "http://" + app_name + ":5000/" + route;
-        } else {
-            return "http://localhost:5000/" + route;
-        }
+  const { expenses, error } = useExpenses(userId);
+
+  const categoryTotals = expenses.reduce((acc, expense) => {
+    const category = expense.category || "Uncategorized";
+    if (!acc[category]) {
+      acc[category] = 0;
     }
+    acc[category] += expense.cost;
+    return acc;
+  }, {});
 
-    let _ud = localStorage.getItem("user_data");
-    let ud = JSON.parse(_ud);
-    let userId = ud.id;
+  const pieData = Object.entries(categoryTotals).map(([category, total], index) => ({
+    id: index,
+    value: total,
+    label: category,
+  }));
 
-    const { expenses, error } = useExpenses(userId);
+  return (
+    <div className="bg-primary mt-4 flex flex-col items-center justify-center p-6 rounded shadow-md w-full max-w-md">
+      <h2 className="text-xl font-bold mb-4">Expenses by Category</h2>
 
-    return (
-        <div className="bg-primary mt-4 flex flex-col items-center justify-center p-6 rounded shadow-md w-full max-w-md">
-            <PieChart
-                series={[
-                    {
-                        data: expenses.map((expense, index) => ({
-                            id: index,
-                            value: expense.cost,
-                            label: expense.name
-                        })),
-                    },
-                ]}
-                width={400}
-                height={200}
-            />
-        </div>
-    );
+      {error && <p className="text-red-500">{error}</p>}
+
+      {pieData.length > 0 ? (
+        <PieChart
+          series={[
+            {
+              data: pieData,
+            },
+          ]}
+          width={400}
+          height={200}
+        />
+      ) : (
+        <p>No expenses to display.</p>
+      )}
+    </div>
+  );
 }
 
 export default CategoryChart;
