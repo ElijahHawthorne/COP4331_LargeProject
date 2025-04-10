@@ -60,10 +60,7 @@ const Viewdebt: React.FC<ViewDebtProps> = ({ debt = [], userId, onDebtDeleted })
 
   return (
     <div>
-      <Typography variant="h4" gutterBottom>
-        Your Debt
-      </Typography>
-
+      
       {/* Map through each debt and display it */}
       {debt.length > 0 ? (
         debt.map((debtItem, index) => (

@@ -74,9 +74,7 @@ const ViewGoals: React.FC<ViewGoalsProps> = ({ goals = [], userId, onGoalDeleted
 
   return (
     <div>
-      <Typography variant="h4" gutterBottom>
-        Your Goals
-      </Typography>
+
 
       {/* Map through each goal and display it */}
       {goals.length > 0 ? (

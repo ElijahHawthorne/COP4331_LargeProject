@@ -16,9 +16,6 @@ const ViewExpense: React.FC<ViewExpenseProps> = ({
 }) => {
   return (
     <Box>
-      <Typography variant="h3" gutterBottom>
-        Your Expenses
-      </Typography>
 
       {expenseList.length > 0 ? (
         expenseList.map((expense, index) => (

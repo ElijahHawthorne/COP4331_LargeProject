@@ -66,7 +66,7 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
           expenseName: newGoal.name,
           expenseCost: newGoal.paymentAmount,
           expenseDate: newGoal.date,
-          expenseCategory: "saving goal",
+          expenseCategory: "Saving Goal",
         };
 
         const expenseResponse = await fetch(

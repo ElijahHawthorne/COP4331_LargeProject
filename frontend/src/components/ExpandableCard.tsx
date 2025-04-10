@@ -48,7 +48,12 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
         overflowY: isActive ? "hidden" : "auto", // Show overflow when expanded
       }}
     >
-      <CardHeader title={title} />
+      <CardHeader
+        title={title}
+        sx={{
+          marginBottom: 1, // Add bottom margin
+        }}
+      />
       <CardContent sx={{ padding: 0 }}>
         {!isActive && componentCollapsed}
         {isActive && (
@@ -77,7 +82,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
             <Box
               sx={{
                 flex: 1,
-                width: "150px",
+                width: isActive ? "100%" : "150px", // Make the input section wider when expanded
                 height: "100%",
                 overflowY: "auto", // Enable scrolling for this section
     
@@ -93,7 +98,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
               >
                 Add {title}
               </Typography>
-              {componentExpanded}
+              {React.cloneElement(componentExpanded as React.ReactElement, {})}
             </Box>
           </Box>
         )}
@@ -103,3 +108,4 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
 };
 
 export default ExpandableCard;
+

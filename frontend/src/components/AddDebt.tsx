@@ -78,7 +78,7 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
           expenseName: newDebt.name,
           expenseCost: newDebt.paymentAmount,
           expenseDate: newDebt.date,
-          expenseCategory: 'debt',  // Category set to 'debt'
+          expenseCategory: 'Debt',  // Category set to 'debt'
         };
 
         // Log the expense data being sent to the server
