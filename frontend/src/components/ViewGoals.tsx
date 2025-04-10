@@ -18,7 +18,10 @@ const ViewGoals: React.FC<ViewGoalsProps> = ({ goals = [], userId, onGoalDeleted
       alert('User is not logged in');
       return;
     }
-
+  
+    const confirmDelete = window.confirm(`Are you sure you want to delete the goal "${goalName}" and its related expense?`);
+    if (!confirmDelete) return;
+  
     try {
       // First, delete the goal
       const goalResponse = await fetch('http://777finances.com:5000/api/removegoal', {
@@ -27,42 +30,37 @@ const ViewGoals: React.FC<ViewGoalsProps> = ({ goals = [], userId, onGoalDeleted
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userId: userId,  // Pass the userId
-          goalName: goalName,  // Pass the goalName
+          userId: userId,
+          goalName: goalName,
         }),
       });
-
+  
       const goalData = await goalResponse.json();
-
+  
       if (goalData.success) {
-        // After successful goal deletion, remove the goal from the state
-        onGoalDeleted(goalName);  // Call onGoalDeleted to update the UI
-
+        onGoalDeleted(goalName); // Update UI
         alert('Goal deleted successfully!');
-
-
+  
+        // Then remove the related expense
         const expenseResponse = await fetch('http://777finances.com:5000/api/removeexpense', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            userId: userId,  // Pass the userId
-            expenseName: goalName,  // Pass the debtName, which will match the expense name
+            userId: userId,
+            expenseName: goalName,
           }),
         });
-
+  
         const expenseData = await expenseResponse.json();
-
+  
         if (expenseData.success) {
-          alert('Debt and related expense deleted successfully!');
+          alert('Related expense deleted successfully!');
         } else {
           alert(`Failed to delete related expense: ${expenseData.error}`);
         }
-
-
-
-
+  
       } else {
         alert(`Failed to delete goal: ${goalData.error}`);
       }
@@ -71,6 +69,7 @@ const ViewGoals: React.FC<ViewGoalsProps> = ({ goals = [], userId, onGoalDeleted
       alert('An error occurred while deleting the goal.');
     }
   };
+  
 
   return (
     <div>
@@ -88,11 +87,15 @@ const ViewGoals: React.FC<ViewGoalsProps> = ({ goals = [], userId, onGoalDeleted
               padding: 2,
               border: '1px solid #ddd',
               borderRadius: 2,
-              position: 'relative', // Make sure the delete button is positioned correctly
+              position: 'relative',
+              "&:hover .action-buttons": {
+                opacity: 1,
+              }, // Make sure the delete button is positioned correctly
             }}
           >
             {/* Delete Icon Button at the top right */}
             <IconButton
+            className="action-buttons"
               onClick={() => handleDeleteGoal(goal.name)}
               sx={{
                 position: 'absolute',
@@ -100,6 +103,8 @@ const ViewGoals: React.FC<ViewGoalsProps> = ({ goals = [], userId, onGoalDeleted
                 right: 8,
                 size: 'small',
                 fontSize: '15px',
+                opacity: 0,
+                transition: "opacity 0.3s",
                 color: 'gray',
                 '&:hover': {
                   color: 'red', // Change color when hovered over

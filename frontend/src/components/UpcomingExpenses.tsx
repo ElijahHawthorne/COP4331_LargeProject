@@ -14,7 +14,9 @@ interface UpcomingExpensesCardProps {
   expenses: Expense[];
 }
 
-const UpcomingExpensesCard: React.FC<UpcomingExpensesCardProps> = ({ expenses }) => {
+const UpcomingExpensesCard: React.FC<UpcomingExpensesCardProps> = ({
+  expenses,
+}) => {
   // Local state to track upcoming expenses
   const [localExpenses, setLocalExpenses] = useState<Expense[]>(expenses);
 
@@ -46,10 +48,10 @@ const UpcomingExpensesCard: React.FC<UpcomingExpensesCardProps> = ({ expenses })
             <ListItem key={expense.name}>
               <ListItemText
                 primary={expense.name}
-                secondary={`Due: ${new Date(expense.date).toLocaleDateString()} — $${expense.cost.toFixed(2)}`}
+                secondary={`Due: ${new Date(
+                  expense.date
+                ).toLocaleDateString()} — $${expense.cost.toFixed(2)}`}
               />
-              {/* Optional: Add a checkbox or other actions here */}
-              <Checkbox />
             </ListItem>
           ))
         ) : (

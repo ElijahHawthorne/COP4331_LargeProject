@@ -79,10 +79,10 @@ export default function MainGrid() {
   };
 
   const handleCardClick = (cardIndex: number) => {
-    setActiveCard((prevIndex) =>
-      prevIndex === cardIndex ? cardIndex : cardIndex
-    );
+    // Only set the active card if it's not the currently active one
+    setActiveCard((prevIndex) => (prevIndex !== cardIndex ? cardIndex : prevIndex));
   };
+  
 
   const handleEditExpense = (expense: any) => {
     console.log("Edit expense:", expense);
@@ -285,7 +285,7 @@ export default function MainGrid() {
           isActive={activeCard === 4}
           componentCollapsed={<BalanceCard expenses={curUserData.expenses} income={curUserData.income}/>}
           componentExpanded={null}
-          cardRef={(el) => (cardRefs.current[0] = el)}
+          cardRef={(el) => (cardRefs.current[4] = el)}
         />
       </Box>
 
@@ -302,7 +302,7 @@ export default function MainGrid() {
           isActive={activeCard === 4}
           componentCollapsed={<UpcomingExpensesCard expenses={curUserData.expenses}/>}
           componentExpanded={null}
-          cardRef={(el) => (cardRefs.current[0] = el)}
+          cardRef={(el) => (cardRefs.current[4] = el)}
         />
       </Box>
       <Box

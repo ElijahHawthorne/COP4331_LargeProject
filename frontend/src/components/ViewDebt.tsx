@@ -11,6 +11,9 @@ interface ViewDebtProps {
 
 const Viewdebt: React.FC<ViewDebtProps> = ({ debt = [], userId, onDebtDeleted }) => {
   const handleDeleteDebt = async (debtName: string) => {
+    const confirmDelete = window.confirm(`Are you sure you want to delete the debt "${debtName}" and its related expense?`);
+    if (!confirmDelete) return; // Exit if user cancels
+  
     try {
       // First, delete the debt
       const debtResponse = await fetch('http://777finances.com:5000/api/deletedebt', {
@@ -19,44 +22,44 @@ const Viewdebt: React.FC<ViewDebtProps> = ({ debt = [], userId, onDebtDeleted })
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userId: userId,  // Pass the userId
-          debtName: debtName,  // Pass the debtName
+          userId: userId,
+          debtName: debtName,
         }),
       });
-
+  
       const debtData = await debtResponse.json();
-
+  
       if (debtData.success) {
-        // After successful debt deletion, remove the debt from the state
-        onDebtDeleted(debtName);  // Call onDebtDeleted to update the UI
-
-        // Now, remove the expense with the same name
+        onDebtDeleted(debtName);  // Update UI
+  
+        // Then remove the related expense
         const expenseResponse = await fetch('http://777finances.com:5000/api/removeexpense', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            userId: userId,  // Pass the userId
-            expenseName: debtName,  // Pass the debtName, which will match the expense name
+            userId: userId,
+            expenseName: debtName,
           }),
         });
-
+  
         const expenseData = await expenseResponse.json();
-
+  
         if (expenseData.success) {
-          alert('Debt and related expense deleted successfully!');
+          console.log('Debt and related expense deleted successfully!');
         } else {
-          alert(`Failed to delete related expense: ${expenseData.error}`);
+          console.log(`Failed to delete related expense: ${expenseData.error}`);
         }
       } else {
-        alert(`Failed to delete debt: ${debtData.error}`);
+        console.log(`Failed to delete debt: ${debtData.error}`);
       }
     } catch (error) {
       console.error('Error deleting debt and expense:', error);
-      alert('An error occurred while deleting the debt and expense.');
+      console.log('An error occurred while deleting the debt and expense.');
     }
   };
+  
 
   return (
     <div>
@@ -74,18 +77,24 @@ const Viewdebt: React.FC<ViewDebtProps> = ({ debt = [], userId, onDebtDeleted })
               padding: 2,
               border: '1px solid #ddd',
               borderRadius: 2,
-              position: 'relative', // Make sure the delete button is positioned correctly
+              position: 'relative',
+              "&:hover .action-buttons": {
+                opacity: 1,
+              }, // Make sure the delete button is positioned correctly
             }}
           >
             {/* Delete Icon Button at the top right */}
             <IconButton
               onClick={() => handleDeleteDebt(debtItem.name)}
+              className="action-buttons"
               sx={{
                 position: 'absolute',
                 top: 8,
                 right: 8,
                 size: 'small',
                 fontSize: '15px',
+                opacity:0,
+                transition: "opacity 0.3s",
                 color: 'gray',
                 '&:hover': {
                   color: 'red', // Change color when hovered over
