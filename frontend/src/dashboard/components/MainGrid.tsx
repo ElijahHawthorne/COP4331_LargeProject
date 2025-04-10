@@ -193,7 +193,9 @@ export default function MainGrid() {
       {/* Goal Card */}
       <Box
         sx={{
-          width: 'calc(33.33% - 16px)',  // Make sure the card takes up 1/3 of the available width
+          width: 'calc(33.33% - 16px)', 
+          justifyContent:"center" ,
+          display:'flex'// Make sure the card takes up 1/3 of the available width
         }}
       >
         <ExpandableCard
@@ -210,7 +212,8 @@ export default function MainGrid() {
       {/* Debt Card */}
       <Box
         sx={{
-          width: 'calc(33.33% - 16px)',
+          width: 'calc(33.33% - 16px)',justifyContent:"center" ,
+          display:'flex'
         }}
       >
         <ExpandableCard
@@ -227,7 +230,8 @@ export default function MainGrid() {
       {/* Income Card */}
       <Box
         sx={{
-          width: 'calc(33.33% - 16px)',
+          width: 'calc(33.33% - 16px)',justifyContent:"center" ,
+          display:'flex'
         }}
       >
         <ExpandableCard
@@ -246,6 +250,8 @@ export default function MainGrid() {
         sx={{
           zIndex: 2,
           width: 'calc(33.33% - 16px)',
+          justifyContent:"center" ,
+          display:'flex'
         }}
       >
         <ExpandableCard
@@ -267,7 +273,8 @@ export default function MainGrid() {
 
       <Box
         sx={{
-          width: 'calc(33.33% - 16px)',  // Maintain the same width as other cards
+          width: 'calc(33.33% - 16px)', justifyContent:"center" ,
+          display:'flex' // Maintain the same width as other cards
         }}
       >
         
@@ -284,7 +291,8 @@ export default function MainGrid() {
 
       <Box
         sx={{
-          width: 'calc(33.33% - 16px)',  // Maintain the same width as other cards
+          width: 'calc(33.33% - 16px)', justifyContent:"center" ,
+          display:'flex' // Maintain the same width as other cards
         }}
       >
        <ExpandableCard
