@@ -33,7 +33,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
       ref={cardRef}
       onClick={handleCardClick}
       sx={{
-        backgroundColor: "white",
+       
         p: 2,
         borderRadius: "4px",
         boxShadow: 1,
