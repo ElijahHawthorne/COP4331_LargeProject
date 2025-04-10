@@ -13,6 +13,7 @@ import AddIncome from "../../components/AddIncome";
 import Viewdebt from "../../components/ViewDebt";
 import AddDebt from "../../components/AddDebt";
 import CurrentBalanceCard from "../../components/CurrentBalanceCard";
+import AddBalance from "../../components/AddBalance";
 
 
 const sampleExpenses = [
@@ -293,12 +294,24 @@ export default function MainGrid() {
       </Box>
 
       <Box
-        sx={{
-          width: 'calc(33.33% - 16px)',  // Maintain the same width as other cards
-        }}
-      >
-        <CurrentBalanceCard currentBalance={95}/>
-      </Box>
+      sx={{
+        width: 'calc(33.33% - 16px)',
+      }}
+    >
+<ExpandableCard
+    title="Current Balance"
+    index={4}
+    onClick={() => handleCardClick(4)}
+    isActive={activeCard === 4}
+    componentCollapsed={
+      <CurrentBalanceCard currentBalance={curUserData.currentBalance} />
+    }
+    componentExpanded={
+      <AddBalance userId={sessionId} onBalanceAdded={fetchUserData} />
+    }
+    cardRef={(el) => (cardRefs.current[4] = el)}
+  />
+    </Box>
 
       <Box
         sx={{

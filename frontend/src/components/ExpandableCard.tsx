@@ -48,7 +48,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
         overflowY: isActive ? "hidden" : "auto", // Show overflow when expanded
   })}
     >
-      <CardHeader title={title} />
+      <CardHeader title={title} titleTypographyProps={{ align: "center" }} />
       <CardContent sx={{ padding: 0 }}>
         {!isActive && componentCollapsed}
         {isActive && (

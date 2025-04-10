@@ -21,16 +21,13 @@ const CurrentBalanceCard: React.FC<CurrentBalanceCardProps> = ({
     <Box
       sx={{
         padding: 2,
-        borderRadius: 1,
-        boxShadow: 1,
-        textAlign: "center",
-        width: "100%" // adjust if you want a fixed width
+        textAlign: "center",// adjust if you want a fixed width
       }}
     >
       <Typography variant="h6" gutterBottom>
         {label}
       </Typography>
-      <Divider sx={{ marginBottom: 2 }} />
+
 
       {/* Main Balance Display */}
       <Typography variant="h3" sx={{ fontWeight: "bold" }}>
@@ -49,6 +46,11 @@ const CurrentBalanceCard: React.FC<CurrentBalanceCardProps> = ({
           {variation > 0 ? `+${variation}%` : `${variation}%`}
         </Typography>
       )}
+
+      {/* Subtitle, e.g. "Daily earnings", if you want a second label */}
+      <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+        Daily earnings
+      </Typography>
     </Box>
   );
 };
