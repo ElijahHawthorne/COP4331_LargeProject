@@ -11,7 +11,7 @@ import MenuButton from './MenuButton';
 import MenuContent from './MenuContent';
 import CardAlert from './CardAlert';
 import { useEffect, useState } from 'react';
-import NewAvatar from './newAvatar';
+import NewAvatar from './NewAvatar';
 import { useNavigate } from 'react-router-dom';
 
 

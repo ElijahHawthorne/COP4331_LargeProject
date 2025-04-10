@@ -13,6 +13,8 @@ import AddDebt from "../../components/AddDebt";
 import { Stack } from "@mui/material";
 import { on } from "events";
 import UpcomingExpensesCard from "../../components/UpcomingExpenses";
+import PieChartComponent from "../../components/ExpensesPieChart";
+import BalanceCard from "../../components/Balance";
 
 
 
@@ -269,15 +271,7 @@ export default function MainGrid() {
           width: 'calc(33.33% - 16px)',  // Maintain the same width as other cards
         }}
       >
-        <ExpandableCard
-          title="New Card"
-          index={4}  // Ensure the index is unique
-          onClick={() => handleCardClick(4)}
-          isActive={activeCard === 4}
-          componentCollapsed={<div>Content for New Card</div>}  // Customize this
-          componentExpanded={<div>Expanded Content for New Card</div>}  // Customize this
-          cardRef={(el) => (cardRefs.current[4] = el)}  // Add to card refs array
-        />
+        <BalanceCard expenses={curUserData.expenses} income={curUserData.income}/>
       </Box>
 
       <Box
@@ -287,6 +281,17 @@ export default function MainGrid() {
       >
        <UpcomingExpensesCard expenses={curUserData.expenses} />
       </Box>
+      <Box
+        sx={{
+          width: '100%', // Span the full width of the container
+          marginTop: 2,  // Add some space before the large card
+        }}
+      >
+        <PieChartComponent expenses={curUserData.expenses} />
+      </Box>
+
+
+
     </Box>
   );
 }
