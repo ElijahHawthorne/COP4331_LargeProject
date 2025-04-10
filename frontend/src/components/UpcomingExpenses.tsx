@@ -9,15 +9,13 @@ import {
   Checkbox,
   Typography,
 } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 
 interface UpcomingExpensesCardProps {
   expenses: Expense[];
 }
 
 const UpcomingExpensesCard: React.FC<UpcomingExpensesCardProps> = ({ expenses }) => {
-  const theme = useTheme();
-  // Local state to track current expenses
+  // Local state to track upcoming expenses
   const [localExpenses, setLocalExpenses] = useState<Expense[]>(expenses);
 
   // Update local state when props change

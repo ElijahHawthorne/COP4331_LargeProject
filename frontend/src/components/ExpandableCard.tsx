@@ -32,8 +32,8 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
     <Card
       ref={cardRef}
       onClick={handleCardClick}
-      sx={{
-        backgroundColor: "white",
+      sx={(theme) => ({
+        backgroundColor: theme.palette.background.paper,
         p: 2,
         borderRadius: "4px",
         boxShadow: 1,
@@ -46,7 +46,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
         width: isActive ? "500px" : "300px", // Adjust expanded width
         zIndex: isActive ? 9999 : 1, // Ensure it's on top of everything else
         overflowY: isActive ? "hidden" : "auto", // Show overflow when expanded
-      }}
+  })}
     >
       <CardHeader title={title} />
       <CardContent sx={{ padding: 0 }}>
