@@ -40,7 +40,7 @@ const PasswordChangeDialog: React.FC<PasswordChangeDialogProps> = ({
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    recipientEmail: /*userEmail*/"elijah.hawthorne@yahoo.com", // Using userEmail passed as a prop
+                    recipientEmail: userEmail, // Using userEmail passed as a prop
                     subject: 'Password Change Verification Code',
                     message: `Please use the verification code to change your password: ${code}. This code will expire in 10 minutes.`,
                 }),
@@ -127,7 +127,7 @@ const PasswordChangeDialog: React.FC<PasswordChangeDialogProps> = ({
                 ) : !codeVerified ? (
                     <>
                         <Typography variant="body1" gutterBottom>
-                            Enter the verification code sent to your email.
+                            Enter the verification code sent to {userEmail}.
                         </Typography>
                         <TextField
                             label="Verification Code"

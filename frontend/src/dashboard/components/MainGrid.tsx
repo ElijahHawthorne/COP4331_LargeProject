@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import Grid from "@mui/material/Grid";
+
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+
 import ExpandableCard from "../../components/ExpandableCard";
 import ViewGoals from "../../components/ViewGoals";
 import AddGoal from "../../components/AddGoal";
@@ -10,8 +10,7 @@ import ViewExpense from "../../components/ViewExpense";
 import AddIncome from "../../components/AddIncome";
 import Viewdebt from "../../components/ViewDebt";
 import AddDebt from "../../components/AddDebt";
-import { Stack } from "@mui/material";
-import { on } from "events";
+
 import UpcomingExpensesCard from "../../components/UpcomingExpenses";
 import PieChartComponent from "../../components/ExpensesPieChart";
 import BalanceCard from "../../components/Balance";
@@ -271,7 +270,16 @@ export default function MainGrid() {
           width: 'calc(33.33% - 16px)',  // Maintain the same width as other cards
         }}
       >
-        <BalanceCard expenses={curUserData.expenses} income={curUserData.income}/>
+        
+        <ExpandableCard
+          title=""
+          index={4}
+          onClick={() => null}
+          isActive={activeCard === 4}
+          componentCollapsed={<BalanceCard expenses={curUserData.expenses} income={curUserData.income}/>}
+          componentExpanded={null}
+          cardRef={(el) => (cardRefs.current[0] = el)}
+        />
       </Box>
 
       <Box
@@ -279,7 +287,15 @@ export default function MainGrid() {
           width: 'calc(33.33% - 16px)',  // Maintain the same width as other cards
         }}
       >
-       <UpcomingExpensesCard expenses={curUserData.expenses} />
+       <ExpandableCard
+          title=""
+          index={4}
+          onClick={() => null}
+          isActive={activeCard === 4}
+          componentCollapsed={<UpcomingExpensesCard expenses={curUserData.expenses}/>}
+          componentExpanded={null}
+          cardRef={(el) => (cardRefs.current[0] = el)}
+        />
       </Box>
       <Box
         sx={{

@@ -10,7 +10,7 @@ import {
 } from "recharts";
 import { format, eachDayOfInterval, startOfMonth, endOfMonth, isSameDay, parseISO } from "date-fns";
 import { Expense } from "../Types";
-import { Typography } from "@mui/material";
+import { Typography, Box, Paper } from "@mui/material";
 
 interface SpendingOverTimeProps {
   expenses: Expense[];
@@ -39,16 +39,35 @@ const SpendingOverTime: React.FC<SpendingOverTimeProps> = ({ expenses }) => {
   });
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    
+
+<Paper
+      elevation={3}
+      sx={{
+        p: 3,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Typography variant="h6" gutterBottom>
+        Expense Distribution by Category
+      </Typography>
+      <Box sx={{ width: 650, height: 300 }}>
+      <ResponsiveContainer width="100%" height={300}>
        
-      <LineChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="date" angle={-45} textAnchor="end" height={70} interval={0} />
-        <YAxis />
-        <Tooltip />
-        <Line type="monotone" dataKey="amount" stroke="#1976d2" strokeWidth={2} />
-      </LineChart>
-    </ResponsiveContainer>
+       <LineChart data={data}>
+         <CartesianGrid strokeDasharray="3 3" />
+         <XAxis dataKey="date" angle={-45} textAnchor="end" height={70} interval={0} />
+         <YAxis />
+         <Tooltip />
+         <Line type="monotone" dataKey="amount" stroke="#1976d2" strokeWidth={2} />
+       </LineChart>
+     </ResponsiveContainer>
+      </Box>
+    </Paper>
+
+
   );
 };
 

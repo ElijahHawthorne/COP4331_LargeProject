@@ -82,7 +82,7 @@ const ViewGoals: React.FC<ViewGoalsProps> = ({ goals = [], userId, onGoalDeleted
       {goals.length > 0 ? (
         goals.map((goal, index) => (
           <Box
-            key={goal.name}
+            key={goal.name+index}
             sx={{
               mb: 3,
               padding: 2,

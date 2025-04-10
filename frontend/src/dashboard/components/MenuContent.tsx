@@ -28,14 +28,17 @@ export default function MenuContent() {
     navigator("/accountsettings");
   }
 
+  function goToDashboard(){
+    navigator("/dashboard");
+  }
 
   const mainListItems = [
-    { text: 'Home', icon: <HomeRoundedIcon /> }
+    { text: 'Home', icon: <HomeRoundedIcon/> }
     
   ];
   
   const secondaryListItems = [
-    { text: 'Settings', icon: <SettingsRoundedIcon onClick={goToSettings} /> },
+    { text: 'Settings', icon: <SettingsRoundedIcon  /> },
     
   ];
 
@@ -44,7 +47,7 @@ export default function MenuContent() {
       <List dense>
         {mainListItems.map((item, index) => (
           <ListItem key={index} disablePadding sx={{ display: 'block' }}>
-            <ListItemButton selected={index === 0}>
+            <ListItemButton selected={index === 0} onClick={goToDashboard}>
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} />
             </ListItemButton>
@@ -54,7 +57,7 @@ export default function MenuContent() {
       <List dense>
         {secondaryListItems.map((item, index) => (
           <ListItem key={index} disablePadding sx={{ display: 'block' }}>
-            <ListItemButton>
+            <ListItemButton onClick={goToSettings}>
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} />
             </ListItemButton>

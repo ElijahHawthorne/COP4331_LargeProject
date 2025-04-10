@@ -12,23 +12,12 @@ import MainGrid from './components/MainGrid';
 
 import AppTheme from '../shared-theme/AppTheme';
 import type {} from '@mui/material/themeCssVarsAugmentation';
-import {
-  chartsCustomizations,
-  dataGridCustomizations,
-  datePickersCustomizations,
-  treeViewCustomizations,
-} from './theme/customizations';
 
-const xThemeComponents = {
-  ...chartsCustomizations,
-  ...dataGridCustomizations,
-  ...datePickersCustomizations,
-  ...treeViewCustomizations,
-};
+
 
 export default function Dashboard(props: { disableCustomTheme?: boolean }) {
   return (
-    <AppTheme {...props} themeComponents={xThemeComponents}>
+    <AppTheme {...props}>
       <CssBaseline enableColorScheme />
       <Box
         sx={{
@@ -51,7 +40,7 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
               ? `rgba(${theme.vars.palette.background.defaultChannel} / 1)`
               : alpha(theme.palette.background.default, 1),
             overflow: 'auto',
-            paddingTop: '500px', // Add padding at the top to avoid content hiding behind the navbar
+            paddingTop: '800px', // Add padding at the top to avoid content hiding behind the navbar
           })}
         >
           <Stack

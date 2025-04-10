@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paper, Typography, Box, Card, CardContent } from '@mui/material';
+import { Typography, Box, Card, CardContent } from '@mui/material';
 import { Expense } from '../Types'; // Assuming the Expense interface is imported
 
 interface BalanceCardProps {

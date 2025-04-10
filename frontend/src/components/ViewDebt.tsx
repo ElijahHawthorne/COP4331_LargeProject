@@ -68,7 +68,7 @@ const Viewdebt: React.FC<ViewDebtProps> = ({ debt = [], userId, onDebtDeleted })
       {debt.length > 0 ? (
         debt.map((debtItem, index) => (
           <Box
-            key={debtItem.name}
+            key={debtItem.name+index}
             sx={{
               mb: 3,
               padding: 2,

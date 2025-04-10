@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Button, Typography, TextField, Box, Stack, IconButton, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { useState, useEffect } from "react";
+import { Button, Typography, TextField, Box, Stack, IconButton} from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import the back arrow icon
 import { useNavigate } from "react-router-dom";
 import NewAvatar from "../dashboard/components/NewAvatar";
@@ -15,10 +15,7 @@ interface Data {
   Email: string;
 }
 
-interface UserData {
-  success: boolean;
-  user: Data;
-}
+
 
 const AccountSettings = () => {
   const [sessionId, setSessionId] = useState<number | null>(null);
@@ -26,8 +23,7 @@ const AccountSettings = () => {
   const [currentLastname, setCurrentLastname] = useState<string | null>(null);
   const [userData, setUserData] = useState<Data | null>(null); // State to store the fetched user data
   const [error, setError] = useState<string>(''); // State to handle errors
-  const [dialogOpen, setDialogOpen] = useState(false); // State to control dialog visibility
-  const [newPassword, setNewPassword] = useState<string>(''); // State for new password input
+   
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   
   
@@ -86,17 +82,12 @@ const AccountSettings = () => {
     setIsDialogOpen(true);
   };
 
-  const handleDialogClose = () => {
-    // Close the dialog
-    setDialogOpen(false);
-  };
+  
 
-  const handleSavePassword = () => {
-    // Logic for saving the new password goes here
-    console.log("New Password:", newPassword);
-    // Close the dialog after saving the password
-    setDialogOpen(false);
-  };
+  
+
+
+
 
   const handleBackClick = () => {
     navigate(-1); // Navigate back to the previous page
