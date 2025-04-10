@@ -106,7 +106,7 @@ export default function MainGrid() {
 
   const handleCardClick = (cardIndex: number) => {
     // Toggle the card: collapse if it's already active, or expand otherwise
-    setActiveCard((prevIndex) => (prevIndex === cardIndex ? null : cardIndex));
+    setActiveCard((prevIndex) => (prevIndex === cardIndex ? cardIndex : cardIndex));
   };
 
   const handleEditExpense = (expense: any) => {
