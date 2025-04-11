@@ -2,12 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Expense } from "../Types";
 import {
   Box,
-  Divider,
   List,
   ListItem,
   ListItemText,
   Checkbox,
-  Typography,
 } from "@mui/material";
 
 interface UpcomingExpensesCardProps {
@@ -43,6 +41,21 @@ const UpcomingExpensesCard: React.FC<UpcomingExpensesCardProps> = ({ expenses })
               <ListItemText
                 primary={expense.name}
                 secondary={`Due: ${new Date(expense.date).toLocaleDateString()} — $${expense.cost.toFixed(2)}`}
+                primaryTypographyProps={{
+                  sx: (theme) => ({
+                    fontFamily: "Inter, sans-serif",
+                    color: theme.palette.text.primary,
+                    fontSize: "1.3rem !important",
+                    fontWeight: "bold",
+                  }),
+                }}
+                secondaryTypographyProps={{
+                  sx: (theme) => ({
+                    fontFamily: "Inter, sans-serif",
+                    color: theme.palette.text.primary ,
+                    fontSize: "1rem !important",
+                  }),
+                }}
               />
               {/* Optional: Add a checkbox or other actions here */}
               <Checkbox />

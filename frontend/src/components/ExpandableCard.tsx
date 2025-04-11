@@ -52,7 +52,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
       {/* Title is now fixed, does NOT scroll */}
       <CardHeader
         title={title}
-        sx={{ flexShrink: 0 }}
+        sx={{ flexShrink: 0, justifyContent: "center", textAlign: "center" }}
       />
 
       {/* Scrollable content section */}

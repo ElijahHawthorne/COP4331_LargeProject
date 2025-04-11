@@ -10,7 +10,7 @@ import ViewExpense from "../../components/ViewExpense";
 import AddIncome from "../../components/AddIncome";
 import Viewdebt from "../../components/ViewDebt";
 import AddDebt from "../../components/AddDebt";
-
+import ViewIncome from "../../components/ViewIncome";
 import UpcomingExpensesCard from "../../components/UpcomingExpenses";
 import PieChartComponent from "../../components/ExpensesPieChart";
 import BalanceCard from "../../components/Balance";
@@ -235,11 +235,11 @@ export default function MainGrid() {
         }}
       >
         <ExpandableCard
-          title="Income"
+          title="This Month's Income"
           index={2}
           onClick={() => handleCardClick(2)}
           isActive={activeCard === 2}
-          componentCollapsed={<p>Monthly Income: ${curUserData.income}</p>}
+          componentCollapsed={<ViewIncome income = {curUserData.income}/>}
           componentExpanded={<AddIncome userId={sessionId} onIncomeAdded={fetchUserData} />}
           cardRef={(el) => (cardRefs.current[2] = el)}
         />
@@ -279,7 +279,7 @@ export default function MainGrid() {
       >
         
         <ExpandableCard
-          title=""
+          title="Remaining Balance"
           index={4}
           onClick={() => null}
           isActive={activeCard === 4}
