@@ -41,12 +41,20 @@ const PieChartComponent: React.FC<PieChartProps> = ({ expenses }) => {
   return (
     <Paper
       elevation={3}
-      sx={{
+      sx={(theme) => ({
         p: 3,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-      }}
+          "&:hover": {
+          // Change shadow color based on mode.
+          boxShadow:
+            theme.palette.mode === "dark"
+              ? "0px 4px 16px #2c4f83"
+              : "0px 4px 16px #007FFF",
+        },
+
+      })}
     >
       <Typography variant="h6" gutterBottom>
         Expense Distribution by Category
