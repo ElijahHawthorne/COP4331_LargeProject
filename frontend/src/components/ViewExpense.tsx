@@ -1,6 +1,6 @@
 import { Expense } from "../Types";
 import { Box, Typography, IconButton } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
+
 import DeleteIcon from "@mui/icons-material/Delete";
 
 interface ViewExpenseProps {
@@ -11,12 +11,11 @@ interface ViewExpenseProps {
 
 const ViewExpense: React.FC<ViewExpenseProps> = ({
   expenseList = [],
-  onEdit,
+ 
   onDelete,
 }) => {
   return (
     <Box>
-
       {expenseList.length > 0 ? (
         expenseList.map((expense, index) => (
           <Box
@@ -49,19 +48,19 @@ const ViewExpense: React.FC<ViewExpenseProps> = ({
                 gap: 1,
                 opacity: 0,
                 transition: "opacity 0.3s",
+                
               }}
             >
-              <IconButton
-                size="small"
-                color="primary"
-                onClick={() => onEdit && onEdit(expense)} // Trigger the onEdit callback
-              >
-                <EditIcon />
-              </IconButton>
+              
               <IconButton
                 size="small"
                 color="secondary"
-                onClick={() => onDelete && onDelete(expense)} // Trigger the onDelete callback
+                onClick={() => onDelete && onDelete(expense)}
+                
+                sx={{color: 'gray',
+                '&:hover': {
+                  color: 'red', // Change color when hovered over
+                },}}// Trigger the onDelete callback
               >
                 <DeleteIcon />
               </IconButton>

@@ -285,7 +285,7 @@ export default function MainGrid() {
           isActive={activeCard === 4}
           componentCollapsed={<BalanceCard expenses={curUserData.expenses} income={curUserData.income}/>}
           componentExpanded={null}
-          cardRef={(el) => (cardRefs.current[0] = el)}
+          cardRef={(el) => (cardRefs.current[4] = el)}
         />
       </Box>
 
@@ -296,13 +296,13 @@ export default function MainGrid() {
         }}
       >
        <ExpandableCard
-          title=""
+          title="Upcoming Expenses"
           index={4}
           onClick={() => null}
           isActive={activeCard === 4}
           componentCollapsed={<UpcomingExpensesCard expenses={curUserData.expenses}/>}
           componentExpanded={null}
-          cardRef={(el) => (cardRefs.current[0] = el)}
+          cardRef={(el) => (cardRefs.current[4] = el)}
         />
       </Box>
       <Box

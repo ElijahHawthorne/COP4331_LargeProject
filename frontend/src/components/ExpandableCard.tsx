@@ -12,7 +12,7 @@ interface ExpandableCardProps {
   isActive: boolean;
   componentCollapsed: React.ReactNode;
   componentExpanded: React.ReactNode;
-  cardRef: (el: HTMLDivElement | null) => void; // Accept a function to set the ref
+  cardRef: (el: HTMLDivElement | null) => void;
 }
 
 const ExpandableCard: React.FC<ExpandableCardProps> = ({
@@ -24,8 +24,8 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
   cardRef,
 }) => {
   const handleCardClick = (event: React.MouseEvent) => {
-    event.stopPropagation(); // Prevent the event from propagating to the global listener
-    onClick(event); // Call the passed onClick handler
+    event.stopPropagation();
+    onClick(event);
   };
 
   return (
@@ -33,59 +33,65 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
       ref={cardRef}
       onClick={handleCardClick}
       sx={{
-       
         p: 2,
         borderRadius: "4px",
         boxShadow: 1,
         transition: "transform 0.3s ease, z-index 0.3s ease, height 0.3s ease",
-        position: isActive ? "fixed" : "relative", // Fixed position when expanded
-        top: isActive ? "50%" : "auto", // Center vertically
-        left: isActive ? "50%" : "auto", // Center horizontally
-        transform: isActive ? "translate(-50%, -50%) scale(1.5)" : "scale(1)", // Scale and center
-        height: isActive ? "500px" : "300px", // Adjust expanded height
-        width: isActive ? "500px" : "300px", // Adjust expanded width
-        zIndex: isActive ? 9999 : 1, // Ensure it's on top of everything else
-        overflowY: isActive ? "hidden" : "auto", // Show overflow when expanded
+        position: isActive ? "fixed" : "relative",
+        top: isActive ? "50%" : "auto",
+        left: isActive ? "50%" : "auto",
+        transform: isActive ? "translate(-50%, -50%) scale(1.5)" : "scale(1)",
+        height: isActive ? "500px" : "300px",
+        width: isActive ? "500px" : "300px",
+        zIndex: isActive ? 9999 : 1,
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
+      {/* Title is now fixed, does NOT scroll */}
       <CardHeader
         title={title}
-        sx={{
-          marginBottom: 1, // Add bottom margin
-        }}
+        sx={{ flexShrink: 0 }}
       />
-      <CardContent sx={{ padding: 0 }}>
+
+      {/* Scrollable content section */}
+      <CardContent
+        sx={{
+          padding: 0,
+          overflowY: "auto", // scrollable area
+          flexGrow: 1,
+        }}
+      >
         {!isActive && componentCollapsed}
+
         {isActive && (
           <Box
             sx={{
               display: "flex",
               justifyContent: "space-between",
               gap: 2,
-              height: "100%", // Make sure the Box fills the height of the Card
-              position:"fixed"
+              height: "100%",
+              overflow: "hidden", // To ensure inner sections scroll individually
             }}
           >
-            {/* Left section - scrollable */}
+            {/* Left scrollable section */}
             <Box
               sx={{
-                position: "relative",
-                width: "200px",
+                flex: 1,
+                overflowY: "auto",
                 height: "100%",
-                overflowY: "auto", // Enable scrolling for this section
               }}
             >
               {componentCollapsed}
             </Box>
 
-            {/* Right section - scrollable */}
+            {/* Right scrollable section */}
             <Box
               sx={{
                 flex: 1,
-                width: isActive ? "100%" : "150px", // Make the input section wider when expanded
+                overflowY: "auto",
                 height: "100%",
-                overflowY: "auto", // Enable scrolling for this section
-    
               }}
             >
               <Typography
@@ -98,7 +104,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
               >
                 Add {title}
               </Typography>
-              {React.cloneElement(componentExpanded as React.ReactElement, {})}
+              {componentExpanded}
             </Box>
           </Box>
         )}
@@ -108,4 +114,3 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
 };
 
 export default ExpandableCard;
-

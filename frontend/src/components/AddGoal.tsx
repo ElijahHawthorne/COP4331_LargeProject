@@ -19,13 +19,13 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
 
     // Check if userId is null
     if (userId === null) {
-      alert("User is not logged in");
+      console.log("User is not logged in");
       return; // Prevent form submission if userId is null
     }
 
     // Validate that the cost and payment amount are numbers
     if (isNaN(Number(goalCost)) || isNaN(Number(paymentAmount))) {
-      alert("Please enter valid numbers for cost and payment amount.");
+      console.log("Please enter valid numbers for cost and payment amount.");
       return;
     }
 
@@ -84,16 +84,16 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
 
         if (expenseDataResponse.success) {
           onGoalAdded();
-          alert("Goal and expense added successfully!");
+          console.log("Goal and expense added successfully!");
         } else {
-          alert(`Failed to add expense: ${expenseDataResponse.error}`);
+          console.log(`Failed to add expense: ${expenseDataResponse.error}`);
         }
       } else {
-        alert(`Failed to add goal: ${goalData.error}`);
+        console.log(`Failed to add goal: ${goalData.error}`);
       }
     } catch (error) {
       console.error("Error submitting goal and expense:", error);
-      alert("An error occurred while adding the goal and expense.");
+      console.log("An error occurred while adding the goal and expense.");
     }
   };
 
