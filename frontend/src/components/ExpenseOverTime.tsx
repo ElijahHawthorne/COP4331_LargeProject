@@ -46,10 +46,6 @@ const SpendingOverTime: React.FC<SpendingOverTimeProps> = ({ expenses }) => {
         cursor: "pointer", // Change cursor to pointer on hover
         transition: "box-shadow 0.3s ease, color 0.3s ease",
         "&:hover": {
-          // Change text color for all children on hover.
-          "& *": {
-            color: theme.palette.mode === "dark" ? "#2c4f83" : "#007FFF",
-          },
           // Change shadow color based on mode.
           boxShadow:
             theme.palette.mode === "dark"

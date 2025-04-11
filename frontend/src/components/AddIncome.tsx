@@ -50,10 +50,7 @@ const AddIncome: React.FC<AddIncomeProps> = ({ userId, onIncomeAdded }) => {
   };
 
   return (
-    <Box sx={{ maxWidth: 400, margin: "0 auto", padding: 2 }}>
-      <Typography variant="h6" gutterBottom>
-        Add Income
-      </Typography>
+    <Box sx={{ maxWidth: 400, margin: "0 auto", padding: 2, paddingTop: 1 }}>
 
       {message && (
         <Typography
