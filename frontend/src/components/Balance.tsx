@@ -9,7 +9,7 @@ interface BalanceCardProps {
 
 const BalanceCard: React.FC<BalanceCardProps> = ({ expenses, income }) => {
   const totalExpenses = expenses.reduce((acc, expense) => acc + expense.cost, 0);
-  const remainingBalance = income - totalExpenses;
+  const remainingBalance = (income - totalExpenses).toFixed(2);
 
   return (
     <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
