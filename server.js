@@ -8,7 +8,7 @@ const saltRounds = 10;
 const MongoClient = require('mongodb').MongoClient;
 require('dotenv').config();
 
-const mailjet = require('node-mailjet').connect( // Use connect for version 6.0.8
+const mailjet = require('node-mailjet').apiConnect( // Use connect for version 6.0.8
   process.env.MAILJET_API_KEY, 
   process.env.MAILJET_SECRET_KEY
 );

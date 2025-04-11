@@ -44,8 +44,8 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
     transform: isActive
       ? "translate(-50%, -50%) scale(1.5)"
       : "scale(1)",
-    height: isActive ? "500px" : "300px",
-    width: isActive ? "500px" : "300px",
+    width: isActive ? "45vw" : "35vw",  
+    height: isActive ? "55vh" : "40vh",
     zIndex: isActive ? 9999 : 1,
     overflowY: isActive ? "hidden" : "auto",
     display: "flex",

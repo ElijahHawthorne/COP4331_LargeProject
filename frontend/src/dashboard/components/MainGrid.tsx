@@ -187,15 +187,16 @@ export default function MainGrid() {
         justifyContent: 'center',  // Horizontally center the cards
         gap: 2,  // Space between the cards
         alignItems: 'flex-start',
-        padding: 2,  // Adjust the padding as needed
+        padding: 15,  // Adjust the padding as needed
+        paddingTop: 30,  // Remove top padding to align with the top of the page
       }}
     >
       {/* Goal Card */}
       <Box
-        sx={{
-          width: 'calc(33.33% - 16px)', 
-          justifyContent:"center" ,
-          display:'flex'// Make sure the card takes up 1/3 of the available width
+        sx={{ position: 'relative',
+          width: 'calc(33.33% - 16px)',
+          justifyContent: "center",
+          display: 'flex'// Make sure the card takes up 1/3 of the available width
         }}
       >
         <ExpandableCard
@@ -211,9 +212,9 @@ export default function MainGrid() {
 
       {/* Debt Card */}
       <Box
-        sx={{
-          width: 'calc(33.33% - 16px)',justifyContent:"center" ,
-          display:'flex'
+        sx={{position: 'relative',
+          width: 'calc(33.33% - 16px)', justifyContent: "center",
+          display: 'flex'
         }}
       >
         <ExpandableCard
@@ -229,9 +230,9 @@ export default function MainGrid() {
 
       {/* Income Card */}
       <Box
-        sx={{
-          width: 'calc(33.33% - 16px)',justifyContent:"center" ,
-          display:'flex'
+        sx={{position: 'relative',
+          width: 'calc(33.33% - 16px)', justifyContent: "center",
+          display: 'flex'
         }}
       >
         <ExpandableCard
@@ -239,7 +240,7 @@ export default function MainGrid() {
           index={2}
           onClick={() => handleCardClick(2)}
           isActive={activeCard === 2}
-          componentCollapsed={<ViewIncome income = {curUserData.income}/>}
+          componentCollapsed={<ViewIncome income={curUserData.income} />}
           componentExpanded={<AddIncome userId={sessionId} onIncomeAdded={fetchUserData} />}
           cardRef={(el) => (cardRefs.current[2] = el)}
         />
@@ -247,11 +248,11 @@ export default function MainGrid() {
 
       {/* Expense Card */}
       <Box
-        sx={{
+        sx={{position: 'relative',
           zIndex: 2,
           width: 'calc(33.33% - 16px)',
-          justifyContent:"center" ,
-          display:'flex'
+          justifyContent: "center",
+          display: 'flex'
         }}
       >
         <ExpandableCard
@@ -272,56 +273,56 @@ export default function MainGrid() {
       </Box>
 
       <Box
-        sx={{
-          width: 'calc(33.33% - 16px)', justifyContent:"center" ,
-          display:'flex' // Maintain the same width as other cards
+        sx={{position: 'relative',
+          width: 'calc(33.33% - 16px)', justifyContent: "center",
+          display: 'flex' // Maintain the same width as other cards
         }}
       >
-        
+
         <ExpandableCard
           title="Remaining Balance"
           index={4}
           onClick={() => null}
           isActive={activeCard === 4}
-          componentCollapsed={<BalanceCard expenses={curUserData.expenses} income={curUserData.income}/>}
+          componentCollapsed={<BalanceCard expenses={curUserData.expenses} income={curUserData.income} />}
           componentExpanded={null}
           cardRef={(el) => (cardRefs.current[4] = el)}
         />
       </Box>
 
       <Box
-        sx={{
-          width: 'calc(33.33% - 16px)', justifyContent:"center" ,
-          display:'flex' // Maintain the same width as other cards
+        sx={{position: 'relative',
+          width: 'calc(33.33% - 16px)', justifyContent: "center",
+          display: 'flex' // Maintain the same width as other cards
         }}
       >
-       <ExpandableCard
+        <ExpandableCard
           title="Upcoming Expenses"
-          index={4}
+          index={5}
           onClick={() => null}
-          isActive={activeCard === 4}
-          componentCollapsed={<UpcomingExpensesCard expenses={curUserData.expenses}/>}
+          isActive={activeCard === 5}
+          componentCollapsed={<UpcomingExpensesCard expenses={curUserData.expenses} />}
           componentExpanded={null}
-          cardRef={(el) => (cardRefs.current[4] = el)}
+          cardRef={(el) => (cardRefs.current[5] = el)}
         />
       </Box>
       <Box
-  sx={{
-    display: 'flex',
-    justifyContent: 'center',
-    gap: 2,
-    width: '100%',
-    marginTop: 2,
-  }}
->
-  <Box sx={{ width: '50%' }}>
-    <PieChartComponent expenses={curUserData.expenses} />
-  </Box>
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: 2,
+          width: '100%',
+          marginTop: 2,
+        }}
+      >
+        <Box sx={{ width: '50%' }}>
+          <PieChartComponent expenses={curUserData.expenses} />
+        </Box>
 
-  <Box sx={{ width: '50%' }}>
-    <SpendingOverTimeChart expenses={curUserData.expenses} />
-  </Box>
-</Box>
+        <Box sx={{ width: '50%' }}>
+          <SpendingOverTimeChart expenses={curUserData.expenses} />
+        </Box>
+      </Box>
 
 
     </Box>
