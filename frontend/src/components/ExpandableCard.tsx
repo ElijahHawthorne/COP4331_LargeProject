@@ -54,12 +54,6 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
     cursor: componentExpanded ? "pointer" : "default",
     // Hover effect: change all text color and the shadow color conditionally based on mode
     "&:hover": {
-      "& *": {
-        color:
-          theme.palette.mode === "dark"
-            ? "#2c4f83"   // Dark mode hover color
-            : "#007FFF",  // Light mode hover color
-      },
       boxShadow: `0px 4px 16px ${
         theme.palette.mode === "dark" ? "#2c4f83" : "#007FFF"
       }`,
