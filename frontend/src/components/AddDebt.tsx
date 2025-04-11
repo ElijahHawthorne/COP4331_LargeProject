@@ -110,8 +110,7 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
   };
 
   return (
-    <Box sx={{ maxWidth: 400, margin: '0 auto', padding: 2 }}>
-      <Typography variant="h6">Add a New Debt</Typography>
+    <Box sx={{ maxWidth: 400, margin: '0 auto', padding: 2, paddingTop: 1 }}>
 
       {error && <Typography color="error">{error}</Typography>}
 

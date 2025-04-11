@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, TextField, Button, Typography } from "@mui/material";
+import { Box, TextField, Button } from "@mui/material";
 import { Goal } from "../Types";
 
 interface AddGoalProps {
@@ -98,8 +98,7 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
   };
 
   return (
-    <Box sx={{ maxWidth: 400, margin: "0 auto", padding: 2, overflowY:"auto" }}>
-      <Typography variant="h6">Add a New Goal</Typography>
+    <Box sx={{ maxWidth: 400, margin: "0 auto", padding: 2,paddingTop: 1, overflowY:"auto" }}>
 
       <form onSubmit={handleGoalSubmit}>
         <TextField
