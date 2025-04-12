@@ -92,7 +92,7 @@ export default function MainGrid() {
 
     // Validate the input
     if (!newCost || isNaN(parseFloat(newCost))) {
-      alert("Invalid input. Please enter a valid number.");
+      console.log("Invalid input. Please enter a valid number.");
       return;
     }
 
@@ -125,9 +125,18 @@ export default function MainGrid() {
   };
 
   const handleDeleteExpense = async (expense: any) => {
-    console.log("Delete expense:", expense);
+    // Ask for confirmation before proceeding with deletion
+    const isConfirmed = window.confirm(`Are you sure you want to delete the expense: ${expense.name}?`);
+  
+    if (!isConfirmed) {
+      console.log("Expense deletion cancelled.");
+      return; // Exit if the user cancels
+    }
+  
+    console.log("Deleting expense:", expense);
+  
     if (!sessionId) return;
-
+  
     try {
       const response = await fetch("http://777finances.com:5000/api/removeexpense", {
         method: "POST",
@@ -136,7 +145,7 @@ export default function MainGrid() {
         },
         body: JSON.stringify({ userId: sessionId, expenseName: expense.name }),
       });
-
+  
       const result = await response.json();
       if (result.success) {
         console.log("Expense deleted successfully");
@@ -148,6 +157,7 @@ export default function MainGrid() {
       console.error("Error deleting expense:", error);
     }
   };
+  
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

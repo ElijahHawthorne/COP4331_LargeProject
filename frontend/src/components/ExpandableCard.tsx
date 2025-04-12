@@ -77,7 +77,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
             <Box
               sx={{
                 flex: 1,
-                width: "150px",
+                width: isActive ? "100%" : "150px", // Make the input section wider when expanded
                 height: "100%",
                 overflowY: "auto", // Enable scrolling for this section
     
@@ -103,3 +103,4 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
 };
 
 export default ExpandableCard;
+

@@ -6,7 +6,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  Checkbox,
   Typography,
 } from "@mui/material";
 

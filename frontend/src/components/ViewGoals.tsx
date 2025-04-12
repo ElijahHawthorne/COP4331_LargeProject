@@ -15,7 +15,7 @@ interface ViewGoalsProps {
 const ViewGoals: React.FC<ViewGoalsProps> = ({ goals = [], userId, onGoalDeleted }) => {
   const handleDeleteGoal = async (goalName: string) => {
     if (!userId) {
-      alert('User is not logged in');
+      console.log('User is not logged in');
       return;
     }
   
@@ -39,7 +39,7 @@ const ViewGoals: React.FC<ViewGoalsProps> = ({ goals = [], userId, onGoalDeleted
   
       if (goalData.success) {
         onGoalDeleted(goalName); // Update UI
-        alert('Goal deleted successfully!');
+        console.log('Goal deleted successfully!');
   
         // Then remove the related expense
         const expenseResponse = await fetch('http://777finances.com:5000/api/removeexpense', {
@@ -56,17 +56,17 @@ const ViewGoals: React.FC<ViewGoalsProps> = ({ goals = [], userId, onGoalDeleted
         const expenseData = await expenseResponse.json();
   
         if (expenseData.success) {
-          alert('Related expense deleted successfully!');
+          console.log('Related expense deleted successfully!');
         } else {
-          alert(`Failed to delete related expense: ${expenseData.error}`);
+          console.log(`Failed to delete related expense: ${expenseData.error}`);
         }
   
       } else {
-        alert(`Failed to delete goal: ${goalData.error}`);
+        console.log(`Failed to delete goal: ${goalData.error}`);
       }
     } catch (error) {
       console.error('Error deleting goal:', error);
-      alert('An error occurred while deleting the goal.');
+      console.log('An error occurred while deleting the goal.');
     }
   };
   

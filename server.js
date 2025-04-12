@@ -24,24 +24,7 @@ client.connect();
 app.use(cors());
 app.use(bodyParser.json());
 
-// ------------------------------------
-// ADD CARD ENDPOINT
-// ------------------------------------
-app.post('/api/addcard', async (req, res) => {
-  const { userId, card } = req.body;
-  const newCard = { Card: card, UserId: userId };
-  let error = '';
 
-  try {
-    const db = client.db('COP4331Cards');
-    // Insert into MongoDB
-    await db.collection('Cards').insertOne(newCard);
-  } catch (e) {
-    error = e.toString();
-  }
-
-  res.status(200).json({ error });
-});
 
 // ------------------------------------
 // SIGNUP ENDPOINT
