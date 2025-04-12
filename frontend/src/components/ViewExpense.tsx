@@ -1,6 +1,6 @@
+import React from "react";
 import { Expense } from "../Types";
 import { Box, Typography, IconButton } from "@mui/material";
-
 import DeleteIcon from "@mui/icons-material/Delete";
 
 interface ViewExpenseProps {
@@ -11,7 +11,6 @@ interface ViewExpenseProps {
 
 const ViewExpense: React.FC<ViewExpenseProps> = ({
   expenseList = [],
- 
   onDelete,
 }) => {
   return (
@@ -26,7 +25,6 @@ const ViewExpense: React.FC<ViewExpenseProps> = ({
               border: "1px solid #ddd",
               borderRadius: 2,
               position: "relative",
-
               "&:hover .action-buttons": {
                 opacity: 1,
               },
@@ -34,8 +32,12 @@ const ViewExpense: React.FC<ViewExpenseProps> = ({
           >
             <Typography variant="h6">{expense.name}</Typography>
             <Typography variant="body1">Cost: ${expense.cost}</Typography>
-            <Typography variant="body2">Category: {expense.category || "N/A"}</Typography>
-            <Typography variant="body2">Date: {expense.date || "N/A"}</Typography>
+            <Typography variant="body2">
+              Category: {expense.category || "N/A"}
+            </Typography>
+            <Typography variant="body2">
+              Date: {expense.date || "N/A"}
+            </Typography>
 
             {/* Action Buttons */}
             <Box
@@ -48,19 +50,26 @@ const ViewExpense: React.FC<ViewExpenseProps> = ({
                 gap: 1,
                 opacity: 0,
                 transition: "opacity 0.3s",
-                
               }}
             >
-              
               <IconButton
                 size="small"
                 color="secondary"
-                onClick={(e) =>{e.stopPropagation(); onDelete && onDelete(expense)}}
-                
-                sx={{color: 'gray',
-                '&:hover': {
-                  color: 'red', // Change color when hovered over
-                },}}// Trigger the onDelete callback
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const confirmDelete = window.confirm(
+                    `Are you sure you want to delete the expense "${expense.name}"?`
+                  );
+                  if (confirmDelete && onDelete) {
+                    onDelete(expense);
+                  }
+                }}
+                sx={{
+                  color: "gray",
+                  "&:hover": {
+                    color: "red",
+                  },
+                }}
               >
                 <DeleteIcon />
               </IconButton>
