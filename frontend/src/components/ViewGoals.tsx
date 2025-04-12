@@ -89,7 +89,7 @@ const ViewGoals: React.FC<ViewGoalsProps> = ({ goals = [], userId, onGoalDeleted
             {/* Delete Icon Button at the top right */}
             <IconButton
             className="action-buttons"
-              onClick={() => handleDeleteGoal(goal.name)}
+              onClick={(e) => {e.stopPropagation(); handleDeleteGoal(goal.name)}}
               sx={{
                 position: 'absolute',
                 top: 8,

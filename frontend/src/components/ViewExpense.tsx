@@ -55,7 +55,7 @@ const ViewExpense: React.FC<ViewExpenseProps> = ({
               <IconButton
                 size="small"
                 color="secondary"
-                onClick={() => onDelete && onDelete(expense)}
+                onClick={(e) =>{e.stopPropagation(); onDelete && onDelete(expense)}}
                 
                 sx={{color: 'gray',
                 '&:hover': {

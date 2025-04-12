@@ -81,7 +81,7 @@ const Viewdebt: React.FC<ViewDebtProps> = ({ debt = [], userId, onDebtDeleted })
           >
             {/* Delete Icon Button at the top right */}
             <IconButton
-              onClick={() => handleDeleteDebt(debtItem.name)}
+              onClick={(e) =>{e.stopPropagation(); handleDeleteDebt(debtItem.name)}}
               className="action-buttons"
               sx={{
                 position: 'absolute',
