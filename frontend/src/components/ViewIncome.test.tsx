@@ -8,7 +8,7 @@ describe("ViewIncome Component", () => {
 
     render(<ViewIncome income={income} />);
 
-    // Assert the formatted income appears
+    //Check income appears
     expect(screen.getByText(`$${income.toFixed(2)}`)).toBeInTheDocument();
   });
 });
