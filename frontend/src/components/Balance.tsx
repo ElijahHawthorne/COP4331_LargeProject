@@ -15,7 +15,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ expenses, income }) => {
     <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
       <Card
         sx={{
-          width: 250,
+          width: 400,
           border: 'none',
           textAlign: 'center',
           p: 2, // Additional padding
@@ -25,7 +25,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ expenses, income }) => {
           {/* Main balance in the middle */}
           <Typography
             variant="h3"
-            sx={{fontWeight: "bold", fontSize: "2.5rem", my: 1, color: (theme) => theme.palette.text.primary }}
+            sx={{fontWeight: "bold", fontSize: "4rem", my: 1, color: (theme) => theme.palette.text.primary }}
           >
           ${remainingBalance}
           </Typography>

@@ -71,6 +71,14 @@ const AddIncome: React.FC<AddIncomeProps> = ({ userId, onIncomeAdded }) => {
           required
           margin="normal"
           placeholder="Enter your income amount"
+          InputLabelProps={{
+            sx: {
+              transform: 'translate(14px, 10px) scale(1)',
+              '&.MuiInputLabel-shrink': {
+                transform: 'translate(14px, -19px) scale(0.75)',
+              },
+            }
+          }}
         />
         <Button
           type="submit"

@@ -79,6 +79,14 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
           required
           margin="normal"
           placeholder="Enter the name of the expense"
+          InputLabelProps={{
+            sx: {
+              transform: 'translate(14px, 10px) scale(1)',
+              '&.MuiInputLabel-shrink': {
+                transform: 'translate(14px, -19px) scale(0.75)',
+              },
+            }
+          }}
         />
         <TextField
           label="Expense Cost"
@@ -94,6 +102,14 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
               style: { WebkitAppearance: "none", MozAppearance: "textfield" }, // Hide arrows in number input
             },
           }}
+          InputLabelProps={{
+            sx: {
+              transform: 'translate(14px, 10px) scale(1)',
+              '&.MuiInputLabel-shrink': {
+                transform: 'translate(14px, -19px) scale(0.75)',
+              },
+            }
+          }}
         />
         
         {/* Category was previously a TextField, but now it will be the Select component */}
@@ -105,6 +121,14 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
           required
           margin="normal"
           placeholder="Enter the category of the expense"
+          InputLabelProps={{
+            sx: {
+              transform: 'translate(14px, 10px) scale(1)',
+              '&.MuiInputLabel-shrink': {
+                transform: 'translate(14px, -19px) scale(0.75)',
+              },
+            }
+          }}
           select
         >
           <MenuItem value="Food">Food</MenuItem>

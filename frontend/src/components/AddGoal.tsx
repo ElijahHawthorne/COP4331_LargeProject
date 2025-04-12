@@ -109,6 +109,14 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
           required
           margin="normal"
           placeholder="Enter the name of your goal"
+          InputLabelProps={{
+            sx: {
+              transform: 'translate(14px, 10px) scale(1)',
+              '&.MuiInputLabel-shrink': {
+                transform: 'translate(14px, -19px) scale(0.75)',
+              },
+            }
+          }}
         />
         <TextField
           label="Goal Cost"
@@ -124,6 +132,14 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
               style: { WebkitAppearance: "none", MozAppearance: "textfield" }, // Hide arrows in number input
             },
           }}
+          InputLabelProps={{
+            sx: {
+              transform: 'translate(14px, 10px) scale(1)',
+              '&.MuiInputLabel-shrink': {
+                transform: 'translate(14px, -19px) scale(0.75)',
+              },
+            }
+          }}
         />
         <TextField
           label="Payment Amount"
@@ -138,6 +154,14 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
             inputProps: {
               style: { WebkitAppearance: "none", MozAppearance: "textfield" }, // Hide arrows in number input
             },
+          }}
+          InputLabelProps={{
+            sx: {
+              transform: 'translate(14px, 10px) scale(1)',
+              '&.MuiInputLabel-shrink': {
+                transform: 'translate(14px, -19px) scale(0.75)',
+              },
+            }
           }}
         />
         <TextField
@@ -166,6 +190,14 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
             inputProps: {
               style: { WebkitAppearance: "none", MozAppearance: "textfield" }, // Hide arrows in number input
             },
+          }}
+          InputLabelProps={{
+            sx: {
+              transform: 'translate(14px, 10px) scale(1)',
+              '&.MuiInputLabel-shrink': {
+                transform: 'translate(14px, -19px) scale(0.75)',
+              },
+            }
           }}
         />
 

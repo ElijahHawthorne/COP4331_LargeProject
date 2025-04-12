@@ -34,8 +34,8 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
   onClick={handleCardClick}
   sx={(theme) => ({
     p: 2,
-    borderRadius: "4px",
-    boxShadow: 1,
+    borderRadius: "10px",
+    boxShadow: 2,
     transition:
       "transform 0.3s ease, z-index 0.3s ease, height 0.3s ease, box-shadow 0.3s ease",
     position: isActive ? "fixed" : "relative",
@@ -91,6 +91,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
             flex: 1,
             overflowY: "auto",
             height: "100%",
+
           }}
         >
           {componentCollapsed}

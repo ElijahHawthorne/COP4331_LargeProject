@@ -10,7 +10,7 @@ const ViewIncome: React.FC<ViewIncomeProps> = ({ income }) => {
     <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
       <Card
         sx={{
-          width: 250,
+          width: 400,
           border: 'none',
           textAlign: 'center',
           p: 2,
@@ -21,7 +21,7 @@ const ViewIncome: React.FC<ViewIncomeProps> = ({ income }) => {
           <Typography
             variant="h3"
             sx={{
-              fontSize: "2.5rem",
+              fontSize: "4rem",
               my: 1,
               color: (theme) => theme.palette.text.primary,
               fontWeight: "bold"

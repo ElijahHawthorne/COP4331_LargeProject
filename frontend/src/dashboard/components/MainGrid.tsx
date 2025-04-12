@@ -185,10 +185,10 @@ export default function MainGrid() {
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent: 'center',  // Horizontally center the cards
-        gap: 2,  // Space between the cards
+        gap: 3,  // Space between the cards
         alignItems: 'flex-start',
-        padding: 15,  // Adjust the padding as needed
-        paddingTop: 30,  // Remove top padding to align with the top of the page
+        padding: 9,  // Adjust the padding as needed
+        paddingTop: 25,  // Remove top padding to align with the top of the page
       }}
     >
       {/* Goal Card */}
@@ -240,7 +240,11 @@ export default function MainGrid() {
           index={2}
           onClick={() => handleCardClick(2)}
           isActive={activeCard === 2}
-          componentCollapsed={<ViewIncome income={curUserData.income} />}
+          componentCollapsed={
+            <Box sx={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'green' }}>
+              <ViewIncome income={curUserData.income} />
+            </Box>
+          }
           componentExpanded={<AddIncome userId={sessionId} onIncomeAdded={fetchUserData} />}
           cardRef={(el) => (cardRefs.current[2] = el)}
         />
@@ -284,7 +288,11 @@ export default function MainGrid() {
           index={4}
           onClick={() => null}
           isActive={activeCard === 4}
-          componentCollapsed={<BalanceCard expenses={curUserData.expenses} income={curUserData.income} />}
+          componentCollapsed={
+            <Box sx={{ fontSize: '1.3rem', fontWeight: 'bold', color: 'blue' }}>
+              <BalanceCard expenses={curUserData.expenses} income={curUserData.income} />
+            </Box>
+          }
           componentExpanded={null}
           cardRef={(el) => (cardRefs.current[4] = el)}
         />

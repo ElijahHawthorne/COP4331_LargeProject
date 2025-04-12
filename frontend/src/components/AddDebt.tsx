@@ -122,6 +122,14 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
           fullWidth
           required
           margin="normal"
+          InputLabelProps={{
+            sx: {
+              transform: 'translate(14px, 10px) scale(1)',
+              '&.MuiInputLabel-shrink': {
+                transform: 'translate(14px, -19px) scale(0.75)',
+              },
+            }
+          }}
         />
         <TextField
           label="Debt Amount"
@@ -131,6 +139,14 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
           fullWidth
           required
           margin="normal"
+          InputLabelProps={{
+            sx: {
+              transform: 'translate(14px, 10px) scale(1)',
+              '&.MuiInputLabel-shrink': {
+                transform: 'translate(14px, -19px) scale(0.75)',
+              },
+            }
+          }}
         />
         <TextField
           label="Payment Amount"
@@ -140,6 +156,14 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
           fullWidth
           required
           margin="normal"
+          InputLabelProps={{
+            sx: {
+              transform: 'translate(14px, 10px) scale(1)',
+              '&.MuiInputLabel-shrink': {
+                transform: 'translate(14px, -19px) scale(0.75)',
+              },
+            }
+          }}
         />
         <TextField
           label="Target Date"
@@ -161,7 +185,14 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
           fullWidth
           required
           margin="normal"
-          
+          InputLabelProps={{
+            sx: {
+              transform: 'translate(14px, 10px) scale(1)',
+              '&.MuiInputLabel-shrink': {
+                transform: 'translate(14px, -19px) scale(0.75)',
+              },
+            }
+          }}
         />
 
         <Button type="submit" variant="contained" color="primary" fullWidth sx={{ marginTop: 2 }}>
