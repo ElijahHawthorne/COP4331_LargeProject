@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography } from '@mui/material';
+import { useColorScheme } from '@mui/material/styles';
 
 interface AddDebtProps {
   userId: number | null;  // User ID, required to associate the debt and expense with the user
@@ -16,7 +17,14 @@ const AddDebt: React.FC<AddDebtProps> = ({ userId, onDebtAdded }) => {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string>("");
   const [messageColor, setMessageColor] = useState<string>("");
-
+  const { mode } = useColorScheme(); // 'light' | 'dark' | undefined
+    const inputSx = {
+      backgroundColor: mode === 'dark' ? 'hsl(219, 50%, 13%)' : '#fff',
+      '& input': {
+        backgroundColor: mode === 'dark' ? 'transparent' : '#fff',
+        color: mode === 'dark' ? '#fff' : '#000',
+      },
+    };
   const handleDebtSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -133,6 +141,9 @@ const AddDebt: React.FC<AddDebtProps> = ({ userId, onDebtAdded }) => {
           fullWidth
           required
           margin="normal"
+          InputProps={{
+            sx: inputSx
+          }}
           InputLabelProps={{
             sx: {
               transform: 'translate(14px, 10px) scale(1)',
@@ -150,6 +161,12 @@ const AddDebt: React.FC<AddDebtProps> = ({ userId, onDebtAdded }) => {
           fullWidth
           required
           margin="normal"
+          InputProps={{
+            sx: inputSx,
+            inputProps: {
+              style: { WebkitAppearance: "none", MozAppearance: "textfield" }, // Hide arrows in number input
+            },
+          }}
           InputLabelProps={{
             sx: {
               transform: 'translate(14px, 10px) scale(1)',
@@ -167,6 +184,12 @@ const AddDebt: React.FC<AddDebtProps> = ({ userId, onDebtAdded }) => {
           fullWidth
           required
           margin="normal"
+          InputProps={{
+            sx: inputSx,
+            inputProps: {
+              style: { WebkitAppearance: "none", MozAppearance: "textfield" }, // Hide arrows in number input
+            },
+          }}
           InputLabelProps={{
             sx: {
               transform: 'translate(14px, 10px) scale(1)',
@@ -192,6 +215,9 @@ const AddDebt: React.FC<AddDebtProps> = ({ userId, onDebtAdded }) => {
               },
             }
           }}
+          InputProps={{
+            sx: inputSx
+          }}
         />
         <TextField
           label="Progress"
@@ -201,6 +227,12 @@ const AddDebt: React.FC<AddDebtProps> = ({ userId, onDebtAdded }) => {
           fullWidth
           required
           margin="normal"
+          InputProps={{
+            sx: inputSx,
+            inputProps: {
+              style: { WebkitAppearance: "none", MozAppearance: "textfield" }, // Hide arrows in number input
+            },
+          }}
           InputLabelProps={{
             sx: {
               transform: 'translate(14px, 10px) scale(1)',

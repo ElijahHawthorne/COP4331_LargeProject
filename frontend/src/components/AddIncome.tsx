@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Box, TextField, Button, Typography } from "@mui/material";
+import { useColorScheme } from '@mui/material/styles';
 
 interface AddIncomeProps {
   userId: number | null;
@@ -9,7 +10,14 @@ interface AddIncomeProps {
 const AddIncome: React.FC<AddIncomeProps> = ({ userId, onIncomeAdded }) => {
   const [incomeAmount, setIncomeAmount] = useState<string>(""); // Use string for text input
   const [message, setMessage] = useState<string>("");
-
+  const { mode } = useColorScheme(); // 'light' | 'dark' | undefined
+  const inputSx = {
+    backgroundColor: mode === 'dark' ? 'hsl(219, 50%, 13%)' : '#fff',
+    '& input': {
+      backgroundColor: mode === 'dark' ? 'transparent' : '#fff',
+      color: mode === 'dark' ? '#fff' : '#000',
+    },
+  };
   const handleAddIncome = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -78,6 +86,9 @@ const AddIncome: React.FC<AddIncomeProps> = ({ userId, onIncomeAdded }) => {
                 transform: 'translate(14px, -19px) scale(0.75)',
               },
             }
+          }}
+          InputProps={{
+            sx: inputSx
           }}
         />
         <Button

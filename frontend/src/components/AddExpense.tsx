@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Box, TextField, Button, Typography, MenuItem } from "@mui/material";
+import { useColorScheme } from '@mui/material/styles';
 
 interface AddExpensesProps {
   onRerender: () => void; // onRerender is a function with no arguments and no return value
@@ -15,7 +16,14 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
   const [messageColor, setMessageColor] = useState<string>("");
 
   const app_name = "777finances.com";
-
+  const { mode } = useColorScheme(); // 'light' | 'dark' | undefined
+  const inputSx = {
+    backgroundColor: mode === 'dark' ? 'hsl(219, 50%, 13%)' : '#fff',
+    '& input': {
+      backgroundColor: mode === 'dark' ? 'transparent' : '#fff',
+      color: mode === 'dark' ? '#fff' : '#000',
+    },
+  };
   function buildPath(route: string): string {
     return "http://" + app_name + ":5000/" + route;
   }
@@ -70,12 +78,12 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
 
   return (
     <Box sx={{ maxWidth: 400, margin: "0 auto", padding: 1, paddingTop: 0, overflowY: "auto" }}>
-          <Typography
-            variant="caption"
-            sx={{ color: "gray", fontStyle: "italic", display: "block"}}
-          >
-            * = Required Field
-          </Typography>
+      <Typography
+        variant="caption"
+        sx={{ color: "gray", fontStyle: "italic", display: "block" }}
+      >
+        * = Required Field
+      </Typography>
       <form onSubmit={addExpense}>
         <TextField
           label="Expense Name"
@@ -93,6 +101,9 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
               },
             }
           }}
+          InputProps={{
+            sx: inputSx
+          }}
         />
         <TextField
           label="Expense Cost"
@@ -104,6 +115,7 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
           margin="normal"
           placeholder="Enter the cost of the expense"
           InputProps={{
+            sx: inputSx,
             inputProps: {
               style: { WebkitAppearance: "none", MozAppearance: "textfield" }, // Hide arrows in number input
             },
@@ -117,7 +129,7 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
             }
           }}
         />
-        
+
         {/* Category was previously a TextField, but now it will be the Select component */}
         <TextField
           label="Expense Category"
@@ -134,6 +146,17 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
                 transform: 'translate(14px, -19px) scale(0.75)',
               },
             }
+          }}
+          InputProps={{
+            sx: {
+              ...inputSx,
+              '& .MuiSelect-select': {
+                backgroundColor: mode === 'dark' ? 'hsl(219, 50%, 13%)' : '#fff',
+                color: mode === 'dark' ? '#fff' : '#000',
+                borderRadius: '8px',
+                padding: '10px',
+              },
+            },
           }}
           select
         >
@@ -160,7 +183,10 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
               },
             }
           }}
-          
+          InputProps={{
+            sx: inputSx
+          }}
+
         />
         <Button
           type="submit"

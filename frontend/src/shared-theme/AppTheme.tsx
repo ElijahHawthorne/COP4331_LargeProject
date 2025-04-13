@@ -44,10 +44,7 @@ export default function AppTheme(props: AppThemeProps) {
               styleOverrides: {
                 
                 input: ({ theme }) => ({
-                  backgroundColor:
-                    theme.palette.mode === "light"
-                      ? "#ffffff"
-                      : "theme.palette.background.default", 
+                  backgroundColor: "#ffffff",
                   padding: "10px",
                   borderRadius: 8,
                   color: theme.palette.text.primary

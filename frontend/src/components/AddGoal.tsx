@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, TextField, Button, Typography } from "@mui/material";
 import { Goal } from "../Types";
+import { useColorScheme } from '@mui/material/styles';
 
 interface AddGoalProps {
   userId: number | null; // Allow null as userId is optional at first
@@ -15,6 +16,14 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
   const [progress, setProgress] = useState<number | null>(null); // Progress is added, and it will be set to 0 initially
   const [message, setMessage] = useState<string>("");
   const [messageColor, setMessageColor] = useState<string>("");
+  const { mode } = useColorScheme(); // 'light' | 'dark' | undefined
+  const inputSx = {
+    backgroundColor: mode === 'dark' ? 'hsl(219, 50%, 13%)' : '#fff',
+    '& input': {
+      backgroundColor: mode === 'dark' ? 'transparent' : '#fff',
+      color: mode === 'dark' ? '#fff' : '#000',
+    },
+  };
 
   const handleGoalSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -134,7 +143,9 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
               },
             }
           }}
-          
+          InputProps={{
+            sx: inputSx
+          }}
         />
         <TextField
           label="Goal Cost"
@@ -146,6 +157,7 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
           margin="normal"
           placeholder="Enter the total amount"
           InputProps={{
+            sx: inputSx,
             inputProps: {
               style: { WebkitAppearance: "none", MozAppearance: "textfield" }, // Hide arrows in number input
             },
@@ -158,6 +170,7 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
               },
             }
           }}
+          
         />
         <TextField
           label="Payment Amount"
@@ -169,6 +182,7 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
           margin="normal"
           placeholder="Enter the amount to be paid every month"
           InputProps={{
+            sx: inputSx,
             inputProps: {
               style: { WebkitAppearance: "none", MozAppearance: "textfield" }, // Hide arrows in number input
             },
@@ -198,6 +212,9 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
               },
             }
           }}
+          InputProps={{
+            sx:  inputSx
+          }}
           placeholder="Enter the date of your goal"
         />
         <TextField
@@ -210,6 +227,7 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
           margin="normal"
           placeholder="Enter your progress toward this goal"
           InputProps={{
+            sx: inputSx,
             inputProps: {
               style: { WebkitAppearance: "none", MozAppearance: "textfield" }, // Hide arrows in number input
             },
