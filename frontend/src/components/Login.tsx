@@ -1,11 +1,9 @@
-//import React, { useState } from "react";
 import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-  // const app_name = "777finances.com";
-  const navigate = useNavigate(); // Get the navigate function
+  const navigate = useNavigate();
 
   const [message, setMessage] = useState("");
   const [loginName, setLoginName] = useState("");
@@ -41,7 +39,7 @@ function Login() {
       }
     } catch (error: any) {
       setMessage("An error occurred. Please try again later.");
-      console.error(error);  // Log for debugging
+      console.error(error);
     }
   }
 
@@ -71,15 +69,17 @@ Background: EBE9E1*/
   return (
     <div
       id="loginDiv"
-      className="mt-4 flex flex-col items-center justify-center bg-white p-6 rounded shadow-md"
+      className=" flex flex-col items-center justify-center bg-white rounded-lg shadow-md"
     >
-      <span id="inner-title" className="text-3xl font-bold mb-6">
+      <span id="inner-title" className="text-3xl font-bold" style={{paddingTop: "1.5rem",
+        paddingBottom: "0.5rem"
+      }}>
         PLEASE LOG IN
       </span>
       <br />
       <input
         type="text"
-        className="input-style"
+        className="w-[50%] bg-transparent border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
         id="loginName"
         placeholder="Username"
         onChange={handleSetLoginName}
@@ -87,7 +87,7 @@ Background: EBE9E1*/
       <br />
       <input
         type="password"
-        className="input-style"
+        className="w-[50%] bg-transparent border-b-2 border-gray-300 focus:border-blue-500 focus:outline-none transition-all duration-200 py-2"
         id="loginPassword"
         placeholder="Password"
         onChange={handleSetPassword}
@@ -96,11 +96,12 @@ Background: EBE9E1*/
       <input
         type="submit"
         id="loginButton"
-        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 w-[60%]"
+        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 w-[20%]"
+        style={{marginTop: "1rem"}}
         value="Do It"
         onClick={doLogin}
       />
-      <p className="text-black">
+      <p className="text-black" style={{padding: "1rem"}}>
         Don't have an account?{" "}
         <a className="text-blue-500 underline" href="#" onClick={goToSignup}>
           Sign up
@@ -109,7 +110,7 @@ Background: EBE9E1*/
       </p>
       <span
         id="loginResult"
-        className="block mt-4 p-2 text-red-500" // You can adjust the color based on success/error
+        className="block mt-4 p-2 text-red-500"
       >
         {message}
       </span>

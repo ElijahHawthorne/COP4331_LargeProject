@@ -230,15 +230,15 @@ function Signup() {
   return (
     <div
       id="signupDiv"
-      className="mt-4 flex flex-col items-center justify-center bg-white p-6 rounded shadow-md w-[70%]"
+      className="mt-4 flex flex-col items-center justify-center bg-white p-6 rounded shadow-md w-[70%] " style={{height: "65vh", width: "35vw"}}
     >
-      <span id="inner-title" className="text-3xl font-bold mb-6">
+      <span id="inner-title" className="text-3xl font-bold mb-6" style={{paddingBottom: "1.5rem",}}>
         PLEASE SIGN UP
       </span>
       <br />
       <input
         type="text"
-        className="input-style"
+        className="w-[50%] bg-transparent border-b-2 border-gray-300 focus:outline-none focus:border-blue-500" style={{ marginBottom: "1rem" }}
         id="firstName"
         placeholder="First Name"
         onChange={handleSetFirstName}
@@ -246,7 +246,7 @@ function Signup() {
       <br />
       <input
         type="text"
-        className="input-style"
+        className="w-[50%] bg-transparent border-b-2 border-gray-300 focus:outline-none focus:border-blue-500" style={{ marginBottom: "1rem" }}
         id="lastName"
         placeholder="Last Name"
         onChange={handleSetLastName}
@@ -254,7 +254,7 @@ function Signup() {
       <br />
       <input
         type="email"
-        className="input-style"
+        className="w-[50%] bg-transparent border-b-2 border-gray-300 focus:outline-none focus:border-blue-500" style={{ marginBottom: "1rem" }}
         id="email"
         placeholder="Email"
         onChange={handleSetEmail}
@@ -262,7 +262,7 @@ function Signup() {
       <br />
       <input
         type="text"
-        className="input-style"
+        className="w-[50%] bg-transparent border-b-2 border-gray-300 focus:outline-none focus:border-blue-500" style={{ marginBottom: "1rem" }}
         id="signupName"
         placeholder="Username"
         onChange={handleSetSignupName}
@@ -270,7 +270,7 @@ function Signup() {
       <br />
       <input
         type="password"
-        className="input-style"
+        className="w-[50%] bg-transparent border-b-2 border-gray-300 focus:outline-none focus:border-blue-500" style={{ marginBottom: "1rem" }}
         id="signupPassword"
         placeholder="Password"
         onChange={handleSetPassword}
@@ -278,7 +278,7 @@ function Signup() {
       <br />
       <input
         type="password"
-        className="input-style"
+        className="w-[50%] bg-transparent border-b-2 border-gray-300 focus:outline-none focus:border-blue-500" style={{ marginBottom: "1rem" }}
         id="confirmPassword"
         placeholder="Confirm Password"
         onChange={handleSetConfirmPassword}
@@ -287,11 +287,11 @@ function Signup() {
       <input
         type="submit"
         id="signupButton"
-        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 w-[60%]"
+        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 w-[60%]" style={{ marginBottom: "1rem", marginTop: "1rem" }}
         value="Sign Up"
         onClick={doSignup}
       />
-      <p>
+      <p className="text-black" style={{ padding: "1rem" }}>
         Already have an account?{" "}
         <a className="text-blue-500 underline" href="#" onClick={goToLogin}>
           Log in
@@ -300,9 +300,7 @@ function Signup() {
       </p>
       <span
         id="signupResult"
-        className={`block mt-4 p-2 ${
-          SignupSuccess ? "text-black" : "text-red-500"
-        }`}
+        className={`block mt-4 p-2 ${SignupSuccess ? "text-black" : "text-red-500"}`}
       >
         {message}
         {SignupSuccess === false ? "!" : ""}
