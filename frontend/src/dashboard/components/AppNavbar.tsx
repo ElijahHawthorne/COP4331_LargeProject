@@ -69,7 +69,8 @@ export default function AppNavbar() {
             <img 
         src={Logo} 
         alt="Logo" 
-        style={{ width: '2rem', height: '2rem' }} // Adjust size here
+        style={{ width: '2rem', height: '2rem', borderRadius: 12, objectFit: "cover",
+          objectPosition: "center", }} // Adjust size here
       />
 
 

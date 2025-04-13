@@ -115,8 +115,14 @@ const AddDebt: React.FC<AddDebtProps> = ({ userId, onDebtAdded }) => {
   };
 
   return (
-    <Box sx={{ maxWidth: 400, margin: '0 auto', padding: 2, paddingTop: 1 }}>
-
+    <Box sx={{ maxWidth: 400, margin: "0 auto", padding: 1, paddingTop: 0, overflowY: "auto" }}>
+          <Typography
+            variant="caption"
+            sx={{ color: "gray", fontStyle: "italic", display: "block"}}
+          >
+            * = Required Field
+          </Typography>
+      
       {error && <Typography color="error">{error}</Typography>}
 
       <form onSubmit={handleDebtSubmit}>

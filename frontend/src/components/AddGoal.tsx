@@ -67,10 +67,10 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
         setGoalName(""); // Reset fields
         setGoalCost(null);
         setPaymentAmount(null);
-        setProgress(null); 
+        setProgress(null);
         setGoalDate("");
         // After adding goal, add expense
-        
+
         const expenseData = {
           userId,
           expenseName: newGoal.name,
@@ -110,8 +110,13 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
   };
 
   return (
-    <Box sx={{ maxWidth: 400, margin: "0 auto", padding: 2,paddingTop: 1, overflowY:"auto" }}>
-
+    <Box sx={{ maxWidth: 400, margin: "0 auto", padding: 1, paddingTop: 0, overflowY: "auto" }}>
+      <Typography
+        variant="caption"
+        sx={{ color: "gray", fontStyle: "italic", display: "block"}}
+      >
+        * = Required Field
+      </Typography>
       <form onSubmit={handleGoalSubmit}>
         <TextField
           label="Goal Name"
@@ -218,13 +223,13 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
           }}
         />
         {message && (
-        <Typography
-          variant="body2"
-          sx={{ marginTop: 2, color: messageColor === "success" ? "green" : "red" }}
-        >
-          {message}
-        </Typography>
-      )}
+          <Typography
+            variant="body2"
+            sx={{ marginTop: 2, color: messageColor === "success" ? "green" : "red" }}
+          >
+            {message}
+          </Typography>
+        )}
         <Button
           type="submit"
           variant="contained"

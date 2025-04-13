@@ -69,7 +69,13 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
   }
 
   return (
-    <Box sx={{ maxWidth: 400, margin: "0 auto", padding: 2, paddingTop: 1}}>
+    <Box sx={{ maxWidth: 400, margin: "0 auto", padding: 1, paddingTop: 0, overflowY: "auto" }}>
+          <Typography
+            variant="caption"
+            sx={{ color: "gray", fontStyle: "italic", display: "block"}}
+          >
+            * = Required Field
+          </Typography>
       <form onSubmit={addExpense}>
         <TextField
           label="Expense Name"
