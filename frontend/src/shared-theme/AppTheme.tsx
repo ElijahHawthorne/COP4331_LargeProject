@@ -39,6 +39,22 @@ export default function AppTheme(props: AppThemeProps) {
            
             ...surfacesCustomizations,
             ...themeComponents,
+          
+            MuiOutlinedInput: {
+              styleOverrides: {
+                
+                input: ({ theme }) => ({
+                  backgroundColor:
+                    theme.palette.mode === "light"
+                      ? "#ffffff"
+                      : "theme.palette.background.default", 
+                  padding: "10px",
+                  borderRadius: 8,
+                  color: theme.palette.text.primary
+                }),
+              },
+            },
+            
           },
         });
   }, [disableCustomTheme, themeComponents]);

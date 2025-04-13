@@ -134,6 +134,7 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
               },
             }
           }}
+          
         />
         <TextField
           label="Goal Cost"
