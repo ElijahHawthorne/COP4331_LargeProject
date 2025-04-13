@@ -148,7 +148,13 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
           margin="normal"
           InputLabelProps={{
             shrink: true, // Ensure the label stays above the input
+            sx: {
+              '&.MuiInputLabel-shrink': {
+                transform: 'translate(14px, -19px) scale(0.75)',
+              },
+            }
           }}
+          
         />
         <Button
           type="submit"

@@ -9,11 +9,13 @@ interface AddDebtProps {
 const AddDebt: React.FC<AddDebtProps> = ({ userId, onDebtAdded }) => {
   const [debtName, setDebtName] = useState('');
   const [debtAmount, setDebtAmount] = useState<number | null>(null);  // Renamed to debtAmount
-const [paymentDate, setPaymentDate] = useState(''); // Renamed to paymentDate
-const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  // Renamed to paymentProgress
+  const [paymentDate, setPaymentDate] = useState(''); // Renamed to paymentDate
+  const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  // Renamed to paymentProgress
 
   const [paymentAmount, setPaymentAmount] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string>("");
+  const [messageColor, setMessageColor] = useState<string>("");
 
   const handleDebtSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -35,11 +37,11 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
     }
 
     const newDebt = {
-        name: debtName,
-        amount: debtAmount,  // Use debtAmount instead of debtCost
-        paymentAmount: paymentAmount,
-        progress: paymentProgress,  // Use paymentProgress instead of progress
-        date: paymentDate,  // Use paym
+      name: debtName,
+      amount: debtAmount,  // Use debtAmount instead of debtCost
+      paymentAmount: paymentAmount,
+      progress: paymentProgress,  // Use paymentProgress instead of progress
+      date: paymentDate,  // Use paym
     };
 
     // Log the debt data being sent to the server
@@ -60,18 +62,20 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            userId: userId,
-            debtName: newDebt.name,
-            debtAmount: newDebt.amount,  // Use debtAmount here
-            paymentAmount: newDebt.paymentAmount,
-            paymentDate: newDebt.date,  // Use paymentDate here
-            paymentProgress: newDebt.progress,  // Use paymentProgress here
+          userId: userId,
+          debtName: newDebt.name,
+          debtAmount: newDebt.amount,  // Use debtAmount here
+          paymentAmount: newDebt.paymentAmount,
+          paymentDate: newDebt.date,  // Use paymentDate here
+          paymentProgress: newDebt.progress,  // Use paymentProgress here
         }),
       });
 
       const debtData = await debtResponse.json();
 
       if (debtData.success) {
+        setMessage("Debt added successfully!");
+        setMessageColor("success");
         // After adding debt, add expense
         const expenseData = {
           userId,
@@ -96,12 +100,13 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
 
         if (expenseDataResponse.success) {
           onDebtAdded();  // Trigger callback to update the UI
-         
+
         } else {
           setError(`Failed to add expense: ${expenseDataResponse.error}`);
         }
       } else {
         setError(`Failed to add debt: ${debtData.error}`);
+        setMessageColor("error");
       }
     } catch (error) {
       console.error('Error submitting debt and expense:', error);
@@ -134,7 +139,7 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
         <TextField
           label="Debt Amount"
           type="number"
-          value={debtAmount||''}
+          value={debtAmount || ''}
           onChange={(e) => setDebtAmount(Number(e.target.value))}
           fullWidth
           required
@@ -151,7 +156,7 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
         <TextField
           label="Payment Amount"
           type="number"
-          value={paymentAmount||''}
+          value={paymentAmount || ''}
           onChange={(e) => setPaymentAmount(Number(e.target.value))}
           fullWidth
           required
@@ -175,12 +180,17 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
           margin="normal"
           InputLabelProps={{
             shrink: true,
+            sx: {
+              '&.MuiInputLabel-shrink': {
+                transform: 'translate(14px, -19px) scale(0.75)',
+              },
+            }
           }}
         />
         <TextField
           label="Progress"
           type="number"
-          value={paymentProgress||''}
+          value={paymentProgress || ''}
           onChange={(e) => setPaymentProgress(Number(e.target.value))}
           fullWidth
           required
@@ -194,7 +204,14 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
             }
           }}
         />
-
+        {message && (
+        <Typography
+          variant="body2"
+          sx={{ marginTop: 2, color: messageColor === "success" ? "green" : "red" }}
+        >
+          {message}
+        </Typography>
+      )}
         <Button type="submit" variant="contained" color="primary" fullWidth sx={{ marginTop: 2 }}>
           Add Debt
         </Button>

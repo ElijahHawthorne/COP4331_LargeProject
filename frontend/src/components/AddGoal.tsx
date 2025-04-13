@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, TextField, Button } from "@mui/material";
+import { Box, TextField, Button, Typography } from "@mui/material";
 import { Goal } from "../Types";
 
 interface AddGoalProps {
@@ -13,6 +13,8 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
   const [paymentAmount, setPaymentAmount] = useState<number | null>(null);
   const [goalDate, setGoalDate] = useState("");
   const [progress, setProgress] = useState<number | null>(null); // Progress is added, and it will be set to 0 initially
+  const [message, setMessage] = useState<string>("");
+  const [messageColor, setMessageColor] = useState<string>("");
 
   const handleGoalSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -60,7 +62,15 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
       const goalData = await goalResponse.json();
 
       if (goalData.success) {
+        setMessage("Goal added successfully!");
+        setMessageColor("success");
+        setGoalName(""); // Reset fields
+        setGoalCost(null);
+        setPaymentAmount(null);
+        setProgress(null); 
+        setGoalDate("");
         // After adding goal, add expense
+        
         const expenseData = {
           userId,
           expenseName: newGoal.name,
@@ -89,6 +99,8 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
           console.log(`Failed to add expense: ${expenseDataResponse.error}`);
         }
       } else {
+        setMessage("Failed to add goal: " + goalData.error);
+        setMessageColor("error");
         console.log(`Failed to add goal: ${goalData.error}`);
       }
     } catch (error) {
@@ -174,6 +186,11 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
           margin="normal"
           InputLabelProps={{
             shrink: true,
+            sx: {
+              '&.MuiInputLabel-shrink': {
+                transform: 'translate(14px, -19px) scale(0.75)',
+              },
+            }
           }}
           placeholder="Enter the date of your goal"
         />
@@ -200,7 +217,14 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
             }
           }}
         />
-
+        {message && (
+        <Typography
+          variant="body2"
+          sx={{ marginTop: 2, color: messageColor === "success" ? "green" : "red" }}
+        >
+          {message}
+        </Typography>
+      )}
         <Button
           type="submit"
           variant="contained"

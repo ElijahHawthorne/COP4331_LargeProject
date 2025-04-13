@@ -57,8 +57,6 @@ const UpcomingExpensesCard: React.FC<UpcomingExpensesCardProps> = ({ expenses })
                   }),
                 }}
               />
-              {/* Optional: Add a checkbox or other actions here */}
-              <Checkbox />
             </ListItem>
           ))
         ) : (
