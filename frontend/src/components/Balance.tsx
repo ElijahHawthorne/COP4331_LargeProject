@@ -25,7 +25,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ expenses, income }) => {
           {/* Main balance in the middle */}
           <Typography
             variant="h3"
-            sx={{fontWeight: "bold", fontSize: "4rem", my: 1, color: (theme) => theme.palette.text.primary }}
+            sx={{fontWeight: "bold", fontSize: "4rem", my: 1, }}
           >
           ${remainingBalance}
           </Typography>
