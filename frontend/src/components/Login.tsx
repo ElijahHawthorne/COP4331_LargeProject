@@ -1,5 +1,6 @@
 //import React, { useState } from "react";
 import { useState } from "react";
+import { Alert } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
 
@@ -57,6 +58,11 @@ function Login() {
     console.log("Going to signup Page");
     navigate("/signup");
   }
+   function goToRecovery(){
+
+    navigate("/recover_account");
+   }
+
 
   /*Primary: E43D12
 
@@ -107,12 +113,20 @@ Background: EBE9E1*/
         </a>{" "}
         here.
       </p>
-      <span
-        id="loginResult"
-        className="block mt-4 p-2 text-red-500" // You can adjust the color based on success/error
-      >
-        {message}
-      </span>
+      <p className="text-black">
+        Forgot Password?{" "}
+        <a className="text-blue-500 underline" href="#" onClick={goToRecovery}>
+          Recover Account.
+        </a>{" "}
+        here.
+      </p>
+      {message && (
+  <div className="w-full mt-4">
+    <div className="p-2">
+      <Alert severity="error">{message}</Alert>
+    </div>
+  </div>
+)}
     </div>
   );
 }

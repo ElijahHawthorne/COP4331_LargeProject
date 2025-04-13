@@ -1,32 +1,31 @@
-import React, { useState } from 'react';
-import { Goal } from '../Types';
-
-
+import React, { useState } from "react";
+import { Box, TextField, Button } from "@mui/material";
+import { Goal } from "../Types";
 
 interface AddGoalProps {
-  userId: number | null;  // Allow null as userId is optional at first
+  userId: number | null; // Allow null as userId is optional at first
   onGoalAdded: () => void;
 }
 
 const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
-  const [goalName, setGoalName] = useState('');
-  const [goalCost, setGoalCost] = useState('');
-  const [paymentAmount, setPaymentAmount] = useState('');
-  const [goalDate, setGoalDate] = useState('');
-  const [progress, setProgress] = useState(0);  // Progress is added, and it will be set to 0 initially
+  const [goalName, setGoalName] = useState("");
+  const [goalCost, setGoalCost] = useState<number | null>(null);
+  const [paymentAmount, setPaymentAmount] = useState<number | null>(null);
+  const [goalDate, setGoalDate] = useState("");
+  const [progress, setProgress] = useState<number | null>(null); // Progress is added, and it will be set to 0 initially
 
   const handleGoalSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     // Check if userId is null
     if (userId === null) {
-      alert('User is not logged in');
+      console.log("User is not logged in");
       return; // Prevent form submission if userId is null
     }
 
     // Validate that the cost and payment amount are numbers
     if (isNaN(Number(goalCost)) || isNaN(Number(paymentAmount))) {
-      alert('Please enter valid numbers for cost and payment amount.');
+      console.log("Please enter valid numbers for cost and payment amount.");
       return;
     }
 
@@ -34,26 +33,29 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
       name: goalName,
       cost: Number(goalCost),
       paymentAmount: Number(paymentAmount),
-      progress: progress,  // Progress value passed in the API call
+      progress: Number(progress), // Progress value passed in the API call
       date: goalDate,
     };
 
     try {
       // Send goal data to the server
-      const goalResponse = await fetch('http://777finances.com:5000/api/addgoal', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId,
-          goalName: newGoal.name,
-          goalCost: newGoal.cost,
-          paymentAmount: newGoal.paymentAmount,
-          goalDate: newGoal.date,
-          progress: newGoal.progress,  // Add progress in the request body for the API
-        }),
-      });
+      const goalResponse = await fetch(
+        "http://777finances.com:5000/api/addgoal",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: userId,
+            goalName: newGoal.name,
+            goalCost: newGoal.cost,
+            paymentAmount: newGoal.paymentAmount,
+            payDate: newGoal.date,
+            paymentProgress: newGoal.progress, // Add progress in the request body for the API
+          }),
+        }
+      );
 
       const goalData = await goalResponse.json();
 
@@ -64,96 +66,121 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
           expenseName: newGoal.name,
           expenseCost: newGoal.paymentAmount,
           expenseDate: newGoal.date,
-          expenseCategory: 'saving goal',
+          expenseCategory: "Saving Goal",
+          recurring:true
         };
 
-        const expenseResponse = await fetch('http://777finances.com:5000/api/addexpense', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(expenseData),
-        });
+        const expenseResponse = await fetch(
+          "http://777finances.com:5000/api/addexpense",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(expenseData),
+          }
+        );
 
         const expenseDataResponse = await expenseResponse.json();
 
         if (expenseDataResponse.success) {
           onGoalAdded();
-          alert('Goal and expense added successfully!');
+          console.log("Goal and expense added successfully!");
         } else {
-          alert(`Failed to add expense: ${expenseDataResponse.error}`);
+          console.log(`Failed to add expense: ${expenseDataResponse.error}`);
         }
       } else {
-        alert(`Failed to add goal: ${goalData.error}`);
+        console.log(`Failed to add goal: ${goalData.error}`);
       }
     } catch (error) {
-      console.error('Error submitting goal and expense:', error);
-      alert('An error occurred while adding the goal and expense.');
+      console.error("Error submitting goal and expense:", error);
+      console.log("An error occurred while adding the goal and expense.");
     }
   };
 
   return (
-    <> 
-  <h2 className="text-lg font-bold mb-2">Add a New Goal</h2>
-    <form onSubmit={handleGoalSubmit}>
-    <div>
-      <label>
-        Goal Name:
-        <input
-          type="text"
+    <Box sx={{ maxWidth: 400, margin: "0 auto", padding: 2,paddingTop: 1, overflowY:"auto" }}>
+
+      <form onSubmit={handleGoalSubmit}>
+        <TextField
+          label="Goal Name"
           value={goalName}
           onChange={(e) => setGoalName(e.target.value)}
+          fullWidth
           required
+          margin="normal"
+          placeholder="Enter the name of your goal"
         />
-      </label>
-    </div>
-    <div>
-      <label>
-        Goal Cost:
-        <input
-          type="text"  // Using text input instead of number input
-          value={goalCost}
-          onChange={(e) => setGoalCost(e.target.value)}
+        <TextField
+          label="Goal Cost"
+          type="number"
+          value={goalCost || ""}
+          onChange={(e) => setGoalCost(e.target.value ? Number(e.target.value) : null)}
+          fullWidth
           required
+          margin="normal"
+          placeholder="Enter the total amount"
+          InputProps={{
+            inputProps: {
+              style: { WebkitAppearance: "none", MozAppearance: "textfield" }, // Hide arrows in number input
+            },
+          }}
         />
-      </label>
-    </div>
-    <div>
-      <label>
-        Payment Amount:
-        <input
-          type="text"  // Using text input instead of number input
-          value={paymentAmount}
-          onChange={(e) => setPaymentAmount(e.target.value)}
+        <TextField
+          label="Payment Amount"
+          type="number"
+          value={paymentAmount || ""}
+          onChange={(e) => setPaymentAmount(e.target.value ? Number(e.target.value) : null)}
+          fullWidth
           required
+          margin="normal"
+          placeholder="Enter the amount to be paid every month"
+          InputProps={{
+            inputProps: {
+              style: { WebkitAppearance: "none", MozAppearance: "textfield" }, // Hide arrows in number input
+            },
+          }}
         />
-      </label>
-    </div>
-    <div>
-      <label>
-        Target Date:
-        <input
+        <TextField
+          label="Target Date"
           type="date"
           value={goalDate}
           onChange={(e) => setGoalDate(e.target.value)}
+          fullWidth
           required
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          placeholder="Enter the date of your goal"
         />
-      </label>
-    </div>
-    <div>
-      <label>
-        Progress:
-        <input
-          type="text" // Progress can be a number
-          value={progress}
-          onChange={(e) => setProgress(Number(e.target.value))}  // Handling progress value
+        <TextField
+          label="Progress"
+          type="number"
+          value={progress || ""}
+          onChange={(e) => setProgress(e.target.value ? Number(e.target.value) : null)}
+          fullWidth
           required
+          margin="normal"
+          placeholder="Enter your progress toward this goal"
+          InputProps={{
+            inputProps: {
+              style: { WebkitAppearance: "none", MozAppearance: "textfield" }, // Hide arrows in number input
+            },
+          }}
         />
-      </label>
-    </div>
-    <button type="submit">Add Goal</button>
-  </form> </>
-    
+
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
+          sx={{ marginTop: 2 }}
+        >
+          Add Goal
+        </Button>
+      </form>
+    </Box>
   );
 };
 

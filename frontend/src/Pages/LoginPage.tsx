@@ -3,12 +3,12 @@ import Login from "../components/Login.tsx";
 
 const LoginPage = () => {
   return (
-    <div className="min-h-screen bg-[#D6536D] flex flex-col items-center justify-center">
-    <PageTitle />
-      
-      
-      <div className="w-full h-1/3 max-w-md bg-white p-6 rounded shadow-md">
-        
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center">
+      {/* Page Title */}
+      <PageTitle />
+
+      {/* Login Card */}
+      <div className="w-full h-1/3 max-w-md bg-white p-6 rounded shadow-lg">
         <Login />
       </div>
     </div>
@@ -16,4 +16,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-

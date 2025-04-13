@@ -1,6 +1,9 @@
-
-
-import React, { useRef } from "react";
+import React from "react";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardContent from "@mui/material/CardContent";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 interface ExpandableCardProps {
   title: string;
@@ -9,12 +12,11 @@ interface ExpandableCardProps {
   isActive: boolean;
   componentCollapsed: React.ReactNode;
   componentExpanded: React.ReactNode;
-  cardRef: (el: HTMLDivElement | null) => void; // Accept a function to set the ref
+  cardRef: (el: HTMLDivElement | null) => void;
 }
 
 const ExpandableCard: React.FC<ExpandableCardProps> = ({
   title,
-  index,
   onClick,
   isActive,
   componentCollapsed,
@@ -22,44 +24,101 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
   cardRef,
 }) => {
   const handleCardClick = (event: React.MouseEvent) => {
-    event.stopPropagation(); // Prevent the event from propagating to the global listener
-    onClick(event); // Call the passed onClick handler
+    event.stopPropagation();
+    onClick(event);
   };
 
   return (
-    <div
-      ref={cardRef} // Pass the cardRef here
-      className={`bg-white p-4 rounded shadow transform transition-all duration-300 ease-in-out ${
-        isActive ? "scale-105 z-50 fixed inset-0" : ""
-      }`}
-      style={{
-        transition: "transform 0.3s ease, z-index 0.3s ease",
-        zIndex: isActive ? 50 : 1,
-        position: isActive ? "absolute" : "relative",
-        top: isActive ? "50%" : "auto",
-        left: isActive ? "50%" : "auto",
-        height: "300px",
-        overflowY: isActive? "hidden": "auto",
-        transform: isActive ? "translate(-50%, -50%) scale(1.5)" : "scale(1)",
-        
-      }}
-      onClick={handleCardClick} // Use the handleCardClick to stop propagation
-    >
-      <h2 className="text-lg font-bold">{title}</h2>
-      {!isActive && componentCollapsed}
-      {isActive && (
-        <div className="flex justify-between gap-4" style={{ height: "100%" }}>
-        <div style={{ width: "200px", overflowY: "auto", height: "100%" }}>
+<Card
+  ref={cardRef}
+  onClick={handleCardClick}
+  sx={(theme) => ({
+    p: 2,
+    borderRadius: "4px",
+    boxShadow: 1,
+    transition:
+      "transform 0.3s ease, z-index 0.3s ease, height 0.3s ease, box-shadow 0.3s ease",
+    position: isActive ? "fixed" : "relative",
+    top: isActive ? "50%" : "auto",
+    left: isActive ? "50%" : "auto",
+    transform: isActive
+      ? "translate(-50%, -50%) scale(1.5)"
+      : "scale(1)",
+    width: isActive ? "45vw" : "35vw",  
+    height: isActive ? "55vh" : "40vh",
+    zIndex: isActive ? 9999 : 1,
+    overflowY: isActive ? "hidden" : "auto",
+    display: "flex",
+    flexDirection: "column",
+    // Set the pointer if there is a componentExpanded (so the card is interactive)
+    cursor: componentExpanded ? "pointer" : "default",
+    // Hover effect: change all text color and the shadow color conditionally based on mode
+    "&:hover": {
+      boxShadow: `0px 4px 16px ${
+        theme.palette.mode === "dark" ? "#2c4f83" : "#007FFF"
+      }`,
+    },
+  })}
+>
+  {/* Title is fixed */}
+  <CardHeader
+    title={title}
+    titleTypographyProps={{ align: "center" }}
+    sx={{ flexShrink: 0 }}
+  />
+
+  {/* Scrollable content */}
+  <CardContent
+    sx={{
+      padding: 0,
+      overflowY: "auto",
+      flexGrow: 1,
+    }}
+  >
+    {!isActive && componentCollapsed}
+    {isActive && (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          gap: 2,
+          height: "100%",
+          overflow: "hidden",
+        }}
+      >
+        <Box
+          sx={{
+            flex: 1,
+            overflowY: "auto",
+            height: "100%",
+          }}
+        >
           {componentCollapsed}
-        </div>
-        
-        <div style={{ width: "150px", overflowY: "auto", height: "100%" }}>
-  <strong className="text-[20px] border-black">Add Goal</strong> {/* Corrected Tailwind font size */}
-  {componentExpanded}
-</div>
-      </div>
-      )}
-    </div>
+        </Box>
+        <Box
+          sx={{
+            flex: 1,
+            overflowY: "auto",
+            height: "100%",
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: "bold",
+              borderBottom: "1px solid",
+              mb: 1,
+            }}
+          >
+            Add {title}
+          </Typography>
+          {componentExpanded}
+        </Box>
+      </Box>
+    )}
+  </CardContent>
+</Card>
+
   );
 };
 

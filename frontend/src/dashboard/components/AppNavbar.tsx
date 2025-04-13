@@ -11,6 +11,8 @@ import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import SideMenuMobile from './SideMenuMobile';
 import MenuButton from './MenuButton';
 import ColorModeIconDropdown from '../../shared-theme/ColorModeIconDropdown';
+import Logo from "../../assets/logo.png"
+
 
 const Toolbar = styled(MuiToolbar)({
   width: '100%',
@@ -39,7 +41,7 @@ export default function AppNavbar() {
     <AppBar
       position="fixed"
       sx={{
-        display: { xs: 'auto', md: 'none' },
+        display: { xs: 'auto', md: 'auto' },
         boxShadow: 0,
         bgcolor: 'background.paper',
         backgroundImage: 'none',
@@ -63,7 +65,14 @@ export default function AppNavbar() {
             spacing={1}
             sx={{ justifyContent: 'center', mr: 'auto' }}
           >
-            <CustomIcon />
+            {/*logo here*/ }
+            <img 
+        src={Logo} 
+        alt="Logo" 
+        style={{ width: '2rem', height: '2rem' }} // Adjust size here
+      />
+
+
             <Typography variant="h4" component="h1" sx={{ color: 'text.primary' }}>
               Dashboard
             </Typography>

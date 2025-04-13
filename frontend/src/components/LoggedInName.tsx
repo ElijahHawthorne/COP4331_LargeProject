@@ -8,6 +8,7 @@ function LoggedInName() {
     event.preventDefault();
 
     navigate("/");
+  
   }
   return (
     <div id="loggedInDiv">

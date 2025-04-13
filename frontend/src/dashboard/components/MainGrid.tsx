@@ -1,104 +1,25 @@
 import { useState, useEffect, useRef } from "react";
-import Grid from "@mui/material/Grid";
+
 import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import Copyright from "../internals/components/Copyright";
+
 import ExpandableCard from "../../components/ExpandableCard";
 import ViewGoals from "../../components/ViewGoals";
 import AddGoal from "../../components/AddGoal";
-import UpcomingExpensesCard from "../../components/UpcomingExpenses";
-import { UserData } from "../../Types";
-import { Goal } from "../../Types";
 import AddExpenses from "../../components/AddExpense";
-import Viewdebt from "../../components/ViewDebt";
-import AddDebt from "../../components/AddDebt";
 import ViewExpense from "../../components/ViewExpense";
 import AddIncome from "../../components/AddIncome";
-
-const sampleExpenses = [
-  {
-    id: 1,
-    description: "Electricity Bill",
-    amount: 100.5,
-    dueDate: "2023-08-30T00:00:00.000Z",
-  },
-  {
-    id: 2,
-    description: "Water Bill",
-    amount: 45.75,
-    dueDate: "2023-09-01T00:00:00.000Z",
-  },
-  {
-    id: 3,
-    description: "Internet Bill",
-    amount: 60.0,
-    dueDate: "2023-09-05T00:00:00.000Z",
-  },
-];
-
-const data: Object[] = [
-  {
-    title: "Users",
-    value: "14k",
-    interval: "Last 30 days",
-    trend: "up",
-    data: [
-      200, 24, 220, 260, 240, 380, 100, 240, 280, 240, 300, 340, 320, 360, 340,
-      380, 360, 400, 380, 420, 400, 640, 340, 460, 440, 480, 460, 600, 880, 920,
-    ],
-  },
-  {
-    title: "Conversions",
-    value: "325",
-    interval: "Last 30 days",
-    trend: "down",
-    data: [
-      1640, 1250, 970, 1130, 1050, 900, 720, 1080, 900, 450, 920, 820, 840, 600,
-      820, 780, 800, 760, 380, 740, 660, 620, 840, 500, 520, 480, 400, 360, 300,
-      220,
-    ],
-  },
-  {
-    title: "Event count",
-    value: "200k",
-    interval: "Last 30 days",
-    trend: "neutral",
-    data: [
-      500, 400, 510, 530, 520, 600, 530, 520, 510, 730, 520, 510, 530, 620, 510,
-      530, 520, 410, 530, 520, 610, 530, 520, 610, 530, 420, 510, 430, 520, 510,
-    ],
-  },
-];
-
-const TestGoals: Goal[] = [
-  {
-    name: "Buy a Car",
-    cost: 20000,
-    paymentAmount: 1000,
-    progress: 5000,
-    date: "2025-12-31",
-  },
-  {
-    name: "Buy PS5",
-    cost: 500,
-    paymentAmount: 20,
-    progress: 140,
-    date: "2025-12-31",
-  },
-  {
-    name: "Student Loan",
-    cost: 20000,
-    paymentAmount: 150,
-    progress: 5000,
-    date: "2025-12-31",
-  },
-];
+import Viewdebt from "../../components/ViewDebt";
+import AddDebt from "../../components/AddDebt";
+import ViewIncome from "../../components/ViewIncome";
+import UpcomingExpensesCard from "../../components/UpcomingExpenses";
+import PieChartComponent from "../../components/ExpensesPieChart";
+import BalanceCard from "../../components/Balance";
+import SpendingOverTimeChart from "../../components/ExpenseOverTime";
+import Dummy from "../../components/dummy";
 
 export default function MainGrid() {
-  //
   const [sessionId, setSessionId] = useState<number | null>(null);
-  const [curUserData, setCurUserData] = useState<UserData>({
+  const [curUserData, setCurUserData] = useState({
     income: 0,
     currentBalance: 0,
     expenses: [],
@@ -107,8 +28,8 @@ export default function MainGrid() {
   });
   const [activeCard, setActiveCard] = useState<number | null>(null);
   const [error, setError] = useState("");
+  const [editgoal, seteditgoal] = useState(false);
 
-  // Initialize individual refs for each card
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
@@ -117,12 +38,16 @@ export default function MainGrid() {
       try {
         const userData = JSON.parse(storedUserData);
         setSessionId(userData.id);
-        console.log("UserData:", userData);
+        console.log("UserData.id:", userData.id);
       } catch (error) {
         console.error("Error parsing user data:", error);
       }
     }
   }, []);
+
+  function handleEditgoal() {
+    seteditgoal(prev => !prev);
+  }
 
   useEffect(() => {
     if (sessionId !== null) {
@@ -145,7 +70,8 @@ export default function MainGrid() {
       }
 
       const data = await response.json();
-      const userData: UserData = data.userData;
+      console.log("Fetched User Data:", data);
+      const userData = data.userData;
 
       setCurUserData(userData);
     } catch (error: unknown) {
@@ -163,149 +89,352 @@ export default function MainGrid() {
     );
   };
 
-  const goals = curUserData?.goals || [];
-  const expenses = curUserData?.expenses || [];
+  const handleEditExpense = (expense: any) => {
+    console.log("Edit expense:", expense);
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+    // Prompt the user for the new cost of the expense
+    const newCost = prompt("Enter new cost for the expense:", expense.cost);
 
-  // Handle click outside to collapse card
+    // Validate the input
+    if (!newCost || isNaN(parseFloat(newCost))) {
+      alert("Invalid input. Please enter a valid number.");
+      return;
+    }
+
+    // Send the updated expense cost to the backend
+    const updatedExpense = {
+      userId: sessionId,
+      expenseName: expense.name, // Use the existing name to identify the expense
+      newExpenseCost: parseFloat(newCost), // Only update the cost
+    };
+
+    fetch("http://777finances.com:5000/api/updateexpense", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedExpense),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.success) {
+          console.log("Expense updated successfully");
+          fetchUserData(); // Refresh the expense list
+        } else {
+          console.error("Failed to update expense:", result.error);
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating expense:", error);
+      });
+  };
+
+  const handleDeleteExpense = async (expense: any) => {
+    console.log("Delete expense:", expense);
+    if (!sessionId) return;
+
+    try {
+      // First, remove the expense
+      const response = await fetch(
+        "http://777finances.com:5000/api/removeexpense",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: sessionId,
+            expenseName: expense.name,
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        console.log("Expense deleted successfully");
+
+        // If the expense is a debt, also remove it from debts
+        if (expense.category === "Debt") {
+          try {
+            const debtResponse = await fetch(
+              "http://777finances.com:5000/api/deletedebt",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  userId: sessionId,
+                  debtName: expense.name,
+                }),
+              }
+            );
+
+            const debtResult = await debtResponse.json();
+
+            if (debtResult.success) {
+              console.log("Debt record also deleted successfully");
+            } else {
+              console.error("Failed to delete debt record:", debtResult.error);
+            }
+          } catch (debtError) {
+            console.error("Error deleting debt record:", debtError);
+          }
+        }
+
+        if (expense.category === "Saving Goal") {
+          try {
+            const debtResponse = await fetch(
+              "http://777finances.com:5000/api/removegoal",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  userId: sessionId,
+                  goalName: expense.name,
+                }),
+              }
+            );
+
+            const debtResult = await debtResponse.json();
+
+            if (debtResult.success) {
+              console.log("Goal record also deleted successfully");
+            } else {
+              console.error("Failed to Goal debt record:", debtResult.error);
+            }
+          } catch (debtError) {
+            console.error("Error deleting goal record:", debtError);
+          }
+        }
+
+        fetchUserData(); // Refresh data after deletion
+      } else {
+        console.error("Failed to delete expense:", result.error);
+      }
+    } catch (error) {
+      console.error("Error deleting expense:", error);
+    }
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      // Ignore clicks inside dropdowns or other specific elements
+      if ((event.target as HTMLElement).closest(".MuiMenu-paper")) {
+        return; // Do nothing if the click is inside a Material-UI dropdown
+      }
+
+      // Check if the click happened outside all cards
       if (
         cardRefs.current.every(
           (ref) => ref && !ref.contains(event.target as Node)
         )
       ) {
-        setActiveCard(null); // Close the card if clicked outside
+        setActiveCard(null); // Collapse all cards if clicked outside
       }
     };
 
+    // Add event listener for detecting clicks outside
     document.addEventListener("mousedown", handleClickOutside);
 
+    // Cleanup event listener when the component is unmounted
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [cardRefs]);
 
-  console.log(curUserData);
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
-  ////////////////////
   return (
-    <Box sx={{ width: "100%", maxWidth: { sm: "100%", md: "1700px" } }}>
-      {/* cards */}
-      <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
-        Overview
-      </Typography>
-      <Grid
-        container
-        spacing={2}
-        columns={12}
-        sx={{ mb: (theme) => theme.spacing(2) }}
+    <Box
+      sx={{
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "center", // Horizontally center the cards
+        gap: 2, // Space between the cards
+        alignItems: "flex-start",
+        padding: 15, // Adjust the padding as needed
+        paddingTop: 30, // Remove top padding to align with the top of the page
+      }}
+    >
+      {/* Goal Card */}
+      <Box
+        sx={{
+          position: "relative",
+          width: "calc(33.33% - 16px)",
+          justifyContent: "center",
+          display: "flex", // Make sure the card takes up 1/3 of the available width
+        }}
       >
-        {data.map((card, index) => (
-          <Grid key={index} size={{ xs: 12, sm: 6, lg: 3 }}>
-            <p>card here</p>
-          </Grid>
-        ))}
-        <Grid key={10} size={{ xs: 12, sm: 6, lg: 3 }}>
-          <ExpandableCard
-            title="Expenses"
-            index={1}
-            onClick={() => handleCardClick(1)}
-            isActive={activeCard === 1}
-            componentCollapsed={<ViewExpense expenseList={expenses} />}
-            componentExpanded={
-              <div className="flex">
-                <div>
-                  {sessionId ? (
-                    <AddExpenses
-                      userId={sessionId}
-                      onRerender={fetchUserData}
-                    />
-                  ) : (
-                    <p>Loading...</p>
-                  )}
-                </div>
-              </div>
-            }
-            cardRef={(el) => (cardRefs.current[1] = el)}
-          />
-
-          <ExpandableCard
-            title="Income"
-            index={2} // Unique index for the Income card
-            onClick={() => handleCardClick(2)}
-            isActive={activeCard === 2}
-            componentCollapsed={<p>Your total income: ${curUserData.income}</p>}
-            componentExpanded={
-              <div className="flex">
-                {/* Left Section: Income Details */}
-                <div className="w-1/2">
-                  <p className="text-lg font-medium">
-                    Your current income is: ${curUserData.income}
-                  </p>
-                </div>
-
-                {/* Right Section: Add Income Form */}
-                <div className="w-1/2">
-                  {sessionId ? (
-                    <AddIncome
-                      userId={sessionId}
-                      onIncomeAdded={fetchUserData}
-                    />
-                  ) : (
-                    <p>Loading...</p>
-                  )}
-                </div>
-              </div>
-            }
-            cardRef={(el) => (cardRefs.current[2] = el)}
-          />
-        </Grid>
-        <Grid className="" size={{ xs: 12, md: 6 }}>
-          <ExpandableCard
-            title="debt"
-            index={1}
-            onClick={() => handleCardClick(1)}
-            isActive={activeCard === 1}
-            componentCollapsed={<Viewdebt debt={curUserData.debt} />}
-            componentExpanded={
-              <AddDebt userId={sessionId} onDebtAdded={fetchUserData} />
-            }
-            // Pass the specific ref for each card
-            cardRef={(el) => (cardRefs.current[1] = el)}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <ExpandableCard
-            title="Goals"
-            index={0}
-            onClick={() => handleCardClick(0)}
-            isActive={activeCard === 0}
-            componentCollapsed={<ViewGoals goals={curUserData.goals} />}
-            componentExpanded={
+        <ExpandableCard
+          title="Goals"
+          index={0}
+          onClick={() => handleCardClick(0)}
+          isActive={activeCard === 0}
+          componentCollapsed={
+            <ViewGoals
+              userId={sessionId}
+              onGoalDeleted={fetchUserData}
+              goals={curUserData.goals}
+              onEditclicked={handleEditgoal}
+            />
+          }
+          componentExpanded={
+            editgoal ? (
+              <Dummy />
+            ) : (
               <AddGoal userId={sessionId} onGoalAdded={fetchUserData} />
-            }
-            // Pass the specific ref for each card
-            cardRef={(el) => (cardRefs.current[0] = el)}
-          />
-        </Grid>
-      </Grid>
-      <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
-        Details
-      </Typography>
-      <Grid container spacing={2} columns={12}>
-        <Grid size={{ xs: 12, lg: 9 }}></Grid>
-        <Grid size={{ xs: 12, lg: 3 }}>
-          <Stack
-            gap={2}
-            direction={{ xs: "column", sm: "row", lg: "column" }}
-          ></Stack>
-        </Grid>
-      </Grid>
-      <Copyright sx={{ my: 4 }} />
+            )
+          }
+          cardRef={(el) => (cardRefs.current[0] = el)}
+        />
+      </Box>
+
+      {/* Debt Card */}
+      <Box
+        sx={{
+          position: "relative",
+          width: "calc(33.33% - 16px)",
+          justifyContent: "center",
+          display: "flex",
+        }}
+      >
+        <ExpandableCard
+          title="Debt"
+          index={1}
+          onClick={() => handleCardClick(1)}
+          isActive={activeCard === 1}
+          componentCollapsed={
+            <Viewdebt
+              userId={sessionId}
+              onDebtDeleted={fetchUserData}
+              debt={curUserData.debt}
+            />
+          }
+          componentExpanded={
+            <AddDebt userId={sessionId} onDebtAdded={fetchUserData} />
+          }
+          cardRef={(el) => (cardRefs.current[1] = el)}
+        />
+      </Box>
+
+      {/* Income Card */}
+      <Box
+        sx={{
+          position: "relative",
+          width: "calc(33.33% - 16px)",
+          justifyContent: "center",
+          display: "flex",
+        }}
+      >
+        <ExpandableCard
+          title="This Month's Projected Income"
+          index={2}
+          onClick={() => handleCardClick(2)}
+          isActive={activeCard === 2}
+          componentCollapsed={<ViewIncome income={curUserData.income} />}
+          componentExpanded={
+            <AddIncome userId={sessionId} onIncomeAdded={fetchUserData} />
+          }
+          cardRef={(el) => (cardRefs.current[2] = el)}
+        />
+      </Box>
+
+      {/* Expense Card */}
+      <Box
+        sx={{
+          position: "relative",
+          zIndex: 2,
+          width: "calc(33.33% - 16px)",
+          justifyContent: "center",
+          display: "flex",
+        }}
+      >
+        <ExpandableCard
+          title="Expenses"
+          index={3}
+          onClick={() => handleCardClick(3)}
+          isActive={activeCard === 3}
+          componentCollapsed={
+            <ViewExpense
+              expenseList={curUserData.expenses}
+              onEdit={handleEditExpense}
+              onDelete={handleDeleteExpense}
+            />
+          }
+          componentExpanded={
+            <AddExpenses userId={sessionId} onRerender={fetchUserData} />
+          }
+          cardRef={(el) => (cardRefs.current[3] = el)}
+        />
+      </Box>
+
+      <Box
+        sx={{
+          position: "relative",
+          width: "calc(33.33% - 16px)",
+          justifyContent: "center",
+          display: "flex", // Maintain the same width as other cards
+        }}
+      >
+        <ExpandableCard
+          title="Remaining Balance"
+          index={4}
+          onClick={() => null}
+          isActive={activeCard === 4}
+          componentCollapsed={
+            <BalanceCard
+              expenses={curUserData.expenses}
+              income={curUserData.income}
+            />
+          }
+          componentExpanded={null}
+          cardRef={(el) => (cardRefs.current[4] = el)}
+        />
+      </Box>
+
+      <Box
+        sx={{
+          position: "relative",
+          width: "calc(33.33% - 16px)",
+          justifyContent: "center",
+          display: "flex", // Maintain the same width as other cards
+        }}
+      >
+        <ExpandableCard
+          title="Upcoming Expenses"
+          index={5}
+          onClick={() => null}
+          isActive={activeCard === 5}
+          componentCollapsed={
+            <UpcomingExpensesCard expenses={curUserData.expenses} />
+          }
+          componentExpanded={null}
+          cardRef={(el) => (cardRefs.current[5] = el)}
+        />
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          gap: 2,
+          width: "100%",
+          marginTop: 2,
+        }}
+      >
+        <Box sx={{ width: "50%" }}>
+          <PieChartComponent expenses={curUserData.expenses} />
+        </Box>
+
+        <Box sx={{ width: "50%" }}>
+          <SpendingOverTimeChart expenses={curUserData.expenses} />
+        </Box>
+      </Box>
     </Box>
   );
 }

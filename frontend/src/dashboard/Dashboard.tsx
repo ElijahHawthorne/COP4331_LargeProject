@@ -8,53 +8,50 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import AppNavbar from './components/AppNavbar';
-import Header from './components/Header';
 import MainGrid from './components/MainGrid';
-import SideMenu from './components/SideMenu';
+
 import AppTheme from '../shared-theme/AppTheme';
 import type {} from '@mui/material/themeCssVarsAugmentation';
-import {
-  chartsCustomizations,
-  dataGridCustomizations,
-  datePickersCustomizations,
-  treeViewCustomizations,
-} from './theme/customizations';
 
-const xThemeComponents = {
-  ...chartsCustomizations,
-  ...dataGridCustomizations,
-  ...datePickersCustomizations,
-  ...treeViewCustomizations,
-};
+
 
 export default function Dashboard(props: { disableCustomTheme?: boolean }) {
   return (
-    <AppTheme {...props} themeComponents={xThemeComponents}>
+    <AppTheme {...props}>
       <CssBaseline enableColorScheme />
-      <Box sx={{ display: 'flex' }}>
-        {/* <SideMenu /> */}
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100vh',  // Ensure the container takes up the full height
+        }}
+      >
+        {/* Navbar */}
         <AppNavbar />
         {/* Main content */}
         <Box
           component="main"
           sx={(theme) => ({
             flexGrow: 1,
+            display: 'flex',
+            justifyContent: 'center',  // Horizontally center content
+            alignItems: 'center',      // Vertically center content
             backgroundColor: theme.vars
               ? `rgba(${theme.vars.palette.background.defaultChannel} / 1)`
               : alpha(theme.palette.background.default, 1),
             overflow: 'auto',
+            paddingTop: '400px', // Add padding at the top to avoid content hiding behind the navbar
           })}
         >
           <Stack
             spacing={2}
             sx={{
               alignItems: 'center',
-              mx: 3,
+              mx: 0,
               pb: 5,
-              mt: { xs: 8, md: 0 },
+              mt: { xs: 4, md: 4 },
             }}
           >
-            <Header />
             <MainGrid />
           </Stack>
         </Box>

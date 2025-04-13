@@ -1,5 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  CircularProgress,
+  TextField,
+  Typography,
+  Alert,
+} from "@mui/material";
 
 function Signup() {
   const navigate = useNavigate(); // Get the navigate function
@@ -11,7 +22,11 @@ function Signup() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-
+  const [confirmationCode, setConfirmationCode] = useState(""); // User entered confirmation code
+  const [generatedCode, setGeneratedCode] = useState(""); // The randomly generated code
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // Control the dialog visibility
+  const [isSendingEmail, setIsSendingEmail] = useState(false); // Loading state for sending email
+  const [emailSent, setEmailSent] = useState(false); // Track if the email is sent successfully
   const [SignupSuccess, setSignupSuccess] = useState<boolean | null>(null);
 
   // Regex for email validation
@@ -30,6 +45,10 @@ function Signup() {
   function validatePassword(password: string): boolean {
     return passwordRegex.test(password);
   }
+
+  const generateRandomString = (): string => {
+    return Math.random().toString(36).substr(2, 12); // Generate a random 12-character string
+  };
 
   async function doSignup(event: any): Promise<void> {
     event.preventDefault();
@@ -67,11 +86,65 @@ function Signup() {
     if (signupPassword !== confirmPassword) {
       setSignupSuccess(false);
       setMessage("Passwords do not match");
-
       return;
     }
 
-    let obj = {
+    // Generate a random string (confirmation code)
+    const randomString = generateRandomString();
+    setGeneratedCode(randomString); // Save the generated code
+
+    // Show the email confirmation dialog
+    setIsDialogOpen(true);
+
+    // Call the send-email API with the random string and email
+    try {
+      setIsSendingEmail(true);
+      const response = await fetch(
+        "http://777finances.com:5000/api/send-email",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            recipientEmail: "elijah.hawthorne@yahoo.com", // Dynamically using user's email
+            subject: "Email Validation Code",
+            message: `Please use the verification code to validate your email: ${randomString}. This code will expire in 10 minutes.`,
+          }),
+        }
+      );
+
+      const result = await response.json();
+      if (result.success) {
+        setEmailSent(true);
+        setMessage("Please check your email for the confirmation code.");
+      } else {
+        setMessage("Failed to send email. Please try again.");
+      }
+    } catch (error: any) {
+      console.error("Error sending email:", error);
+      setMessage("Error sending email. Please try again later.");
+    } finally {
+      setIsSendingEmail(false);
+    }
+  }
+
+  // Handle the confirmation code input change
+  function handleConfirmationCodeChange(e: any): void {
+    setConfirmationCode(e.target.value);
+  }
+
+  // Handle dialog submission to check the confirmation code
+  async function handleConfirmationCodeSubmit(): Promise<void> {
+    if (confirmationCode === generatedCode) {
+      // If the confirmation code matches, proceed with signup
+      await finalizeSignup();
+    } else {
+      setMessage("Invalid confirmation code. Please try again.");
+    }
+  }
+
+  // Finalize signup after successful confirmation
+  async function finalizeSignup() {
+    const obj = {
       login: signupName, // Matching API field name
       password: signupPassword,
       firstName: firstName,
@@ -92,7 +165,6 @@ function Signup() {
 
       if (res.success) {
         //// Inititalize new user in data table
-
         var initBody = JSON.stringify({ userId: res.userId });
 
         const initUser = await fetch(
@@ -104,9 +176,6 @@ function Signup() {
           }
         );
         console.log(initUser);
-
-        ////
-
         setSignupSuccess(true);
         setMessage("Signup successful! Redirecting to login...");
 
@@ -115,8 +184,7 @@ function Signup() {
         }, 2000);
       } else {
         setSignupSuccess(false);
-
-        setMessage(res.error || "Signup failed. Please try again");
+        setMessage(res.error || "Signup failed. Please try again.");
       }
     } catch (error: any) {
       setSignupSuccess(false);
@@ -128,6 +196,7 @@ function Signup() {
   function handleSetSignupName(e: any): void {
     setSignupName(e.target.value);
   }
+
   function handleSetPassword(e: any): void {
     setPassword(e.target.value);
   }
@@ -139,9 +208,11 @@ function Signup() {
   function handleSetFirstName(e: any): void {
     setFirstName(e.target.value);
   }
+
   function handleSetLastName(e: any): void {
     setLastName(e.target.value);
   }
+
   function handleSetEmail(e: any): void {
     setEmail(e.target.value);
   }
@@ -149,6 +220,16 @@ function Signup() {
   function goToLogin() {
     navigate("/"); // Use navigate function to go to login page
   }
+
+  // Reset dialog states when closing the dialog
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+    // Reset states to restart the process
+    setGeneratedCode("");
+    setConfirmationCode("");
+    setEmailSent(false);
+    setMessage("");
+  };
 
   return (
     <div
@@ -221,15 +302,56 @@ function Signup() {
         </a>{" "}
         here.
       </p>
-      <span
-        id="signupResult"
-        className={`block mt-4 p-2 ${
-          SignupSuccess ? "text-black" : "text-red-500"
-        }`}
-      >
-        {message}
-        {SignupSuccess === false ? "!" : ""}
-      </span>
+      {message && (
+        <div className="w-full mt-4">
+          <div className="p-2">
+            <Alert severity={SignupSuccess ? "success" : "error"}>
+              {message}
+            </Alert>
+          </div>
+        </div>
+      )}
+
+      {/* Email Confirmation Dialog */}
+      <Dialog open={isDialogOpen} onClose={handleDialogClose}>
+        <DialogTitle>Email Confirmation</DialogTitle>
+        <DialogContent>
+          {isSendingEmail ? (
+            <CircularProgress />
+          ) : (
+            <>
+              {emailSent ? (
+                <Typography>
+                  A confirmation email has been sent to {email}. Please check
+                  your inbox to complete your registration.
+                </Typography>
+              ) : (
+                <Typography>
+                  We are sending you a confirmation email. Please check your
+                  inbox.
+                </Typography>
+              )}
+              {emailSent && (
+                <TextField
+                  label="Enter Confirmation Code"
+                  variant="outlined"
+                  value={confirmationCode}
+                  onChange={handleConfirmationCodeChange}
+                  fullWidth
+                />
+              )}
+            </>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirmationCodeSubmit} color="primary">
+            Submit
+          </Button>
+          <Button onClick={handleDialogClose} color="secondary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

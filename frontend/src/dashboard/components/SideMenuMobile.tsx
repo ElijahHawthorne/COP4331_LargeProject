@@ -1,15 +1,16 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
+
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Drawer, { drawerClasses } from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
-import MenuButton from './MenuButton';
 import MenuContent from './MenuContent';
-import CardAlert from './CardAlert';
+
+import { useEffect, useState } from 'react';
+import NewAvatar from './NewAvatar';
+import { useNavigate } from 'react-router-dom';
+
 
 interface SideMenuMobileProps {
   open: boolean | undefined;
@@ -17,6 +18,42 @@ interface SideMenuMobileProps {
 }
 
 export default function SideMenuMobile({ open, toggleDrawer }: SideMenuMobileProps) {
+
+ // const [sessionId, setSessionId] = useState<number | null>(null);
+  const [currentFirstname, setCurrentFirstname] = useState<string | null>(null);
+  const [currentLastname, setCurrentLastname] = useState<string | null>(null);
+
+
+
+
+  useEffect(() => {
+    const storedUserData = localStorage.getItem("user_data");
+    if (storedUserData) {
+      try {
+        const userData = JSON.parse(storedUserData);
+        
+        setCurrentFirstname(userData.firstName);
+        setCurrentLastname(userData.lastName);
+        console.log("UserData:", userData);
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+      }
+    }
+  }, []);
+
+  const navigate = useNavigate();
+
+
+  function handleLogout() {
+    //To remove user data from local storage and go back to login
+    localStorage.removeItem("user_data");
+    navigate("/login");
+  }
+
+  
+
+
+
   return (
     <Drawer
       anchor="right"
@@ -41,28 +78,21 @@ export default function SideMenuMobile({ open, toggleDrawer }: SideMenuMobilePro
             direction="row"
             sx={{ gap: 1, alignItems: 'center', flexGrow: 1, p: 1 }}
           >
-            <Avatar
-              sizes="small"
-              alt="Riley Carter"
-              src="/static/images/avatar/7.jpg"
-              sx={{ width: 24, height: 24 }}
-            />
+            <NewAvatar currentFirstname={currentFirstname} />
             <Typography component="p" variant="h6">
-              Riley Carter
+              {currentFirstname+" "+currentLastname} 
             </Typography>
           </Stack>
-          <MenuButton showBadge>
-            <NotificationsRoundedIcon />
-          </MenuButton>
+          
         </Stack>
         <Divider />
         <Stack sx={{ flexGrow: 1 }}>
           <MenuContent />
           <Divider />
         </Stack>
-        <CardAlert />
+        
         <Stack sx={{ p: 2 }}>
-          <Button variant="outlined" fullWidth startIcon={<LogoutRoundedIcon />}>
+          <Button variant="outlined" fullWidth startIcon={<LogoutRoundedIcon />} onClick={handleLogout}>
             Logout
           </Button>
         </Stack>
