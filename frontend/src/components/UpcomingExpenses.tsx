@@ -5,7 +5,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  Checkbox,
 } from "@mui/material";
 
 interface UpcomingExpensesCardProps {
@@ -42,17 +41,15 @@ const UpcomingExpensesCard: React.FC<UpcomingExpensesCardProps> = ({ expenses })
                 primary={expense.name}
                 secondary={`Due: ${new Date(expense.date).toLocaleDateString()} — $${expense.cost.toFixed(2)}`}
                 primaryTypographyProps={{
-                  sx: (theme) => ({
+                  sx: () => ({
                     fontFamily: "Inter, sans-serif",
-                    color: theme.palette.text.primary,
                     fontSize: "1.3rem !important",
                     fontWeight: "bold",
                   }),
                 }}
                 secondaryTypographyProps={{
-                  sx: (theme) => ({
+                  sx: () => ({
                     fontFamily: "Inter, sans-serif",
-                    color: theme.palette.text.primary ,
                     fontSize: "1rem !important",
                   }),
                 }}

@@ -23,7 +23,6 @@ const ViewIncome: React.FC<ViewIncomeProps> = ({ income }) => {
             sx={{
               fontSize: "4rem",
               my: 1,
-              color: (theme) => theme.palette.text.primary,
               fontWeight: "bold"
             }}
           >
