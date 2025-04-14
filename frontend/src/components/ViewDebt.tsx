@@ -61,6 +61,11 @@ const Viewdebt: React.FC<ViewDebtProps> = ({ debt = [], userId, onDebtDeleted })
   };
   
 
+  function formatDateToMDY(dateStr: string): string {
+    const [year, month, day] = dateStr.split("-");
+    return `${month}-${day}-${year}`;
+  }
+
   return (
     <div>
       {/* Map through each debt and display it */}
@@ -104,7 +109,7 @@ const Viewdebt: React.FC<ViewDebtProps> = ({ debt = [], userId, onDebtDeleted })
             <Typography variant="body1">Total Cost: ${debtItem.amount}</Typography>
             <Typography variant="body2">Payment Amount: ${debtItem.paymentAmount} per month</Typography>
             <Typography variant="body2">Progress: ${debtItem.progress}</Typography>
-            <Typography variant="body2">Target Date: {debtItem.date}</Typography>
+            <Typography variant="body2">Payment Date: {formatDateToMDY(debtItem.date)}</Typography>
 
             {/* Calculate progress as a percentage */}
             <LinearProgress

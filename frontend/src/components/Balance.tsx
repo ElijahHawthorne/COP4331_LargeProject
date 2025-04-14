@@ -8,26 +8,50 @@ interface BalanceCardProps {
 }
 
 const BalanceCard: React.FC<BalanceCardProps> = ({ expenses, income }) => {
-  const totalExpenses = expenses.reduce((acc, expense) => acc + expense.cost, 0);
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth(); // 0-based
+  const currentYear = currentDate.getFullYear();
+
+  const filteredExpenses = expenses.filter((expense) => {
+    // Always include recurring expenses
+    if (expense.recurring) return true;
+
+    // For non-recurring expenses, check if they belong to the current month/year
+    const expenseDate = new Date(expense.date);
+    return (
+      expenseDate.getMonth() === currentMonth &&
+      expenseDate.getFullYear() === currentYear
+    );
+  });
+
+  const totalExpenses = filteredExpenses.reduce(
+    (acc, expense) => acc + expense.cost,
+    0
+  );
+
   const remainingBalance = (income - totalExpenses).toFixed(2);
 
   return (
     <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
       <Card
         sx={{
-          width: 400,
+          width: 250,
           border: 'none',
           textAlign: 'center',
-          p: 2, // Additional padding
+          p: 2,
         }}
       >
         <CardContent>
-          {/* Main balance in the middle */}
           <Typography
             variant="h3"
-            sx={{fontWeight: "bold", fontSize: "4rem", my: 1, }}
+            sx={{
+              fontWeight: 'bold',
+              fontSize: '2.5rem',
+              my: 1,
+              color: (theme) => theme.palette.text.primary,
+            }}
           >
-          ${remainingBalance}
+            ${remainingBalance}
           </Typography>
         </CardContent>
       </Card>
@@ -36,5 +60,3 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ expenses, income }) => {
 };
 
 export default BalanceCard;
-
-// primary.main

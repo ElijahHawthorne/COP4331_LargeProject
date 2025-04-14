@@ -21,6 +21,7 @@ export interface Goal {
     cost: number;
     category: string;
     date: string;
+    recurring: boolean;
   }
   
   export interface UserData {

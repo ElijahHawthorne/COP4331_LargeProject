@@ -10,11 +10,12 @@ interface AddDebtProps {
 const AddDebt: React.FC<AddDebtProps> = ({ userId, onDebtAdded }) => {
   const [debtName, setDebtName] = useState('');
   const [debtAmount, setDebtAmount] = useState<number | null>(null);  // Renamed to debtAmount
-  const [paymentDate, setPaymentDate] = useState(''); // Renamed to paymentDate
-  const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  // Renamed to paymentProgress
+const [paymentDate, setPaymentDate] = useState(''); // Renamed to paymentDate
+const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  // Renamed to paymentProgress
 
   const [paymentAmount, setPaymentAmount] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+
   const [message, setMessage] = useState<string>("");
   const [messageColor, setMessageColor] = useState<string>("");
   const { mode } = useColorScheme(); // 'light' | 'dark' | undefined
@@ -45,11 +46,11 @@ const AddDebt: React.FC<AddDebtProps> = ({ userId, onDebtAdded }) => {
     }
 
     const newDebt = {
-      name: debtName,
-      amount: debtAmount,  // Use debtAmount instead of debtCost
-      paymentAmount: paymentAmount,
-      progress: paymentProgress,  // Use paymentProgress instead of progress
-      date: paymentDate,  // Use paym
+        name: debtName,
+        amount: debtAmount,  // Use debtAmount instead of debtCost
+        paymentAmount: paymentAmount,
+        progress: paymentProgress,  // Use paymentProgress instead of progress
+        date: paymentDate,  // Use paym
     };
 
     // Log the debt data being sent to the server
@@ -90,7 +91,8 @@ const AddDebt: React.FC<AddDebtProps> = ({ userId, onDebtAdded }) => {
           expenseName: newDebt.name,
           expenseCost: newDebt.paymentAmount,
           expenseDate: newDebt.date,
-          expenseCategory: 'Debt',  // Category set to 'debt'
+          expenseCategory: 'Debt',
+          recurring: true  // Category set to 'debt'
         };
 
         // Log the expense data being sent to the server
@@ -108,7 +110,6 @@ const AddDebt: React.FC<AddDebtProps> = ({ userId, onDebtAdded }) => {
 
         if (expenseDataResponse.success) {
           onDebtAdded();  // Trigger callback to update the UI
-
         } else {
           setError(`Failed to add expense: ${expenseDataResponse.error}`);
         }

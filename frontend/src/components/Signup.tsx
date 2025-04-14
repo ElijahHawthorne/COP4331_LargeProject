@@ -9,6 +9,7 @@ import {
   CircularProgress,
   TextField,
   Typography,
+  Alert,
 } from "@mui/material";
 
 function Signup() {
@@ -102,7 +103,7 @@ function Signup() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          recipientEmail: "elijah.hawthorne@yahoo.com", // Dynamically using user's email
+          recipientEmail: email, // Dynamically using user's email
           subject: "Email Validation Code",
           message: `Please use the verification code to validate your email: ${randomString}. This code will expire in 10 minutes.`,
         }),
@@ -298,13 +299,15 @@ function Signup() {
         </a>{" "}
         here.
       </p>
-      <span
-        id="signupResult"
-        className={`block mt-4 p-2 ${SignupSuccess ? "text-black" : "text-red-500"}`}
-      >
-        {message}
-        {SignupSuccess === false ? "!" : ""}
-      </span>
+      {message && (
+        <div className="w-full mt-4">
+          <div className="p-2">
+            <Alert severity={SignupSuccess ? "success" : "error"}>
+              {message}
+            </Alert>
+          </div>
+        </div>
+      )}
 
       {/* Email Confirmation Dialog */}
       <Dialog open={isDialogOpen} onClose={handleDialogClose}>
@@ -316,11 +319,13 @@ function Signup() {
             <>
               {emailSent ? (
                 <Typography>
-                  A confirmation email has been sent to {email}. Please check your inbox to complete your registration.
+                  A confirmation email has been sent to {email}. Please check
+                  your inbox to complete your registration.
                 </Typography>
               ) : (
                 <Typography>
-                  We are sending you a confirmation email. Please check your inbox.
+                  We are sending you a confirmation email. Please check your
+                  inbox.
                 </Typography>
               )}
               {emailSent && (

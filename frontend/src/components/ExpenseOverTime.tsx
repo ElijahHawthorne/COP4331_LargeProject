@@ -8,7 +8,17 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
-import { format, eachDayOfInterval, startOfMonth, endOfMonth, isSameDay, parseISO } from "date-fns";
+import {
+  format,
+  eachDayOfInterval,
+  startOfMonth,
+  endOfMonth,
+  isSameDay,
+  parseISO,
+  getDate,
+  getMonth,
+  getYear,
+} from "date-fns";
 import { Expense } from "../Types";
 import { Typography, Box, Paper } from "@mui/material";
 
@@ -17,20 +27,34 @@ interface SpendingOverTimeProps {
 }
 
 const SpendingOverTime: React.FC<SpendingOverTimeProps> = ({ expenses }) => {
-  // Get current month interval.
-  const start = startOfMonth(new Date());
-  const end = endOfMonth(new Date());
-
-  // Generate all days of current month.
+  const today = new Date();
+  const start = startOfMonth(today);
+  const end = endOfMonth(today);
   const daysOfMonth = eachDayOfInterval({ start, end });
 
-  // Create data for each day with total spending.
   const data = daysOfMonth.map((day) => {
+    const dayOfMonth = getDate(day);
+    const currentMonth = getMonth(day);
+    const currentYear = getYear(day);
+
     const total = expenses
-      .filter((expense) => isSameDay(parseISO(expense.date), day))
+      .filter((expense) => {
+        const expenseDate = parseISO(expense.date);
+
+        if (expense.recurring) {
+          // Only match if the day matches, regardless of month/year
+          return getDate(expenseDate) === dayOfMonth;
+        } else {
+          // One-time expense: must match exact day
+          return (
+            isSameDay(expenseDate, day)
+          );
+        }
+      })
       .reduce((sum, e) => sum + e.cost, 0);
+
     return {
-      date: format(day, "MMM d"), // e.g., "Apr 10"
+      date: format(day, "MMM d"),
       amount: total,
     };
   });
@@ -43,10 +67,9 @@ const SpendingOverTime: React.FC<SpendingOverTimeProps> = ({ expenses }) => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        cursor: "pointer", // Change cursor to pointer on hover
+        cursor: "pointer",
         transition: "box-shadow 0.3s ease, color 0.3s ease",
         "&:hover": {
-          // Change shadow color based on mode.
           boxShadow:
             theme.palette.mode === "dark"
               ? "0px 4px 16px #2c4f83"
@@ -55,7 +78,7 @@ const SpendingOverTime: React.FC<SpendingOverTimeProps> = ({ expenses }) => {
       })}
     >
       <Typography variant="h6" gutterBottom>
-        Expense Distribution by Category
+        Expense Distribution Over Time
       </Typography>
       <Box sx={{ width: 650, height: 300 }}>
         <ResponsiveContainer width="100%" height={300}>

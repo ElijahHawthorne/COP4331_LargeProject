@@ -91,7 +91,6 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
             flex: 1,
             overflowY: "auto",
             height: "100%",
-
           }}
         >
           {componentCollapsed}

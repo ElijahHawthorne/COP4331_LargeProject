@@ -24,24 +24,7 @@ client.connect();
 app.use(cors());
 app.use(bodyParser.json());
 
-// ------------------------------------
-// ADD CARD ENDPOINT
-// ------------------------------------
-app.post('/api/addcard', async (req, res) => {
-  const { userId, card } = req.body;
-  const newCard = { Card: card, UserId: userId };
-  let error = '';
 
-  try {
-    const db = client.db('COP4331Cards');
-    // Insert into MongoDB
-    await db.collection('Cards').insertOne(newCard);
-  } catch (e) {
-    error = e.toString();
-  }
-
-  res.status(200).json({ error });
-});
 
 // ------------------------------------
 // SIGNUP ENDPOINT
@@ -57,12 +40,23 @@ app.post('/api/signup', async (req, res) => {
     const db = client.db('777Finances');
 
     // Check if user with this login already exists
-    const existingUser = await db.collection('Users').findOne({ Login: login });
+    const existingUser = await db.collection('Users').findOne({
+      $or: [
+        { Login: login },
+        { Email: email }
+      ]
+    });
+    
     if (existingUser) {
-      error = 'User already exists';
+      if (existingUser.Login === login) {
+        error = 'Username already exists';
+      } else if (existingUser.Email === email) {
+        error = 'Email already registered';
+      } else {
+        error = 'User already exists';
+      }
       return res.status(400).json({ success, error });
     }
-
     // Generate a simple numeric userId (or use any unique method you want)
     userId = Date.now(); // or UUID for better uniqueness
 
@@ -229,10 +223,10 @@ app.post('/api/datainit', async (req, res) => {
 // ADD EXPENSE ENDPOINT
 // ------------------------------------
 app.post('/api/addexpense', async (req, res) => {
-  const { userId, expenseName, expenseCost, expenseDate, expenseCategory } = req.body;
+  const { userId, expenseName, expenseCost, expenseDate, expenseCategory, recurring } = req.body;
 
   // Log the incoming data for debugging
-  console.log("Received expense data:", { userId, expenseName, expenseCost, expenseDate, expenseCategory });
+  console.log("Received expense data:", { userId, expenseName, expenseCost, expenseDate, expenseCategory, recurring });
 
   let error = '';
   let success = false;
@@ -251,7 +245,7 @@ app.post('/api/addexpense', async (req, res) => {
         { userId: userId },
         {
           $push: {
-            expenses: { name: expenseName, cost: expenseCost, date: expenseDate, category: expenseCategory }  // This is the key part
+            expenses: { name: expenseName, cost: expenseCost, date: expenseDate, category: expenseCategory, recurring: recurring }  // This is the key part
           }
         }
       );
@@ -833,6 +827,48 @@ app.post('/api/send-email', async (req, res) => {
     mailjetResponse  // Include the full response from Mailjet to inspect the details in case of failure.
   });
 });
+// ------------------------------------
+// SEARCH USER BY EMAIL ENDPOINT
+// ------------------------------------
+
+app.post('/api/searchUserByEmail', async (req, res) => {
+  let error = '';
+  let success = false;
+  let user = null; // Declare a variable to store the retrieved user data
+
+  const { email } = req.body;  // Expecting an email from the request body
+
+  try {
+    const db = client.db('777Finances');  // Access your database
+
+    if (!email) {
+      error = 'Email is required';
+      return res.status(400).json({ success, error });
+    }
+
+    // Find the user in the database based on the email
+    user = await db.collection('Users').findOne({ Email: email });
+
+    // If user does not exist, return an error
+    if (!user) {
+      error = 'User not found';
+      return res.status(404).json({ success, error });
+    }
+
+    // If user is found, send the userId and other user details
+    success = true;
+    return res.status(200).json({ success, userId: user.UserId, user: { Firstname: user.FirstName, Lastname: user.LastName ,email: user.Email }, error });
+
+  } catch (e) {
+    console.error(e);
+    error = 'An unexpected error occurred';
+    return res.status(500).json({ success, error });
+  }
+});
+
+
+
+
 
 
 // ------------------------------------

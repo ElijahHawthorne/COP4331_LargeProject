@@ -16,7 +16,6 @@ import PieChartComponent from "../../components/ExpensesPieChart";
 import BalanceCard from "../../components/Balance";
 import SpendingOverTimeChart from "../../components/ExpenseOverTime";
 
-
 export default function MainGrid() {
   const [sessionId, setSessionId] = useState<number | null>(null);
   const [curUserData, setCurUserData] = useState({
@@ -43,6 +42,7 @@ export default function MainGrid() {
       }
     }
   }, []);
+
 
   useEffect(() => {
     if (sessionId !== null) {
@@ -129,18 +129,84 @@ export default function MainGrid() {
     if (!sessionId) return;
 
     try {
-      const response = await fetch("http://777finances.com:5000/api/removeexpense", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId: sessionId, expenseName: expense.name }),
-      });
+      // First, remove the expense
+      const response = await fetch(
+        "http://777finances.com:5000/api/removeexpense",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: sessionId,
+            expenseName: expense.name,
+          }),
+        }
+      );
 
       const result = await response.json();
+
       if (result.success) {
         console.log("Expense deleted successfully");
-        fetchUserData(); // Refresh the data after deletion
+
+        // If the expense is a debt, also remove it from debts
+        if (expense.category === "Debt") {
+          try {
+            const debtResponse = await fetch(
+              "http://777finances.com:5000/api/deletedebt",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  userId: sessionId,
+                  debtName: expense.name,
+                }),
+              }
+            );
+
+            const debtResult = await debtResponse.json();
+
+            if (debtResult.success) {
+              console.log("Debt record also deleted successfully");
+            } else {
+              console.error("Failed to delete debt record:", debtResult.error);
+            }
+          } catch (debtError) {
+            console.error("Error deleting debt record:", debtError);
+          }
+        }
+
+        if (expense.category === "Saving Goal") {
+          try {
+            const debtResponse = await fetch(
+              "http://777finances.com:5000/api/removegoal",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  userId: sessionId,
+                  goalName: expense.name,
+                }),
+              }
+            );
+
+            const debtResult = await debtResponse.json();
+
+            if (debtResult.success) {
+              console.log("Goal record also deleted successfully");
+            } else {
+              console.error("Failed to Goal debt record:", debtResult.error);
+            }
+          } catch (debtError) {
+            console.error("Error deleting goal record:", debtError);
+          }
+        }
+
+        fetchUserData(); // Refresh data after deletion
       } else {
         console.error("Failed to delete expense:", result.error);
       }

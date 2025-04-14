@@ -9,6 +9,11 @@ interface ViewExpenseProps {
   onDelete?: (expense: Expense) => void; // Callback for deleting an expense
 }
 
+function formatDateToMDY(dateStr: string): string {
+  const [year, month, day] = dateStr.split("-");
+  return `${month}-${day}-${year}`;
+}
+
 const ViewExpense: React.FC<ViewExpenseProps> = ({
   expenseList = [],
   onDelete,
@@ -36,7 +41,7 @@ const ViewExpense: React.FC<ViewExpenseProps> = ({
               Category: {expense.category || "N/A"}
             </Typography>
             <Typography variant="body2">
-              Date: {expense.date || "N/A"}
+              Date: {formatDateToMDY(expense.date) || "N/A"}
             </Typography>
 
             {/* Action Buttons */}

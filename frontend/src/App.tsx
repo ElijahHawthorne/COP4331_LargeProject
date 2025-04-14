@@ -6,7 +6,7 @@ import LoginPage from './Pages/LoginPage';
 import SignUpPage from './Pages/SignupPage';
 import Dashboard from './dashboard/Dashboard';
 import AccountSettingsPage from './Pages/AccountSettingsPage';
-
+import RecoveryPage from './Pages/RecoverPassword';
 
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/accountsettings" element={<AccountSettingsPage/>} />
         <Route path="/signup" element={<SignUpPage />} />
-
+        <Route path="/recover_account" element={<RecoveryPage/>} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>

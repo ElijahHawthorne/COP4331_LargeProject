@@ -1,9 +1,17 @@
 import React, { useState } from "react";
-import { Box, TextField, Button, Typography, MenuItem } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  MenuItem,
+  FormControlLabel,
+  Checkbox,
+} from "@mui/material";
 import { useColorScheme } from '@mui/material/styles';
 
 interface AddExpensesProps {
-  onRerender: () => void; // onRerender is a function with no arguments and no return value
+  onRerender: () => void;
   userId: number | null;
 }
 
@@ -14,8 +22,8 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
   const [expenseDate, setExpenseDate] = useState<string>(""); // New state for date
   const [message, setMessage] = useState<string>("");
   const [messageColor, setMessageColor] = useState<string>("");
+  const [recurring, setRecurring] = useState<boolean>(false);
 
-  const app_name = "777finances.com";
   const { mode } = useColorScheme(); // 'light' | 'dark' | undefined
   const inputSx = {
     backgroundColor: mode === 'dark' ? 'hsl(219, 50%, 13%)' : '#fff',
@@ -24,9 +32,7 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
       color: mode === 'dark' ? '#fff' : '#000',
     },
   };
-  function buildPath(route: string): string {
-    return "http://" + app_name + ":5000/" + route;
-  }
+
 
   async function addExpense(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
@@ -36,11 +42,11 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
       return;
     }
 
-    const obj = { userId, expenseName, expenseCost, expenseCategory, expenseDate };
+    const obj = { userId: userId, expenseName: expenseName, expenseCost:expenseCost, expenseCategory: expenseCategory, expenseDate: expenseDate, recurring: recurring };
     const js = JSON.stringify(obj);
-
+    console.log(js);
     try {
-      const response = await fetch(buildPath("api/addexpense"), {
+      const response = await fetch("http://777finances.com:5000/api/addexpense", {
         method: "POST",
         body: js,
         headers: { "Content-Type": "application/json" },
@@ -51,17 +57,17 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
       if (res.success) {
         setMessage("Expense added successfully!");
         setMessageColor("success");
-        onRerender(); // Trigger re-render by calling parent function
-        setExpenseName(""); // Reset fields
+        onRerender();
+        setExpenseName("");
         setExpenseCost(null);
         setExpenseCategory("");
         setExpenseDate("");
+        setRecurring(false);
       } else {
         setMessage("Failed to add expense: " + res.error);
         setMessageColor("error");
       }
 
-      // Clear the message after 2 seconds
       setTimeout(() => {
         setMessage("");
       }, 2000);
@@ -69,7 +75,6 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
       setMessage("An error occurred: " + error.toString());
       setMessageColor("error");
 
-      // Clear the message after 2 seconds
       setTimeout(() => {
         setMessage("");
       }, 2000);
@@ -176,18 +181,20 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
           required
           margin="normal"
           InputLabelProps={{
-            shrink: true, // Ensure the label stays above the input
-            sx: {
-              '&.MuiInputLabel-shrink': {
-                transform: 'translate(14px, -19px) scale(0.75)',
-              },
-            }
+            shrink: true,
           }}
-          InputProps={{
-            sx: inputSx
-          }}
-
         />
+
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={recurring}
+              onChange={(e) => setRecurring(e.target.checked)}
+            />
+          }
+          label="Recurring Expense"
+        />
+
         <Button
           type="submit"
           variant="contained"
