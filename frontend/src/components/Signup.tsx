@@ -52,7 +52,7 @@ function Signup() {
 
   async function doSignup(event: any): Promise<void> {
     event.preventDefault();
-
+  
     if (
       !signupName ||
       !signupPassword ||
@@ -65,15 +65,13 @@ function Signup() {
       setMessage("All fields must be filled out");
       return;
     }
-
-    // Validate email
+  
     if (!validateEmail(email)) {
       setSignupSuccess(false);
       setMessage("Invalid email format");
       return;
     }
-
-    // Validate password
+  
     if (!validatePassword(signupPassword)) {
       setSignupSuccess(false);
       setMessage(
@@ -81,34 +79,66 @@ function Signup() {
       );
       return;
     }
-
-    // Check if password and confirm password match
+  
     if (signupPassword !== confirmPassword) {
       setSignupSuccess(false);
       setMessage("Passwords do not match");
       return;
     }
-
-    // Generate a random string (confirmation code)
+  
+    // 🔍 Check for existing username and email
+    try {
+      const [usernameRes, emailRes] = await Promise.all([
+        fetch("http://777finances.com:5000/api/searchUserByUsername", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ login: signupName }),
+        }),
+        fetch("http://777finances.com:5000/api/searchUserByEmail", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email }),
+        }),
+      ])
+  
+      const usernameData = await usernameRes.json();
+      const emailData = await emailRes.json();
+  
+      if (usernameData.success === true) {
+        setSignupSuccess(false);
+        setMessage("Username is already taken.");
+        return;
+      }
+  
+      if (emailData.success === true) {
+        setSignupSuccess(false);
+        setMessage("Email is already in use.");
+        return;
+      }
+    } catch (err) {
+      console.error("Error checking username/email:", err);
+      setSignupSuccess(false);
+      setMessage("Server error while validating username or email.");
+      return;
+    }
+  
+    // ✅ Passed all checks
     const randomString = generateRandomString();
-    setGeneratedCode(randomString); // Save the generated code
-
-    // Show the email confirmation dialog
+    setGeneratedCode(randomString);
     setIsDialogOpen(true);
-
-    // Call the send-email API with the random string and email
+  
     try {
       setIsSendingEmail(true);
       const response = await fetch("http://777finances.com:5000/api/send-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          recipientEmail: email, // Dynamically using user's email
+          recipientEmail: email,
           subject: "Email Validation Code",
           message: `Please use the verification code to validate your email: ${randomString}. This code will expire in 10 minutes.`,
         }),
       });
-
+  
       const result = await response.json();
       if (result.success) {
         setEmailSent(true);
@@ -299,7 +329,7 @@ function Signup() {
         </a>{" "}
         here.
       </p>
-      {message && (
+      {(message && !isDialogOpen) && (
         <div className="w-full mt-4">
           <div className="p-2">
             <Alert severity={SignupSuccess ? "success" : "error"}>
@@ -340,6 +370,15 @@ function Signup() {
             </>
           )}
         </DialogContent>
+        {(message && isDialogOpen) && (
+                  <div className="w-full mt-4">
+                  <div className="p-2">
+                    <Alert severity={SignupSuccess ? "success" : "error"}>
+                      {message}
+                    </Alert>
+                  </div>
+                </div>
+              )}
         <DialogActions>
           <Button onClick={handleConfirmationCodeSubmit} color="primary">
             Submit
