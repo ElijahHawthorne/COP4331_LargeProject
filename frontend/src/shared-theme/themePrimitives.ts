@@ -1,5 +1,4 @@
 import { createTheme, alpha, PaletteMode, Shadows } from '@mui/material/styles';
-import { Components } from "@mui/material/styles";
 
 
 declare module '@mui/material/Paper' {

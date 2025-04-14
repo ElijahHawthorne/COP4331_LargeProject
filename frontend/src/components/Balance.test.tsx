@@ -4,8 +4,8 @@ import { Expense } from '../Types';
 
 test('displays correct remaining balance', () => {
   const expenses: Expense[] = [
-    { name: 'Food', cost: 50, category: 'Food', date: '2025-04-10' },
-    { name: 'Gas', cost: 20, category: 'Transport', date: '2025-04-11' }
+    { name: 'Food', cost: 50, category: 'Food', date: '2025-04-10', recurring: true },
+    { name: 'Gas', cost: 20, category: 'Transport', date: '2025-04-11', recurring: false },
   ];
 
   render(<BalanceCard expenses={expenses} income={100} />);

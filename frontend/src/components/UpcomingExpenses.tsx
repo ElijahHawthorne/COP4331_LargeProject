@@ -60,7 +60,7 @@ const UpcomingExpensesCard: React.FC<UpcomingExpensesCardProps> = ({ expenses })
             primary={expense.name}
             secondary={`Due: ${formattedDate} — $${expense.cost.toFixed(2)}`}
             primaryTypographyProps={{
-              sx: (theme) => ({
+              sx: () => ({
                 fontFamily: "Inter, sans-serif",
                 color: "primary",
                 fontSize: "1.4rem !important",
@@ -68,7 +68,7 @@ const UpcomingExpensesCard: React.FC<UpcomingExpensesCardProps> = ({ expenses })
               }),
             }}
             secondaryTypographyProps={{
-              sx: (theme) => ({
+              sx: () => ({
                 fontFamily: "Inter, sans-serif",
                 color: "primary",
                 fontSize: "1.3rem !important",
