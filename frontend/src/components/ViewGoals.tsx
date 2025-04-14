@@ -151,7 +151,7 @@ const ViewGoals: React.FC<ViewGoalsProps> = ({
         <Typography
         sx={{
           textAlign: "center",
-          color: "black",
+          color: "primary",
           mt: 4,
           fontSize: "1.2rem",
         }}

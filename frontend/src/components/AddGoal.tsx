@@ -198,7 +198,7 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
           }}
         />
         <TextField
-          label="Target Date"
+          label="Payment Date"
           type="date"
           value={goalDate}
           onChange={(e) => setGoalDate(e.target.value)}

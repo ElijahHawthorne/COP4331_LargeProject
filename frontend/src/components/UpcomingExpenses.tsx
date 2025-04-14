@@ -62,7 +62,7 @@ const UpcomingExpensesCard: React.FC<UpcomingExpensesCardProps> = ({ expenses })
             primaryTypographyProps={{
               sx: (theme) => ({
                 fontFamily: "Inter, sans-serif",
-                color: theme.palette.text.primary,
+                color: "primary",
                 fontSize: "1.4rem !important",
                 fontWeight: "bold",
               }),
@@ -70,7 +70,7 @@ const UpcomingExpensesCard: React.FC<UpcomingExpensesCardProps> = ({ expenses })
             secondaryTypographyProps={{
               sx: (theme) => ({
                 fontFamily: "Inter, sans-serif",
-                color: theme.palette.text.primary,
+                color: "primary",
                 fontSize: "1.3rem !important",
               }),
             }}
@@ -85,7 +85,7 @@ const UpcomingExpensesCard: React.FC<UpcomingExpensesCardProps> = ({ expenses })
         align="center"
         sx={{
           textAlign: "center",
-          color: "black",
+          color: "primary",
           mt: 4,
           fontSize: "1.2rem",
         }}

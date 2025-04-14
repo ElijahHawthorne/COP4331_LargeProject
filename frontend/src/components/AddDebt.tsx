@@ -83,8 +83,6 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
       const debtData = await debtResponse.json();
 
       if (debtData.success) {
-        setMessage("Debt added successfully!");
-        setMessageColor("success");
         // After adding debt, add expense
         const expenseData = {
           userId,
@@ -109,6 +107,8 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
         const expenseDataResponse = await expenseResponse.json();
 
         if (expenseDataResponse.success) {
+          setMessage('Debt added successfully!');
+          setMessageColor("success");
           onDebtAdded();  // Trigger callback to update the UI
         } else {
           setError(`Failed to add expense: ${expenseDataResponse.error}`);
@@ -201,7 +201,7 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
           }}
         />
         <TextField
-          label="Target Date"
+          label="Payment Date"
           type="date"
           value={paymentDate}
           onChange={(e) => setPaymentDate(e.target.value)}

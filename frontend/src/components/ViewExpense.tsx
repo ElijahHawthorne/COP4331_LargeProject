@@ -2,6 +2,7 @@ import React from "react";
 import { Expense } from "../Types";
 import { Box, Typography, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 
 interface ViewExpenseProps {
   expenseList?: Expense[]; // Make the prop optional
@@ -35,7 +36,10 @@ const ViewExpense: React.FC<ViewExpenseProps> = ({
               },
             }}
           >
+            <Box display={"flex"} alignItems="center" gap={1}>
             <Typography variant="h6">{expense.name}</Typography>
+            {expense.recurring&&(<ChangeCircleIcon fontSize="small"/>)}
+            </Box>
             <Typography variant="body1">Cost: ${expense.cost}</Typography>
             <Typography variant="body2">
               Category: {expense.category || "N/A"}
@@ -85,7 +89,7 @@ const ViewExpense: React.FC<ViewExpenseProps> = ({
         <Typography
         sx={{
           textAlign: "center",
-          color: "black",
+          color: "primary",
           mt: 4,
           fontSize: "1.2rem",
         }}>No expenses to display</Typography>

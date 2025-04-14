@@ -16,8 +16,6 @@ import {
   isSameDay,
   parseISO,
   getDate,
-  getMonth,
-  getYear,
 } from "date-fns";
 import { Expense } from "../Types";
 import { Typography, Box, Paper } from "@mui/material";
@@ -34,8 +32,6 @@ const SpendingOverTime: React.FC<SpendingOverTimeProps> = ({ expenses }) => {
 
   const data = daysOfMonth.map((day) => {
     const dayOfMonth = getDate(day);
-    const currentMonth = getMonth(day);
-    const currentYear = getYear(day);
 
     const total = expenses
       .filter((expense) => {

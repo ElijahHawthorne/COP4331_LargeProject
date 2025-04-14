@@ -48,7 +48,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ expenses, income }) => {
               fontWeight: 'bold',
               fontSize: '3.5rem',
               my: 1,
-              color: (theme) => theme.palette.text.primary,
+              color: "primary",
             }}
           >
             ${remainingBalance}
