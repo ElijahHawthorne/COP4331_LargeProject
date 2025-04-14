@@ -82,7 +82,13 @@ const ViewExpense: React.FC<ViewExpenseProps> = ({
           </Box>
         ))
       ) : (
-        <Typography>No expenses to display</Typography>
+        <Typography
+        sx={{
+          textAlign: "center",
+          color: "black",
+          mt: 4,
+          fontSize: "1.2rem",
+        }}>No expenses to display</Typography>
       )}
     </Box>
   );

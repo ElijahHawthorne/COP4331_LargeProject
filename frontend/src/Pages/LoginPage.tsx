@@ -7,7 +7,7 @@ const LoginPage = () => {
       {/* Page Title */}
       <PageTitle />
       {/* Login Card */}
-      <div className="w-full h-1/3 max-w-md bg-white p-6 rounded shadow-lg">
+      <div className="w-1/3 h-[40vh] bg-white p-6 rounded shadow-lg">
         <Login />
       </div>
     </div>

@@ -124,7 +124,13 @@ const Viewdebt: React.FC<ViewDebtProps> = ({ debt = [], userId, onDebtDeleted })
           </Box>
         ))
       ) : (
-        <Typography>No debt to display</Typography>
+        <Typography
+        sx={{
+          textAlign: "center",
+          color: "black",
+          mt: 4,
+          fontSize: "1.2rem",
+        }}>No debt to display</Typography>
       )}
     </div>
   );

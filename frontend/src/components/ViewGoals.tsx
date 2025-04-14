@@ -148,7 +148,14 @@ const ViewGoals: React.FC<ViewGoalsProps> = ({
           </Box>
         ))
       ) : (
-        <Typography>No goals to display</Typography>
+        <Typography
+        sx={{
+          textAlign: "center",
+          color: "black",
+          mt: 4,
+          fontSize: "1.2rem",
+        }}
+        >No goals to display</Typography>
       )}
     </div>
   );

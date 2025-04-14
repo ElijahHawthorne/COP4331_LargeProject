@@ -75,7 +75,7 @@ Background: EBE9E1*/
   return (
     <div
       id="loginDiv"
-      className=" flex flex-col items-center justify-center bg-white rounded-lg shadow-md"
+      className=" flex flex-col items-center justify-center bg-white rounded-lg shadow-md w-full h-full"
     >
       <span id="inner-title" className="text-3xl font-bold" style={{paddingTop: "1.5rem",
         paddingBottom: "0.5rem"

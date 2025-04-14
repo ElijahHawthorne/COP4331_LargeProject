@@ -35,7 +35,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ expenses, income }) => {
     <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
       <Card
         sx={{
-          width: 250,
+          width: 'max-content',
           border: 'none',
           textAlign: 'center',
           p: 2,
@@ -46,7 +46,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ expenses, income }) => {
             variant="h3"
             sx={{
               fontWeight: 'bold',
-              fontSize: '2.5rem',
+              fontSize: '3.5rem',
               my: 1,
               color: (theme) => theme.palette.text.primary,
             }}
