@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Typography,
@@ -7,12 +7,15 @@ import {
   Stack,
   IconButton,
   Paper,
+  CssBaseline,
   useTheme,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import NewAvatar from "../dashboard/components/NewAvatar";
 import PasswordChangeDialog from "../dashboard/components/PasswordChangeDialogue";
+import { alpha } from "@mui/material/styles";
+import AppTheme from "../shared-theme/AppTheme";
 
 interface Data {
   _id: string;
@@ -85,15 +88,14 @@ const AccountSettings = () => {
       elevation={3}
       sx={{
         p: 4,
-        maxWidth: 600,
+        width: '40vw',
         mx: "auto",
         mt: 5,
         position: "relative",
         borderRadius: 3,
-        backgroundColor: theme.palette.background.paper,
+        boxShadow: theme.shadows[5],
       }}
     >
-      {/* Back Button */}
       <IconButton
         onClick={handleBackClick}
         sx={{
@@ -105,7 +107,6 @@ const AccountSettings = () => {
         <ArrowBackIcon />
       </IconButton>
 
-      {/* Avatar */}
       <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
         <NewAvatar currentFirstname={currentFirstname} />
       </Box>
@@ -160,4 +161,26 @@ const AccountSettings = () => {
   );
 };
 
-export default AccountSettings;
+const AccountSettingsPage = (props: { disableCustomTheme?: boolean }) => {
+  return (
+    <AppTheme {...props}>
+      <CssBaseline enableColorScheme />
+      <Box
+        sx={(theme) => ({
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          backgroundColor: theme.vars
+            ? `rgba(${theme.vars.palette.background.defaultChannel} / 1)`
+            : alpha(theme.palette.background.default, 1),
+          overflow: "auto",
+        })}
+      >
+        <AccountSettings />
+      </Box>
+    </AppTheme>
+  );
+};
+
+export default AccountSettingsPage;
