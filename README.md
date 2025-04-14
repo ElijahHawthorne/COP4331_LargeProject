@@ -1,7 +1,4 @@
 # COP4331_LargeProject
 
-Team Members: Jake Weber, Eduardo Salcedo Fuentes, 
+Team Members: Jake Weber, Eduardo Salcedo Fuentes, Elijah Hawthorne, Nathan Romand, Joseph Bogdan, James MacDonald-Ramirez
 
-Notes:
-
-add error message in login.tsx for incorrect username/ password
