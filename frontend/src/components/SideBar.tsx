@@ -16,12 +16,10 @@ function SideBar() {
 
   return (
     <div className="SideBar">
-      {/* Logo at the top */}
       <div className="logo-container">
         <img src={logo} alt="Company Logo" className="logo" />
       </div>
 
-      {/* The list of sidebar items */}
       <ul className="SideBarList">
         {SideBarData.map((val, key) => (
           <li

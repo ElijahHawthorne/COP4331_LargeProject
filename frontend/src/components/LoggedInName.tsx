@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
 function LoggedInName() {
-  //var user={}
   const navigate = useNavigate();
 
   function doLogout(event: any): void {

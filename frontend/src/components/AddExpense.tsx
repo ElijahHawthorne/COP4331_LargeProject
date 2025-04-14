@@ -135,7 +135,6 @@ function AddExpenses({ onRerender, userId }: AddExpensesProps) {
           }}
         />
 
-        {/* Category was previously a TextField, but now it will be the Select component */}
         <TextField
           label="Expense Category"
           value={expenseCategory}

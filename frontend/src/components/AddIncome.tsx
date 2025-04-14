@@ -8,9 +8,9 @@ interface AddIncomeProps {
 }
 
 const AddIncome: React.FC<AddIncomeProps> = ({ userId, onIncomeAdded }) => {
-  const [incomeAmount, setIncomeAmount] = useState<string>(""); // Use string for text input
+  const [incomeAmount, setIncomeAmount] = useState<string>("");
   const [message, setMessage] = useState<string>("");
-  const { mode } = useColorScheme(); // 'light' | 'dark' | undefined
+  const { mode } = useColorScheme();
   const inputSx = {
     backgroundColor: mode === 'dark' ? 'hsl(219, 50%, 13%)' : '#fff',
     '& input': {
@@ -46,8 +46,8 @@ const AddIncome: React.FC<AddIncomeProps> = ({ userId, onIncomeAdded }) => {
 
       if (result.success) {
         setMessage("Income added successfully!");
-        setIncomeAmount(""); // Reset the input field
-        onIncomeAdded(); // Refresh data
+        setIncomeAmount(""); 
+        onIncomeAdded();
       } else {
         setMessage(`Error: ${result.error}`);
       }
@@ -72,7 +72,7 @@ const AddIncome: React.FC<AddIncomeProps> = ({ userId, onIncomeAdded }) => {
       <form onSubmit={handleAddIncome}>
         <TextField
           label="Income Amount"
-          type="text" // Keep input type as text for better validation
+          type="text" //keep input type as text for better validation
           value={incomeAmount}
           onChange={(e) => setIncomeAmount(e.target.value)}
           fullWidth

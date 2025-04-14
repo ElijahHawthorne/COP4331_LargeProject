@@ -65,12 +65,11 @@ export default function AppNavbar() {
             spacing={1}
             sx={{ justifyContent: 'center', mr: 'auto' }}
           >
-            {/*logo here*/ }
             <img 
         src={Logo} 
         alt="Logo" 
         style={{ width: '2rem', height: '2rem', borderRadius: 12, objectFit: "cover",
-          objectPosition: "center", }} // Adjust size here
+          objectPosition: "center", }}
       />
 
 

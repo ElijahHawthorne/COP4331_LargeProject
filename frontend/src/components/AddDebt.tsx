@@ -3,15 +3,15 @@ import { Box, TextField, Button, Typography } from '@mui/material';
 import { useColorScheme } from '@mui/material/styles';
 
 interface AddDebtProps {
-  userId: number | null;  // User ID, required to associate the debt and expense with the user
-  onDebtAdded: () => void;  // Callback to update state or trigger a UI update after debt is added
+  userId: number | null; 
+  onDebtAdded: () => void; 
 }
 
 const AddDebt: React.FC<AddDebtProps> = ({ userId, onDebtAdded }) => {
   const [debtName, setDebtName] = useState('');
-  const [debtAmount, setDebtAmount] = useState<number | null>(null);  // Renamed to debtAmount
-const [paymentDate, setPaymentDate] = useState(''); // Renamed to paymentDate
-const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  // Renamed to paymentProgress
+  const [debtAmount, setDebtAmount] = useState<number | null>(null); 
+const [paymentDate, setPaymentDate] = useState(''); 
+const [paymentProgress, setPaymentProgress] = useState<number | null>(null); 
 
   const [paymentAmount, setPaymentAmount] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -29,13 +29,12 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
   const handleDebtSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    // Check if userId is null
     if (userId === null) {
       setError('User is not logged in');
       return;
     }
 
-    // Validate that the cost, payment amount, and progress are numbers
+    //Check that the cost, payment amount, and progress are numbers
     const debtCostNum = debtAmount && !isNaN(debtAmount) ? Number(debtAmount) : 0;
     const paymentAmountNum = paymentAmount && !isNaN(paymentAmount) ? Number(paymentAmount) : 0;
     const progressNum = paymentProgress && !isNaN(paymentProgress) ? Number(paymentProgress) : 0;
@@ -47,10 +46,10 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
 
     const newDebt = {
         name: debtName,
-        amount: debtAmount,  // Use debtAmount instead of debtCost
+        amount: debtAmount,  
         paymentAmount: paymentAmount,
-        progress: paymentProgress,  // Use paymentProgress instead of progress
-        date: paymentDate,  // Use paym
+        progress: paymentProgress, 
+        date: paymentDate, 
     };
 
     // Log the debt data being sent to the server
@@ -73,10 +72,10 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
         body: JSON.stringify({
           userId: userId,
           debtName: newDebt.name,
-          debtAmount: newDebt.amount,  // Use debtAmount here
+          debtAmount: newDebt.amount, 
           paymentAmount: newDebt.paymentAmount,
-          paymentDate: newDebt.date,  // Use paymentDate here
-          paymentProgress: newDebt.progress,  // Use paymentProgress here
+          paymentDate: newDebt.date,  
+          paymentProgress: newDebt.progress, 
         }),
       });
 
@@ -90,7 +89,7 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
           expenseCost: newDebt.paymentAmount,
           expenseDate: newDebt.date,
           expenseCategory: 'Debt',
-          recurring: true  // Category set to 'debt'
+          recurring: true  //Category set to debt
         };
 
         // Log the expense data being sent to the server
@@ -109,7 +108,7 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
         if (expenseDataResponse.success) {
           setMessage('Debt added successfully!');
           setMessageColor("success");
-          onDebtAdded();  // Trigger callback to update the UI
+          onDebtAdded();  //callback to update the UI
         } else {
           setError(`Failed to add expense: ${expenseDataResponse.error}`);
         }
@@ -165,7 +164,7 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
           InputProps={{
             sx: inputSx,
             inputProps: {
-              style: { WebkitAppearance: "none", MozAppearance: "textfield" }, // Hide arrows in number input
+              style: { WebkitAppearance: "none", MozAppearance: "textfield" },
             },
           }}
           InputLabelProps={{
@@ -188,7 +187,7 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
           InputProps={{
             sx: inputSx,
             inputProps: {
-              style: { WebkitAppearance: "none", MozAppearance: "textfield" }, // Hide arrows in number input
+              style: { WebkitAppearance: "none", MozAppearance: "textfield" },
             },
           }}
           InputLabelProps={{
@@ -231,7 +230,7 @@ const [paymentProgress, setPaymentProgress] = useState<number | null>(null);  //
           InputProps={{
             sx: inputSx,
             inputProps: {
-              style: { WebkitAppearance: "none", MozAppearance: "textfield" }, // Hide arrows in number input
+              style: { WebkitAppearance: "none", MozAppearance: "textfield" },
             },
           }}
           InputLabelProps={{

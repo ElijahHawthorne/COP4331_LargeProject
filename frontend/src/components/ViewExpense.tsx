@@ -48,7 +48,6 @@ const ViewExpense: React.FC<ViewExpenseProps> = ({
               Date: {formatDateToMDY(expense.date) || "N/A"}
             </Typography>
 
-            {/* Action Buttons */}
             <Box
               className="action-buttons"
               sx={{

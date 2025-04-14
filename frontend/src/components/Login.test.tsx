@@ -1,4 +1,3 @@
-// frontend/src/components/Login.test.tsx
 /// <reference types="@testing-library/jest-dom" />
 import { render, screen, fireEvent } from "@testing-library/react";
 import Login from "./Login";

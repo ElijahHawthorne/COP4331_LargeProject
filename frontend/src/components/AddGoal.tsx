@@ -4,7 +4,7 @@ import { Goal } from "../Types";
 import { useColorScheme } from '@mui/material/styles';
 
 interface AddGoalProps {
-  userId: number | null; // Allow null as userId is optional at first
+  userId: number | null;
   onGoalAdded: () => void;
 }
 
@@ -13,10 +13,10 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
   const [goalCost, setGoalCost] = useState<number | null>(null);
   const [paymentAmount, setPaymentAmount] = useState<number | null>(null);
   const [goalDate, setGoalDate] = useState("");
-  const [progress, setProgress] = useState<number | null>(null); // Progress is added, and it will be set to 0 initially
+  const [progress, setProgress] = useState<number | null>(null);
   const [message, setMessage] = useState<string>("");
   const [messageColor, setMessageColor] = useState<string>("");
-  const { mode } = useColorScheme(); // 'light' | 'dark' | undefined
+  const { mode } = useColorScheme();
   const inputSx = {
     backgroundColor: mode === 'dark' ? 'hsl(219, 50%, 13%)' : '#fff',
     '& input': {
@@ -28,13 +28,11 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
   const handleGoalSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    // Check if userId is null
     if (userId === null) {
       console.log("User is not logged in");
-      return; // Prevent form submission if userId is null
+      return; 
     }
 
-    // Validate that the cost and payment amount are numbers
     if (isNaN(Number(goalCost)) || isNaN(Number(paymentAmount))) {
       console.log("Please enter valid numbers for cost and payment amount.");
       return;
@@ -44,7 +42,7 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
       name: goalName,
       cost: Number(goalCost),
       paymentAmount: Number(paymentAmount),
-      progress: Number(progress), // Progress value passed in the API call
+      progress: Number(progress), 
       date: goalDate,
     };
 
@@ -63,7 +61,7 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
             goalCost: newGoal.cost,
             paymentAmount: newGoal.paymentAmount,
             payDate: newGoal.date,
-            paymentProgress: newGoal.progress, // Add progress in the request body for the API
+            paymentProgress: newGoal.progress, 
           }),
         }
       );
@@ -73,12 +71,11 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
       if (goalData.success) {
         setMessage("Goal added successfully!");
         setMessageColor("success");
-        setGoalName(""); // Reset fields
+        setGoalName("");
         setGoalCost(null);
         setPaymentAmount(null);
         setProgress(null);
         setGoalDate("");
-        // After adding goal, add expense
 
         const expenseData = {
           userId,
@@ -185,7 +182,7 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
           InputProps={{
             sx: inputSx,
             inputProps: {
-              style: { WebkitAppearance: "none", MozAppearance: "textfield" }, // Hide arrows in number input
+              style: { WebkitAppearance: "none", MozAppearance: "textfield" }, 
             },
           }}
           InputLabelProps={{
@@ -230,7 +227,7 @@ const AddGoal: React.FC<AddGoalProps> = ({ userId, onGoalAdded }) => {
           InputProps={{
             sx: inputSx,
             inputProps: {
-              style: { WebkitAppearance: "none", MozAppearance: "textfield" }, // Hide arrows in number input
+              style: { WebkitAppearance: "none", MozAppearance: "textfield" }, 
             },
           }}
           InputLabelProps={{

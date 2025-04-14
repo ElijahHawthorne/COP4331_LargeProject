@@ -87,20 +87,18 @@ export default function MainGrid() {
   const handleEditExpense = (expense: any) => {
     console.log("Edit expense:", expense);
 
-    // Prompt the user for the new cost of the expense
     const newCost = prompt("Enter new cost for the expense:", expense.cost);
 
-    // Validate the input
     if (!newCost || isNaN(parseFloat(newCost))) {
       alert("Invalid input. Please enter a valid number.");
       return;
     }
 
-    // Send the updated expense cost to the backend
+    //Send the updated expense cost to the backend
     const updatedExpense = {
       userId: sessionId,
-      expenseName: expense.name, // Use the existing name to identify the expense
-      newExpenseCost: parseFloat(newCost), // Only update the cost
+      expenseName: expense.name,
+      newExpenseCost: parseFloat(newCost),
     };
 
     fetch("http://777finances.com:5000/api/updateexpense", {
@@ -114,7 +112,7 @@ export default function MainGrid() {
       .then((result) => {
         if (result.success) {
           console.log("Expense updated successfully");
-          fetchUserData(); // Refresh the expense list
+          fetchUserData();
         } else {
           console.error("Failed to update expense:", result.error);
         }
@@ -206,7 +204,7 @@ export default function MainGrid() {
           }
         }
 
-        fetchUserData(); // Refresh data after deletion
+        fetchUserData();
       } else {
         console.error("Failed to delete expense:", result.error);
       }
@@ -217,25 +215,23 @@ export default function MainGrid() {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      // Ignore clicks inside dropdowns or other specific elements
+      //Ignore clicks inside dropdowns or other specific elements
       if ((event.target as HTMLElement).closest(".MuiMenu-paper")) {
-        return; // Do nothing if the click is inside a Material-UI dropdown
+        return;
       }
 
-      // Check if the click happened outside all cards
+      // Check if the click happened outside cards
       if (
         cardRefs.current.every(
           (ref) => ref && !ref.contains(event.target as Node)
         )
       ) {
-        setActiveCard(null); // Collapse all cards if clicked outside
+        setActiveCard(null);
       }
     };
 
-    // Add event listener for detecting clicks outside
     document.addEventListener("mousedown", handleClickOutside);
 
-    // Cleanup event listener when the component is unmounted
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -250,11 +246,11 @@ export default function MainGrid() {
       sx={{
         display: 'flex',
         flexWrap: 'wrap',
-        justifyContent: 'center',  // Horizontally center the cards
-        gap: 3,  // Space between the cards
+        justifyContent: 'center',
+        gap: 3, 
         alignItems: 'flex-start',
-        padding: 9,  // Adjust the padding as needed
-        paddingTop: 25,  // Remove top padding to align with the top of the page
+        padding: 9, 
+        paddingTop: 25,
       }}
     >
       {/* Goal Card */}
@@ -262,7 +258,7 @@ export default function MainGrid() {
         sx={{ position: 'relative',
           width: 'calc(33.33% - 16px)',
           justifyContent: "center",
-          display: 'flex'// Make sure the card takes up 1/3 of the available width
+          display: 'flex'
         }}
       >
         <ExpandableCard
@@ -276,7 +272,7 @@ export default function MainGrid() {
         />
       </Box>
 
-      {/* Debt Card */}
+      {/*Debt Card*/}
       <Box
         sx={{position: 'relative',
           width: 'calc(33.33% - 16px)', justifyContent: "center",
@@ -294,7 +290,7 @@ export default function MainGrid() {
         />
       </Box>
 
-      {/* Income Card */}
+      {/*Income Card*/}
       <Box
         sx={{position: 'relative',
           width: 'calc(33.33% - 16px)', justifyContent: "center",
@@ -316,7 +312,7 @@ export default function MainGrid() {
         />
       </Box>
 
-      {/* Expense Card */}
+      {/*Expense Card*/}
       <Box
         sx={{position: 'relative',
           zIndex: 2,
@@ -345,7 +341,7 @@ export default function MainGrid() {
       <Box
         sx={{position: 'relative',
           width: 'calc(33.33% - 16px)', justifyContent: "center",
-          display: 'flex' // Maintain the same width as other cards
+          display: 'flex'
         }}
       >
 
@@ -367,7 +363,7 @@ export default function MainGrid() {
       <Box
         sx={{position: 'relative',
           width: 'calc(33.33% - 16px)', justifyContent: "center",
-          display: 'flex' // Maintain the same width as other cards
+          display: 'flex'
         }}
       >
         <ExpandableCard

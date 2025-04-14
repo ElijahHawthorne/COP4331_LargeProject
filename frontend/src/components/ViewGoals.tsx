@@ -1,10 +1,10 @@
 import React from "react";
 import { Box, Typography, LinearProgress, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Goal } from "../Types"; // Assuming your Goal type is defined
+import { Goal } from "../Types"; 
 interface ViewGoalsProps {
-  goals: Goal[]; // Array of goals to display
-  userId: number | null; // User ID is needed for deletion
+  goals: Goal[]; 
+  userId: number | null;
   onGoalDeleted: (goalName: string) => void;
 }
 
@@ -25,7 +25,6 @@ const ViewGoals: React.FC<ViewGoalsProps> = ({
     if (!confirmDelete) return;
 
     try {
-      // First, delete the goal
       const goalResponse = await fetch(
         "http://777finances.com:5000/api/removegoal",
         {
@@ -43,10 +42,9 @@ const ViewGoals: React.FC<ViewGoalsProps> = ({
       const goalData = await goalResponse.json();
 
       if (goalData.success) {
-        onGoalDeleted(goalName); // Update UI
+        onGoalDeleted(goalName);
         console.log("Goal deleted successfully!");
 
-        // Then remove the related expense
         const expenseResponse = await fetch(
           "http://777finances.com:5000/api/removeexpense",
           {
@@ -83,7 +81,6 @@ const ViewGoals: React.FC<ViewGoalsProps> = ({
 
   return (
     <div>
-      {/* Map through each goal and display it */}
       {goals.length > 0 ? (
         goals.map((goal, index) => (
           <Box
@@ -96,10 +93,9 @@ const ViewGoals: React.FC<ViewGoalsProps> = ({
               position: "relative",
               "&:hover .action-buttons": {
                 opacity: 1,
-              }, // Make sure the delete button is positioned correctly
+              },
             }}
           >
-            {/* Delete Icon Button at the top right */}
             <IconButton
             className="action-buttons"
               onClick={(e) => {e.stopPropagation(); handleDeleteGoal(goal.name)}}
@@ -113,7 +109,7 @@ const ViewGoals: React.FC<ViewGoalsProps> = ({
                 transition: "opacity 0.3s",
                 color: 'gray',
                 '&:hover': {
-                  color: 'red', // Change color when hovered over
+                  color: 'red',
                 },
               }}
             >
@@ -127,7 +123,6 @@ const ViewGoals: React.FC<ViewGoalsProps> = ({
               Payment Date: {formatDateToMDY(goal.date)}
             </Typography>
 
-            {/* Calculate progress as a percentage */}
             <LinearProgress
               variant="determinate"
               value={(goal.progress / goal.cost) * 100}

@@ -9,14 +9,14 @@ interface BalanceCardProps {
 
 const BalanceCard: React.FC<BalanceCardProps> = ({ expenses, income }) => {
   const currentDate = new Date();
-  const currentMonth = currentDate.getMonth(); // 0-based
+  const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
 
   const filteredExpenses = expenses.filter((expense) => {
-    // Always include recurring expenses
+    //Include recurring expenses
     if (expense.recurring) return true;
 
-    // For non-recurring expenses, check if they belong to the current month/year
+    //For non-recurring expenses, check if they belong to the current month and year
     const expenseDate = new Date(expense.date);
     return (
       expenseDate.getMonth() === currentMonth &&

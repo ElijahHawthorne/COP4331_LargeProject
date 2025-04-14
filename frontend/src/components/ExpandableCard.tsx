@@ -50,9 +50,8 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
     overflowY: isActive ? "hidden" : "auto",
     display: "flex",
     flexDirection: "column",
-    // Set the pointer if there is a componentExpanded (so the card is interactive)
     cursor: componentExpanded ? "pointer" : "default",
-    // Hover effect: change all text color and the shadow color conditionally based on mode
+    //Hover effect
     "&:hover": {
       boxShadow: `0px 4px 16px ${
         theme.palette.mode === "dark" ? "#2c4f83" : "#007FFF"
@@ -60,14 +59,12 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
     },
   })}
 >
-  {/* Title is fixed */}
   <CardHeader
     title={title}
     titleTypographyProps={{ align: "center" }}
     sx={{ flexShrink: 0 }}
   />
 
-  {/* Scrollable content */}
   <CardContent
     sx={{
       padding: 0,

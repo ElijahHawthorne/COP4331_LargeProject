@@ -4,18 +4,17 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Debt } from '../Types';
 
 interface ViewDebtProps {
-  debt: Debt[];  // Array of debt to display
-  userId: number | null;  // User ID is needed for the deletion
-  onDebtDeleted: (debtName: string) => void;  // Callback to update state after deletion
+  debt: Debt[];
+  userId: number | null;
+  onDebtDeleted: (debtName: string) => void;
 }
 
 const Viewdebt: React.FC<ViewDebtProps> = ({ debt = [], userId, onDebtDeleted }) => {
   const handleDeleteDebt = async (debtName: string) => {
     const confirmDelete = window.confirm(`Are you sure you want to delete the debt "${debtName}" and its related expense?`);
-    if (!confirmDelete) return; // Exit if user cancels
+    if (!confirmDelete) return; 
   
     try {
-      // First, delete the debt
       const debtResponse = await fetch('http://777finances.com:5000/api/deletedebt', {
         method: 'POST',
         headers: {
@@ -30,9 +29,8 @@ const Viewdebt: React.FC<ViewDebtProps> = ({ debt = [], userId, onDebtDeleted })
       const debtData = await debtResponse.json();
   
       if (debtData.success) {
-        onDebtDeleted(debtName);  // Update UI
+        onDebtDeleted(debtName);
   
-        // Then remove the related expense
         const expenseResponse = await fetch('http://777finances.com:5000/api/removeexpense', {
           method: 'POST',
           headers: {
@@ -68,7 +66,6 @@ const Viewdebt: React.FC<ViewDebtProps> = ({ debt = [], userId, onDebtDeleted })
 
   return (
     <div>
-      {/* Map through each debt and display it */}
       {debt.length > 0 ? (
         debt.map((debtItem, index) => (
           <Box
@@ -81,10 +78,9 @@ const Viewdebt: React.FC<ViewDebtProps> = ({ debt = [], userId, onDebtDeleted })
               position: 'relative',
               "&:hover .action-buttons": {
                 opacity: 1,
-              }, // Make sure the delete button is positioned correctly
+              },
             }}
           >
-            {/* Delete Icon Button at the top right */}
             <IconButton
               onClick={(e) =>{e.stopPropagation(); handleDeleteDebt(debtItem.name)}}
               className="action-buttons"
@@ -98,7 +94,7 @@ const Viewdebt: React.FC<ViewDebtProps> = ({ debt = [], userId, onDebtDeleted })
                 transition: "opacity 0.3s",
                 color: 'gray',
                 '&:hover': {
-                  color: 'red', // Change color when hovered over
+                  color: 'red',
                 },
               }}
             >
@@ -111,7 +107,7 @@ const Viewdebt: React.FC<ViewDebtProps> = ({ debt = [], userId, onDebtDeleted })
             <Typography variant="body2">Progress: ${debtItem.progress}</Typography>
             <Typography variant="body2">Payment Date: {formatDateToMDY(debtItem.date)}</Typography>
 
-            {/* Calculate progress as a percentage */}
+            {/*Calculate progress as a percentage*/}
             <LinearProgress
               variant="determinate"
               value={(debtItem.progress / debtItem.amount) * 100}

@@ -32,7 +32,6 @@ const UpcomingExpensesCard: React.FC<UpcomingExpensesCardProps> = ({ expenses })
     const parsed = parseISO(expense.date);
 
     if (expense.recurring) {
-      // Create a simulated recurring date in the current month
       const recurringDate = new Date(today.getFullYear(), today.getMonth(), parsed.getDate());
       return isWithinNextWeek(recurringDate);
     }

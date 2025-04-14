@@ -8,7 +8,8 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
-import {
+import
+{
   format,
   eachDayOfInterval,
   startOfMonth,
@@ -38,10 +39,10 @@ const SpendingOverTime: React.FC<SpendingOverTimeProps> = ({ expenses }) => {
         const expenseDate = parseISO(expense.date);
 
         if (expense.recurring) {
-          // Only match if the day matches, regardless of month/year
+          //Only match if the day matches
           return getDate(expenseDate) === dayOfMonth;
         } else {
-          // One-time expense: must match exact day
+
           return (
             isSameDay(expenseDate, day)
           );

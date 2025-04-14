@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 
 function Signup() {
-  const navigate = useNavigate(); // Get the navigate function
+  const navigate = useNavigate();
 
   const [message, setMessage] = useState("");
   const [signupName, setSignupName] = useState("");
@@ -22,32 +22,28 @@ function Signup() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [confirmationCode, setConfirmationCode] = useState(""); // User entered confirmation code
+  const [confirmationCode, setConfirmationCode] = useState(""); //confirmation code
   const [generatedCode, setGeneratedCode] = useState(""); // The randomly generated code
-  const [isDialogOpen, setIsDialogOpen] = useState(false); // Control the dialog visibility
-  const [isSendingEmail, setIsSendingEmail] = useState(false); // Loading state for sending email
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isSendingEmail, setIsSendingEmail] = useState(false); 
   const [emailSent, setEmailSent] = useState(false); // Track if the email is sent successfully
   const [SignupSuccess, setSignupSuccess] = useState<boolean | null>(null);
 
-  // Regex for email validation
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-  // Regex for password validation
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-  // Email validation function
   function validateEmail(email: string): boolean {
     return emailRegex.test(email);
   }
 
-  // Password validation function
   function validatePassword(password: string): boolean {
     return passwordRegex.test(password);
   }
 
   const generateRandomString = (): string => {
-    return Math.random().toString(36).substr(2, 12); // Generate a random 12-character string
+    return Math.random().toString(36).substr(2, 12);
   };
 
   async function doSignup(event: any): Promise<void> {
@@ -86,7 +82,7 @@ function Signup() {
       return;
     }
   
-    // 🔍 Check for existing username and email
+    //Check for existing username and email
     try {
       const [usernameRes, emailRes] = await Promise.all([
         fetch("http://777finances.com:5000/api/searchUserByUsername", {
